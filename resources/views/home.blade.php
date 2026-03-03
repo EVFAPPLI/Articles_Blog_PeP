@@ -59,7 +59,9 @@
                         <svg class="w-32 h-32 text-emerald-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
                     </div>
                     <div class="relative z-10">
-                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest mb-2 block">Mental & Humain</span>
+                        <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest mb-2 block flex items-center gap-2">
+                            Mental & Humain <span class="px-2 py-0.5 bg-emerald-100 rounded-full text-[10px]">{{ $categoryCounts['Esprit PEP'] ?? 0 }} article{{ ($categoryCounts['Esprit PEP'] ?? 0) > 1 ? 's' : '' }}</span>
+                        </span>
                         <h3 class="text-2xl font-serif font-bold mb-4">Esprit PEP</h3>
                         <p class="text-gray-500 text-sm mb-6">Moteur humain, charge mentale et psychologie de la performance.</p>
                         <a href="{{ route('blog.index', ['category' => 'Esprit PEP']) }}" class="text-pep-dark font-bold text-sm inline-flex items-center group/link">
@@ -71,7 +73,9 @@
                 <!-- Boîte à outils -->
                 <div class="md:col-span-2 lg:col-span-3 group bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 min-h-[300px] flex flex-col justify-end">
                     <div class="relative z-10">
-                        <span class="text-blue-600 font-bold text-xs uppercase tracking-widest mb-2 block">Logiciels & IA</span>
+                        <span class="text-blue-600 font-bold text-xs uppercase tracking-widest mb-2 block flex items-center gap-2">
+                            Logiciels & IA <span class="px-2 py-0.5 bg-blue-100 rounded-full text-[10px]">{{ $categoryCounts['Boîte à outils'] ?? 0 }} article{{ ($categoryCounts['Boîte à outils'] ?? 0) > 1 ? 's' : '' }}</span>
+                        </span>
                         <h3 class="text-2xl font-serif font-bold mb-4">Boîte à outils</h3>
                         <p class="text-gray-500 text-sm mb-6">Optimisez votre quotidien avec les meilleurs outils et l'intelligence artificielle.</p>
                         <a href="{{ route('blog.index', ['category' => 'Boîte à outils']) }}" class="text-pep-dark font-bold text-sm inline-flex items-center group/link">
@@ -82,7 +86,9 @@
 
                 <!-- Pilotage -->
                 <div class="md:col-span-2 group bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 min-h-[300px] flex flex-col justify-between">
-                    <span class="text-amber-600 font-bold text-xs uppercase tracking-widest mb-2 block">Temps & Priorités</span>
+                    <span class="text-amber-600 font-bold text-xs uppercase tracking-widest mb-2 block flex items-center gap-2">
+                        Temps & Priorités <span class="px-2 py-0.5 bg-amber-100 rounded-full text-[10px]">{{ $categoryCounts['Pilotage'] ?? 0 }} article{{ ($categoryCounts['Pilotage'] ?? 0) > 1 ? 's' : '' }}</span>
+                    </span>
                     <div>
                         <h3 class="text-2xl font-serif font-bold mb-4">Pilotage</h3>
                         <p class="text-gray-500 text-sm mb-6">Maîtrisez votre agenda et vos priorités stratégiques.</p>
@@ -94,7 +100,9 @@
 
                 <!-- Leadership -->
                 <div class="md:col-span-2 group bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 min-h-[300px] flex flex-col justify-between">
-                    <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest mb-2 block">Management</span>
+                    <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest mb-2 block flex items-center gap-2">
+                        Management <span class="px-2 py-0.5 bg-indigo-100 rounded-full text-[10px]">{{ $categoryCounts['Leadership'] ?? 0 }} article{{ ($categoryCounts['Leadership'] ?? 0) > 1 ? 's' : '' }}</span>
+                    </span>
                     <div>
                         <h3 class="text-2xl font-serif font-bold mb-4">Leadership</h3>
                         <p class="text-gray-500 text-sm mb-6">Collaborer, déléguer et inspirer à l'ère du numérique.</p>
@@ -106,7 +114,9 @@
 
                 <!-- Flow -->
                 <div class="md:col-span-2 group bg-pep-dark text-white p-8 rounded-3xl border border-pep-dark shadow-sm hover:shadow-xl transition-all duration-500 min-h-[300px] flex flex-col justify-between">
-                    <span class="text-purple-400 font-bold text-xs uppercase tracking-widest mb-2 block">Équilibre & Sérénité</span>
+                    <span class="text-purple-400 font-bold text-xs uppercase tracking-widest mb-2 block flex items-center gap-2">
+                        Équilibre & Sérénité <span class="px-2 py-0.5 bg-purple-900/50 rounded-full text-[10px]">{{ $categoryCounts['Flow'] ?? 0 }} article{{ ($categoryCounts['Flow'] ?? 0) > 1 ? 's' : '' }}</span>
+                    </span>
                     <div>
                         <h3 class="text-2xl font-serif font-bold mb-4">Flow</h3>
                         <p class="text-gray-400 text-sm mb-6">Atteindre l'état de concentration profonde et préserver son énergie.</p>
@@ -165,6 +175,53 @@
     </section>
     @endif
 
+    <!-- Promo Livre Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="bg-gray-50 rounded-[3rem] p-10 lg:p-16 border border-gray-100 shadow-xl overflow-hidden relative flex flex-col lg:flex-row items-center gap-16">
+                <!-- Background decoration -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-pep-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                
+                <div class="w-full lg:w-1/3 flex-shrink-0 relative z-10 flex justify-center">
+                    <img src="https://pep.world/wp-content/uploads/2019/07/cover_ebookSiSimple07.05.2019-1.jpg" alt="Livre Si Simple ! par Bruno Savoyat" class="w-64 md:w-80 rounded-r-2xl rounded-l-md shadow-2xl transform -rotate-2 hover:rotate-0 transition-transform duration-500 border-l-8 border-slate-800">
+                </div>
+
+                <div class="w-full lg:w-2/3 relative z-10 text-center lg:text-left">
+                    <div class="flex items-center justify-center lg:justify-start gap-4 mb-6">
+                        <img src="https://pep.world/wp-content/uploads/2019/07/logo-sky-blue-on-couleur.png" alt="PEP World" class="h-8">
+                        <span class="h-4 w-px bg-gray-300"></span>
+                        <span class="text-pep-accent font-bold tracking-widest text-xs uppercase">Sélection Lecture</span>
+                    </div>
+                    
+                    <h2 class="text-3xl lg:text-5xl font-serif font-black mb-6 text-pep-dark leading-tight">
+                        15 moyens pour dynamiser votre vie et votre travail
+                    </h2>
+                    
+                    <p class="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        Un livre avec lequel vous allez optimiser votre efficacité personnelle, que ce soit au travail ou à la maison. 15 moyens et des principes simples pour des résultats extraordinaires. Plus d'un million de personnes ont déjà expérimenté la plupart de ces principes pour dynamiser leur vie professionnelle et privée et vivre plus heureux.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 text-sm text-gray-500 mb-10">
+                        <div class="flex flex-col gap-1 text-center lg:text-left">
+                            <span class="font-bold text-gray-900">Auteur : Bruno Savoyat</span>
+                            <span>ISBN : <span class="font-mono">978-2-9566840-6-0</span></span>
+                        </div>
+                        <div class="hidden sm:block w-px h-10 bg-gray-200"></div>
+                        <div class="flex flex-col gap-1 text-center lg:text-left">
+                            <span>419 pages (17 cm x 2.15 cm x 24 cm)</span>
+                            <span>Aussi en format ebook (Fr, En, Nl)</span>
+                        </div>
+                    </div>
+
+                    <a href="https://pep.world/" target="_blank" class="inline-flex items-center justify-center bg-pep-accent text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition-all duration-300 transform hover-lift shadow-lg hover:shadow-blue-500/30">
+                        COMMANDER LE LIVRE SUR PEP.WORLD
+                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Newsletter Section -->
     <section class="py-24 px-6 overflow-hidden relative bg-pep-bg">
         <div class="absolute top-0 right-0 w-1/3 h-full bg-blue-50/50 -skew-x-12 translate-x-1/2 -z-10"></div>
@@ -200,10 +257,10 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
             <div class="md:col-span-2">
                 <div class="flex items-center space-x-3 mb-8">
-                    <div class="w-10 h-10 bg-white flex items-center justify-center rounded-sm">
-                        <span class="text-pep-dark font-bold text-xl">P</span>
-                    </div>
-                    <span class="text-2xl font-serif font-bold tracking-tight italic">PEP.uno</span>
+                    <a href="https://pep.world/" target="_blank" class="hover:opacity-80 transition-opacity">
+                        <img src="https://pep.world/wp-content/uploads/2019/07/logo-sky-blue-on-couleur.png" alt="PEP World Logo" class="h-10">
+                    </a>
+                    <span class="text-2xl font-serif font-bold tracking-tight italic border-l border-gray-700 pl-3">PEP.uno</span>
                 </div>
                 <p class="text-gray-400 max-w-sm mb-8 leading-relaxed">
                     Plateforme dédiée à l'efficience personnelle et collective. Inspiré par les méthodes PEP® internationales.

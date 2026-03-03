@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Post;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     $latestPosts = \App\Models\Post::published()
@@ -8,7 +9,14 @@ Route::get('/', function () {
         ->take(3)
         ->get();
         
-    return view('home', compact('latestPosts'));
+    // Récupérer le nombre de posts publiés par catégorie
+    $categoryCounts = \App\Models\Post::published()
+        ->select('category', DB::raw('count(*) as total'))
+        ->groupBy('category')
+        ->pluck('total', 'category')
+        ->toArray();
+
+    return view('home', compact('latestPosts', 'categoryCounts'));
 })->name('home');
 
 Route::get('/blog', function () {
