@@ -213,7 +213,7 @@
                         </div>
                     </div>
 
-                    <a href="https://pep.world/" target="_blank" class="inline-flex items-center justify-center bg-pep-accent text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition-all duration-300 transform hover-lift shadow-lg hover:shadow-blue-500/30">
+                    <a href="https://pep.world/boutique/" target="_blank" class="inline-flex items-center justify-center bg-pep-accent text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition-all duration-300 transform hover-lift shadow-lg hover:shadow-blue-500/30">
                         COMMANDER LE LIVRE SUR PEP.WORLD
                         <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
