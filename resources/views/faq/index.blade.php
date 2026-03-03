@@ -10,13 +10,24 @@
     <div class="max-w-4xl mx-auto px-6 relative z-10">
         
         <!-- HEADER -->
-        <div class="text-center mb-16">
-            <h1 class="font-serif font-black text-5xl md:text-7xl text-pep-dark mb-6 tracking-tight leading-none" style="font-family: 'Instrument Serif', serif;">
-                Foire Aux <span class="italic text-pep-accent">Questions</span>
-            </h1>
-            <p class="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto">
-                L'expertise de la méthodologie PEP® répond à vos interrogations. Découvrez comment optimiser votre espace de travail et gagner en efficacité.
-            </p>
+        <div class="flex flex-col md:flex-row items-center gap-12 mb-16">
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="font-serif font-black text-5xl md:text-7xl text-pep-dark mb-6 tracking-tight leading-none" style="font-family: 'Instrument Serif', serif;">
+                    Foire Aux <br class="hidden xl:block"/><span class="italic text-pep-accent">Questions</span>
+                </h1>
+                <p class="text-lg md:text-xl text-slate-500 font-medium max-w-lg mx-auto md:mx-0">
+                    L'expertise de la méthodologie PEP® répond à vos interrogations. Découvrez comment optimiser votre espace de travail et gagner en efficacité.
+                </p>
+            </div>
+            <div class="flex-1 w-full flex justify-center md:justify-end relative">
+                <!-- Decorative element behind image -->
+                <div class="absolute inset-0 bg-pep-accent/10 rounded-3xl transform rotate-3 scale-105 pointer-events-none"></div>
+                <img 
+                    src="https://bruno.appliscreaweb.fr/public/faq_pep_uno.webp" 
+                    alt="PEP FAQ Illustration" 
+                    class="relative w-full max-w-sm rounded-3xl shadow-2xl transform -rotate-2 hover:rotate-0 transition-transform duration-500"
+                >
+            </div>
         </div>
 
         <!-- FAQ ACCORDION LIST -->
