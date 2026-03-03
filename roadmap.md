@@ -26,7 +26,16 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 
 ## ✅ Phase 4 : Design Homepage & Bento Grid (Terminé)
 
+- **[x] Dynamisation** : Modification de la route `/` pour afficher les compteurs d'articles par catégorie dans le Bento Grid.
+- **[x] Section Promo Livre "Si Simple"** : Refonte en "Premium Light" avec bouton et backlink redirigeant vers la boutique `pep.world`.
+- **[x] Intégration Marque** : Logo officiel PEP.uno ajouté à la barre de navigation. Backlinks (SEO) vers pep.world dans le footer.
+
 ## ✅ Phase 5 : Système de Blog (Design & API) (Terminé)
+
+- **[x] Typographie & Espacement (V4 Forced Style)** : Injection de règles CSS directes (`app.css`) pour garantir une lecture "Premium" (Interligne profond, marges de 3.5rem entre les paragraphes).
+- **[x] Citations PEP** : Les balises `<em>` issues de l'éditeur sont automatiquement stylisées comme des blocs de citation avec un marqueur latéral.
+- **[x] Filtrage par Univers** : Modification de la route et intégration des paramètres pour filtrer via `?category=`.
+- **[x] UI/UX Badges** : Badges de catégories à haut contraste (blanc sur fond saturé).
 
 ## 🔄 Phase 6 : Recherche & SEO avancé (À venir)
 

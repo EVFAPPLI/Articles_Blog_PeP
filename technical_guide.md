@@ -66,6 +66,24 @@ php artisan storage:link
 
 ---
 
+## 🎨 Stratégies de Design (V4 & Premium)
+
+Face aux limitations de compilation CSS en direct ou aux contenus HTML importés via Filament (sans support Tailwind natif complet pour les enfants), deux stratégies robustes sont utilisées :
+
+### 1. Typographie Forcée (Blog V4)
+
+Le rendu des articles (`blog.show`) s'appuie sur des règles écrites directement dans `resources/css/app.css` pour écraser les utilitaires Tailwind standards via des sélecteurs très puissants :
+
+- **Line-height massif** : `line-height: 2.2;` pour imposer un côté éditorial très fluide.
+- **Marges importantes** : `margin-bottom: 3.5rem !important;` entre les paragraphes, garantissant aération.
+- **`<em>` stylisés** : Transformés en style "Blockquote PEP" (barre latérale bleue, texte plus gros).
+
+### 2. Design "Incassable" (Homepage)
+
+La section "Promo Livre" (homepage) s'appuie délibérément sur du **CSS Inline complet** plutôt que des classes utilitaires Tailwind, garantissant un rendu 100% fidèle sur des environnements cibles où le process Vite (`npm run dev`/`build`) ne tourne pas constamment à jour. Si des ajustements Flex/Grid sont nécessaires, un script JS dédié écoute le resize de fenêtre.
+
+---
+
 ## 📝 Commandes de Maintenance
 
 - **Vider le cache des routes** : `php artisan route:clear`
