@@ -12,6 +12,8 @@
         "Noto Color Emoji";
     --font-serif:
         "Instrument Serif", Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-inter:
+        "Inter", ui-sans-serif, system-ui, sans-serif;
 
     --color-pep-bg: #fdfcfb;
     --color-pep-dark: #1a1a1a;
@@ -29,4 +31,13 @@
 
 .font-serif {
     font-family: var(--font-serif);
+}
+
+.font-inter {
+    font-family: var(--font-inter);
+}
+
+/* Visibloo specific */
+.floating-back {
+    @apply fixed top-5 left-5 z-50 bg-white/80 backdrop-blur-md border border-black/5 px-5 py-2.5 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 text-gray-700 font-medium no-underline hover:-translate-y-0.5 hover:shadow-xl hover:text-black;
 }

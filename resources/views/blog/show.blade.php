@@ -1,101 +1,75 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-pep-bg pt-32 pb-20 px-6">
-    <article class="max-w-4xl mx-auto">
-        <!-- Article Header -->
-        <header class="mb-12 text-center">
-            <div class="flex items-center justify-center gap-3 mb-8">
-                <a href="{{ route('blog.index', ['category' => $post->category]) }}" 
-                   class="px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest 
-                   {{ $post->category == 'Esprit PEP' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
-                      ($post->category == 'Boîte à outils' ? 'bg-blue-50 text-blue-600 border-blue-100' : 
-                      ($post->category == 'Pilotage' ? 'bg-amber-50 text-amber-600 border-amber-100' : 
-                      ($post->category == 'Leadership' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' : 'bg-purple-50 text-purple-600 border-purple-100'))) }} border">
-                    {{ $post->category }}
-                </a>
-                <span class="text-gray-300">|</span>
-                <time class="text-xs font-bold uppercase tracking-widest text-gray-400">
-                    {{ $post->published_at ? $post->published_at->format('d F Y') : $post->created_at->format('d F Y') }}
-                </time>
+<div class="min-h-screen bg-white font-inter selection:bg-blue-100">
+    
+    <!-- Floating Back Button -->
+    <a href="{{ route('blog.index') }}" class="floating-back">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Retour au blog
+    </a>
+
+    <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- 1. Cover Image (Visibloo Style) -->
+        @if($post->cover_image)
+            <div class="mb-12 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white transform rotate-1">
+                <img src="{{ Storage::url($post->cover_image) }}" alt="{{ $post->title }}"
+                    class="w-full h-auto object-cover max-h-[600px]">
             </div>
-            
-            <h1 class="text-4xl md:text-6xl font-serif font-bold leading-tight mb-8">
+        @endif
+
+        <!-- 2. Header Expert -->
+        <header class="mb-10 text-center">
+            @if($post->category)
+                <span class="inline-block text-white bg-pep-accent px-4 py-1.5 rounded-full uppercase tracking-widest text-[10px] font-black shadow-sm mb-6">
+                    {{ $post->category }}
+                </span>
+            @endif
+
+            <h1 class="text-4xl md:text-5xl font-black text-pep-dark leading-[1.1] mb-8 tracking-tight">
                 {{ $post->title }}
             </h1>
 
-            <div class="flex items-center justify-center gap-4 text-sm text-gray-500 italic">
-                <span>Par {{ $post->author ?? 'L\'Équipe PEP' }}</span>
+            <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400 font-medium">
+                <span class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    {{ $post->published_at ? $post->published_at->locale('fr')->translatedFormat('d F Y') : $post->created_at->locale('fr')->translatedFormat('d F Y') }}
+                </span>
+                <span class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    Par <span class="text-pep-dark font-bold">{{ $post->author ?? 'Visibloo' }}</span>
+                </span>
             </div>
         </header>
 
-        <!-- Cover Image -->
-        @if($post->cover_image)
-        <div class="mb-16 rounded-3xl overflow-hidden shadow-2xl transform -rotate-1">
-            <img 
-                src="{{ Storage::url($post->cover_image) }}" 
-                alt="{{ $post->title }}"
-                class="w-full h-full object-cover max-h-[500px]"
-            />
-        </div>
-        @endif
-
-        <!-- Article Content -->
-        <div class="prose prose-lg prose-pep max-w-none 
-                    prose-headings:font-serif prose-headings:font-bold prose-headings:text-pep-dark
-                    prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-                    prose-blockquote:border-l-4 prose-blockquote:border-blue-100 prose-blockquote:bg-blue-50/30 prose-blockquote:p-6 prose-blockquote:rounded-r-2xl prose-blockquote:italic
-                    prose-img:rounded-3xl prose-img:shadow-lg
-                    text-gray-700 leading-relaxed">
-            {!! $post->html_content !!}
+        <!-- 3. HTML Content (Advanced Prose) -->
+        <div class="prose prose-lg prose-slate max-w-none 
+                    prose-h2:text-3xl prose-h2:font-black prose-h2:text-pep-dark prose-h2:mt-16 prose-h2:mb-8 prose-h2:tracking-tight
+                    prose-p:text-slate-600 prose-p:leading-[1.8] prose-p:mb-8 prose-p:text-lg
+                    prose-strong:text-pep-dark prose-strong:font-bold
+                    prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-4 prose-ul:mb-8
+                    prose-img:rounded-3xl prose-img:shadow-xl">
+            {!! preg_replace('/<h1(.*?)>(.*?)<\/h1>/is', '<h2$1>$2</h2>', $post->html_content) !!}
         </div>
 
-        <!-- Article Footer (Keywords) -->
-        @if($post->keywords && count($post->keywords) > 0)
-        <footer class="mt-20 pt-10 border-t border-gray-100 text-center">
-            <h4 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">Mots-clés</h4>
-            <div class="flex flex-wrap justify-center gap-2">
-                @foreach($post->keywords as $keyword)
-                    <span class="px-4 py-1.5 bg-white border border-gray-100 text-gray-500 rounded-full text-xs font-medium hover:border-pep-accent transition-colors cursor-default">
-                        #{{ trim($keyword) }}
+        @if($post->keywords)
+            <div class="mt-20 pt-10 border-t border-gray-100 flex flex-wrap justify-center gap-2">
+                @foreach(is_array($post->keywords) ? $post->keywords : json_decode($post->keywords, true) as $keyword)
+                    <span class="px-4 py-1.5 bg-gray-50 text-gray-500 rounded-full text-xs font-semibold hover:bg-pep-accent hover:text-white transition-colors">
+                        #{{ $keyword }}
                     </span>
                 @endforeach
             </div>
-        </footer>
         @endif
 
-        <!-- Back Link -->
-        <div class="mt-20 text-center">
-            <a href="{{ route('blog.index') }}" class="inline-flex items-center font-bold text-sm uppercase tracking-widest text-pep-dark hover:text-pep-accent transition-colors group">
-                <svg class="mr-2 w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Retour aux articles
-            </a>
-        </div>
     </article>
-</div>
 
-<!-- Newsletter Mini (Optional) -->
-<section class="mt-20 py-20 bg-gray-50/50 border-t border-gray-100">
-    <div class="max-w-4xl mx-auto px-6 text-center">
-        <h3 class="text-2xl font-serif font-bold mb-4">Cet article vous a plu ?</h3>
-        <p class="text-gray-500 mb-8">Inscrivez-vous à notre newsletter pour ne rien manquer de nos futures publications.</p>
-        <form class="flex flex-col sm:flex-row gap-4 p-1.5 bg-white rounded-2xl shadow-sm border border-gray-100 max-w-xl mx-auto">
-            <input type="email" placeholder="votre@email.com" class="flex-grow px-6 py-3 rounded-xl focus:outline-none text-sm" required />
-            <button type="submit" class="bg-pep-dark text-white px-6 py-3 rounded-xl font-bold hover:bg-pep-accent transition-all text-sm">S'abonner</button>
-        </form>
+    <!-- Footer Minimal -->
+    <div class="border-t border-gray-50 py-12 text-center bg-gray-50/50 mt-20">
+        <p class="text-xs text-gray-400">PEP.uno © {{ date('Y') }} — Hub de Réflexion</p>
     </div>
-</section>
-
-<style>
-    /* Custom prose styles for better editorial rendering */
-    .prose-pep h2 {
-        @apply text-3xl mt-12 mb-6;
-    }
-    .prose-pep h3 {
-        @apply text-2xl mt-8 mb-4;
-    }
-    .prose-pep p {
-        @apply mb-6;
-    }
-</style>
+</div>
 @endsection
