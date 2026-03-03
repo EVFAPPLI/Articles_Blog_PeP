@@ -12,7 +12,15 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/blog', function () {
-    $posts = Post::published()->orderBy('published_at', 'desc')->paginate(12);
+    $category = request('category');
+    
+    $posts = Post::published()
+        ->when($category && $category !== 'Tous', function ($query) use ($category) {
+            return $query->where('category', $category);
+        })
+        ->orderBy('published_at', 'desc')
+        ->paginate(12);
+
     return view('blog.index', compact('posts'));
 })->name('blog.index');
 
