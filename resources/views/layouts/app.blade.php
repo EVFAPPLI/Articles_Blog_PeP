@@ -18,12 +18,8 @@
     <!-- Navigation Flottante -->
     <nav class="fixed w-full z-50 top-0 left-0 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between glass mt-4 rounded-full mx-4 lg:mx-auto">
-            <div class="flex items-center space-x-3">
-                <a href="{{ url('/') }}" class="flex items-center space-x-2 group">
-                    <div class="w-10 h-10 bg-pep-dark text-white flex items-center justify-center rounded-sm group-hover:bg-pep-accent transition-colors">
-                        <span class="font-bold text-xl">P</span>
-                    </div>
-                    <span class="text-xl font-serif font-bold tracking-tight italic">PEP.uno</span>
+                <a href="{{ url('/') }}" class="flex items-center group">
+                    <img src="https://bruno.appliscreaweb.fr/public/Logos/logo_pep_uno.webp" alt="PEP.uno Logo" class="h-10 transition-transform transform group-hover:scale-105">
                 </a>
             </div>
 
