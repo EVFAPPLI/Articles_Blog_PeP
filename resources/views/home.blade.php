@@ -175,49 +175,83 @@
     </section>
     @endif
 
-    <!-- Promo Livre Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="bg-gray-50 rounded-[3rem] p-10 lg:p-16 border border-gray-100 shadow-xl overflow-hidden relative flex flex-col lg:flex-row items-center gap-16">
-                <!-- Background decoration -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-pep-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                
-                <div class="w-full lg:w-1/3 flex-shrink-0 relative z-10 flex justify-center">
-                    <img src="https://pep.world/wp-content/uploads/2019/07/cover_ebookSiSimple07.05.2019-1.jpg" alt="Livre Si Simple ! par Bruno Savoyat" class="w-64 md:w-80 rounded-r-2xl rounded-l-md shadow-2xl transform -rotate-2 hover:rotate-0 transition-transform duration-500 border-l-8 border-slate-800">
-                </div>
+    <!-- Promo Livre Section (Premium Dark Redesign) -->
+    <section class="relative py-24 mb-10 overflow-hidden bg-[#0A1128] border-y border-gray-900 shadow-2xl">
+        <!-- Background Ambient Glow -->
+        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            <div class="absolute top-0 right-1/4 w-[600px] h-[600px] bg-pep-accent/10 rounded-full blur-[100px] transform -translate-y-1/2"></div>
+            <div class="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] transform translate-y-1/2"></div>
+            <!-- Subtler noise texture (optional but adds premium feel) -->
+            <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\"/%3E%3C/svg%3E');"></div>
+        </div>
 
-                <div class="w-full lg:w-2/3 relative z-10 text-center lg:text-left">
-                    <div class="flex items-center justify-center lg:justify-start gap-4 mb-6">
-                        <img src="https://pep.world/wp-content/uploads/2019/07/logo-sky-blue-on-couleur.png" alt="PEP World" class="h-8">
-                        <span class="h-4 w-px bg-gray-300"></span>
-                        <span class="text-pep-accent font-bold tracking-widest text-xs uppercase">Sélection Lecture</span>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Left: Text Content -->
+                <div class="order-2 lg:order-1 text-center lg:text-left">
+                    <!-- Top Badge -->
+                    <div class="inline-flex items-center gap-3 mb-8 bg-white/5 border border-white/10 rounded-full pr-6 p-1 backdrop-blur-sm">
+                        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center p-1.5 shrink-0">
+                            <img src="https://pep.world/wp-content/uploads/2019/07/logo-sky-blue-on-couleur.png" alt="PEP World" class="h-full object-contain">
+                        </div>
+                        <span class="text-blue-300 font-bold tracking-widest text-[10px] md:text-xs uppercase">Sélection Lecture PEP®</span>
                     </div>
                     
-                    <h2 class="text-3xl lg:text-5xl font-serif font-black mb-6 text-pep-dark leading-tight">
-                        15 moyens pour dynamiser votre vie et votre travail
+                    <h2 class="text-4xl lg:text-5xl xl:text-6xl font-serif font-black mb-6 text-white leading-[1.15]">
+                        15 moyens pour dynamiser <br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-pep-accent to-purple-400 italic">votre vie et votre travail</span>
                     </h2>
                     
-                    <p class="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                        Un livre avec lequel vous allez optimiser votre efficacité personnelle, que ce soit au travail ou à la maison. 15 moyens et des principes simples pour des résultats extraordinaires. Plus d'un million de personnes ont déjà expérimenté la plupart de ces principes pour dynamiser leur vie professionnelle et privée et vivre plus heureux.
+                    <p class="text-lg text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
+                        Un livre incontournable pour optimiser votre efficacité personnelle. Des principes simples pour des résultats extraordinaires. Déjà plébiscité par des milliers de lecteurs.
                     </p>
 
-                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 text-sm text-gray-500 mb-10">
-                        <div class="flex flex-col gap-1 text-center lg:text-left">
-                            <span class="font-bold text-gray-900">Auteur : Bruno Savoyat</span>
-                            <span>ISBN : <span class="font-mono">978-2-9566840-6-0</span></span>
+                    <!-- Info Cards -->
+                    <div class="grid grid-cols-2 gap-4 text-sm mb-12 max-w-lg mx-auto lg:mx-0">
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col justify-center backdrop-blur-sm hover:bg-white/10 transition-colors">
+                            <span class="text-white font-bold text-base mb-1">Auteur</span>
+                            <span class="text-gray-400">Bruno Savoyat</span>
                         </div>
-                        <div class="hidden sm:block w-px h-10 bg-gray-200"></div>
-                        <div class="flex flex-col gap-1 text-center lg:text-left">
-                            <span>419 pages (17 cm x 2.15 cm x 24 cm)</span>
-                            <span>Aussi en format ebook (Fr, En, Nl)</span>
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col justify-center backdrop-blur-sm hover:bg-white/10 transition-colors">
+                            <span class="text-white font-bold text-base mb-1">Détails</span>
+                            <span class="text-gray-400">419 pages (Aussi en E-Book)</span>
                         </div>
                     </div>
 
-                    <a href="https://pep.world/boutique/" target="_blank" class="inline-flex items-center justify-center bg-pep-accent text-white px-8 py-4 rounded-full font-bold hover:bg-blue-700 transition-all duration-300 transform hover-lift shadow-lg hover:shadow-blue-500/30">
-                        COMMANDER LE LIVRE SUR PEP.WORLD
-                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                    </a>
+                    <!-- Call to Action -->
+                    <div class="flex justify-center lg:justify-start">
+                        <a href="https://pep.world/boutique/" target="_blank" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-pep-accent to-blue-600 text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-black text-sm md:text-base tracking-wide uppercase overflow-hidden shadow-[0_0_30px_-5px_var(--pep-accent)] hover:shadow-[0_0_50px_-5px_var(--pep-accent)] transition-all duration-300 hover:-translate-y-1">
+                            <!-- Shine effect -->
+                            <div class="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"></div>
+                            
+                            <span class="relative z-10 flex items-center">
+                                COMMANDER SUR LA BOUTIQUE
+                                <svg class="ml-3 w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </span>
+                        </a>
+                    </div>
                 </div>
+
+                <!-- Right: Visual -->
+                <div class="order-1 lg:order-2 flex justify-center py-10 relative">
+                    <!-- Glow behind book -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-blue-500/30 blur-[80px] rounded-full"></div>
+                    
+                    <div class="relative group perspective-1000 z-10">
+                        <img 
+                            src="https://pep.world/wp-content/uploads/2019/07/cover_ebookSiSimple07.05.2019-1.jpg" 
+                            alt="Couverture du Livre Si Simple !" 
+                            class="w-64 md:w-80 lg:w-[400px] h-auto rounded-r-2xl rounded-l-md shadow-[20px_20px_60px_rgba(0,0,0,0.5)] transform lg:rotate-y-12 lg:rotate-z-2 transition-transform duration-700 ease-out group-hover:rotate-0  group-hover:scale-[1.02] border-l-[12px] border-[#182a45]"
+                        >
+                        <!-- Badge "Si Simple" overlay -->
+                        <div class="absolute -bottom-4 -left-4 md:-bottom-8 md:-left-8 bg-white text-pep-dark p-4 md:p-5 rounded-2xl shadow-2xl border border-gray-100 transform -rotate-3 group-hover:rotate-0 transition-transform hidden sm:block">
+                            <div class="text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-1">Méthodologie</div>
+                            <div class="font-black text-lg text-pep-accent">Testé & Approuvé</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
