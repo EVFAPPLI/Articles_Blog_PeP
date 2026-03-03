@@ -55,14 +55,8 @@
             </div>
         </header>
 
-        <!-- 3. HTML Content (Advanced Prose) -->
-        <div class="prose prose-lg prose-slate max-w-none 
-                    prose-h2:text-3xl prose-h2:font-black prose-h2:text-pep-dark prose-h2:mt-24 prose-h2:mb-12 prose-h2:tracking-tight
-                    prose-p:text-slate-700 prose-p:leading-[2.1] prose-p:mb-14 prose-p:text-[1.2rem]
-                    prose-strong:text-pep-dark prose-strong:font-black
-                    prose-em:text-pep-accent prose-em:italic prose-em:font-medium prose-em:not-italic prose-em:text-[1.1rem] prose-em:border-l-4 prose-em:border-pep-accent/30 prose-em:pl-6 prose-em:block prose-em:my-10
-                    prose-ul:list-disc prose-ul:pl-8 prose-ul:space-y-8 prose-ul:mb-14
-                    prose-img:rounded-[2.5rem] prose-img:shadow-2xl prose-img:my-20 prose-img:border-8 prose-img:border-white">
+        <!-- 3. HTML Content (Advanced Prose V4) -->
+        <div class="prose max-w-none">
             {!! preg_replace('/<h1(.*?)>(.*?)<\/h1>/is', '<h2$1>$2</h2>', $post->html_content) !!}
         </div>
 

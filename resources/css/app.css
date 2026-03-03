@@ -52,4 +52,36 @@
     .badge-pilotage { @apply bg-amber-600 text-white border-amber-500 shadow-md; }
     .badge-leadership { @apply bg-indigo-600 text-white border-indigo-500 shadow-md; }
     .badge-flow { @apply bg-purple-600 text-white border-purple-500 shadow-md; }
+
+    /* Forced Prose Styling (V4) */
+    .prose {
+        max-width: none !important;
+    }
+
+    .prose p {
+        @apply mb-14 leading-[2.2] text-slate-700 text-[1.2rem] opacity-90;
+        margin-bottom: 3.5rem !important;
+    }
+
+    .prose em {
+        @apply block my-12 pl-8 border-l-4 border-pep-accent/40 italic text-pep-accent font-medium text-[1.15rem];
+        display: block !important;
+        font-style: italic !important;
+    }
+
+    .prose h2 {
+        @apply mt-24 mb-10 text-pep-dark font-black tracking-tight text-3xl;
+    }
+
+    .prose strong {
+        @apply font-black text-pep-dark;
+    }
+
+    .prose ul {
+        @apply mb-14 space-y-6 pl-8;
+    }
+
+    .prose li {
+        @apply text-slate-700 leading-relaxed text-[1.1rem];
+    }
 }
