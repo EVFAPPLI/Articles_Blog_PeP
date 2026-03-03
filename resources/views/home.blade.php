@@ -175,79 +175,93 @@
     </section>
     @endif
 
-    <!-- Promo Livre Section (Premium Dark Redesign) -->
-    <section class="relative py-24 mb-10 overflow-hidden bg-[#0A1128] border-y border-gray-900 shadow-2xl">
-        <!-- Background Ambient Glow -->
-        <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            <div class="absolute top-0 right-1/4 w-[600px] h-[600px] bg-pep-accent/10 rounded-full blur-[100px] transform -translate-y-1/2"></div>
-            <div class="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] transform translate-y-1/2"></div>
-            <!-- Subtler noise texture (optional but adds premium feel) -->
-            <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.65\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\"/%3E%3C/svg%3E');"></div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <!-- Promo Livre Section (Premium Layout Garanti) -->
+    <section class="py-24 bg-gray-50/50 border-y border-gray-100" style="background-color: #f8fafc; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; padding: 6rem 0;">
+        <div class="max-w-7xl mx-auto px-6" style="max-width: 80rem; margin: 0 auto; padding: 0 1.5rem;">
+            
+            <div class="bg-white" style="background-color: white; border-radius: 2.5rem; padding: 3rem; border: 1px solid #f1f5f9; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 3rem; position: relative; overflow: hidden; justify-content: space-between; align-items: center;" id="bookPromoContainer">
                 
-                <!-- Left: Text Content -->
-                <div class="order-2 lg:order-1 text-center lg:text-left">
-                    <!-- Top Badge -->
-                    <div class="inline-flex items-center gap-3 mb-8 bg-white/5 border border-white/10 rounded-full pr-6 p-1 backdrop-blur-sm">
-                        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center p-1.5 shrink-0">
-                            <img src="https://pep.world/wp-content/uploads/2019/07/logo-sky-blue-on-couleur.png" alt="PEP World" class="h-full object-contain">
-                        </div>
-                        <span class="text-blue-300 font-bold tracking-widest text-[10px] md:text-xs uppercase">Sélection Lecture PEP®</span>
+                <!-- Script simple pour gestion responsive de la grid inline -->
+                <script>
+                    function adjustBookPromoLayout() {
+                        const container = document.getElementById('bookPromoContainer');
+                        if (window.innerWidth >= 1024) {
+                            container.style.flexDirection = 'row';
+                            container.style.padding = '4rem';
+                            container.style.gap = '4rem';
+                        } else {
+                            container.style.flexDirection = 'column';
+                            container.style.padding = '2rem';
+                            container.style.gap = '2rem';
+                        }
+                    }
+                    window.addEventListener('resize', adjustBookPromoLayout);
+                    window.addEventListener('DOMContentLoaded', adjustBookPromoLayout);
+                </script>
+
+                <!-- Background Decoration -->
+                <div style="position: absolute; top: -5rem; right: -5rem; width: 24rem; height: 24rem; background-color: #eff6ff; border-radius: 50%; filter: blur(60px); opacity: 0.6; z-index: 0; pointer-events: none;"></div>
+                <div style="position: absolute; bottom: -5rem; left: -5rem; width: 24rem; height: 24rem; background-color: #ecfdf5; border-radius: 50%; filter: blur(60px); opacity: 0.6; z-index: 0; pointer-events: none;"></div>
+
+                <!-- Left: Content -->
+                <div style="flex: 1; z-index: 10; width: 100%;">
+                    
+                    <div style="display: inline-flex; align-items: center; gap: 0.75rem; background-color: #eff6ff; color: #1d4ed8; padding: 0.5rem 1rem; border-radius: 9999px; margin-bottom: 2rem; border: 1px solid #dbeafe;">
+                        <img src="https://pep.world/wp-content/uploads/2019/07/logo-sky-blue-on-couleur.png" alt="PEP World" style="height: 1.25rem;">
+                        <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Sélection Lecture</span>
                     </div>
-                    
-                    <h2 class="text-4xl lg:text-5xl xl:text-6xl font-serif font-black mb-6 text-white leading-[1.15]">
+
+                    <h2 style="font-family: 'Instrument Serif', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; line-height: 1.1; color: #0f172a; margin-bottom: 1.5rem;">
                         15 moyens pour dynamiser <br/>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-pep-accent to-purple-400 italic">votre vie et votre travail</span>
+                        <span style="font-style: italic; font-weight: 400; color: #64748b;">votre vie et votre travail</span>
                     </h2>
-                    
-                    <p class="text-lg text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
+
+                    <p style="font-size: 1.125rem; color: #475569; line-height: 1.7; margin-bottom: 2.5rem; max-width: 40rem;">
                         Un livre incontournable pour optimiser votre efficacité personnelle. Des principes simples pour des résultats extraordinaires. Déjà plébiscité par des milliers de lecteurs.
                     </p>
 
-                    <!-- Info Cards -->
-                    <div class="grid grid-cols-2 gap-4 text-sm mb-12 max-w-lg mx-auto lg:mx-0">
-                        <div class="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col justify-center backdrop-blur-sm hover:bg-white/10 transition-colors">
-                            <span class="text-white font-bold text-base mb-1">Auteur</span>
-                            <span class="text-gray-400">Bruno Savoyat</span>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 3rem; max-width: 35rem;">
+                        <div style="background-color: #f8fafc; border: 1px solid #f1f5f9; border-radius: 1.25rem; padding: 1.5rem;">
+                            <span style="display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 0.25rem;">Auteur</span>
+                            <span style="display: block; font-size: 1.25rem; font-weight: 900; color: #0f172a;">Bruno Savoyat</span>
                         </div>
-                        <div class="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col justify-center backdrop-blur-sm hover:bg-white/10 transition-colors">
-                            <span class="text-white font-bold text-base mb-1">Détails</span>
-                            <span class="text-gray-400">419 pages (Aussi en E-Book)</span>
+                        <div style="background-color: #f8fafc; border: 1px solid #f1f5f9; border-radius: 1.25rem; padding: 1.5rem;">
+                            <span style="display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 0.25rem;">Détails</span>
+                            <span style="display: block; font-size: 1.125rem; font-weight: 900; color: #0f172a;">419 pages (aussi en E-Book)</span>
                         </div>
                     </div>
 
-                    <!-- Call to Action -->
-                    <div class="flex justify-center lg:justify-start">
-                        <a href="https://pep.world/boutique/" target="_blank" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-pep-accent to-blue-600 text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-black text-sm md:text-base tracking-wide uppercase overflow-hidden shadow-[0_0_30px_-5px_var(--pep-accent)] hover:shadow-[0_0_50px_-5px_var(--pep-accent)] transition-all duration-300 hover:-translate-y-1">
-                            <!-- Shine effect -->
-                            <div class="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12"></div>
-                            
-                            <span class="relative z-10 flex items-center">
-                                COMMANDER SUR LA BOUTIQUE
-                                <svg class="ml-3 w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                            </span>
+                    <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                        <a href="https://pep.world/boutique/" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; background-color: #0f172a; color: white; padding: 1.25rem 2.5rem; border-radius: 9999px; font-weight: 800; font-size: 1rem; text-decoration: none; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.4); border: 2px solid transparent; transition: all 0.3s ease;" class="hover:bg-blue-600 hover:-translate-y-1" onmouseover="this.style.backgroundColor='#2563eb'; this.style.transform='translateY(-2px)';" onmouseout="this.style.backgroundColor='#0f172a'; this.style.transform='translateY(0)';">
+                            COMMANDER LE LIVRE
+                            <svg style="margin-left: 0.75rem; width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
+                        <span style="font-family: monospace; font-size: 0.875rem; color: #94a3b8; font-weight: 600;">ISBN: 978-2-9566840-6-0</span>
                     </div>
                 </div>
 
                 <!-- Right: Visual -->
-                <div class="order-1 lg:order-2 flex justify-center py-10 relative">
-                    <!-- Glow behind book -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-blue-500/30 blur-[80px] rounded-full"></div>
+                <div style="flex: 1; display: flex; justify-content: center; position: relative; width: 100%;">
+                    <!-- Decorative Glow behind book -->
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; height: 80%; background-color: rgba(59, 130, 246, 0.15); filter: blur(40px); border-radius: 50%; z-index: 0;"></div>
                     
-                    <div class="relative group perspective-1000 z-10">
+                    <div style="position: relative; z-index: 10; display: flex; justify-content: center;">
                         <img 
                             src="https://pep.world/wp-content/uploads/2019/07/cover_ebookSiSimple07.05.2019-1.jpg" 
                             alt="Couverture du Livre Si Simple !" 
-                            class="w-64 md:w-80 lg:w-[400px] h-auto rounded-r-2xl rounded-l-md shadow-[20px_20px_60px_rgba(0,0,0,0.5)] transform lg:rotate-y-12 lg:rotate-z-2 transition-transform duration-700 ease-out group-hover:rotate-0  group-hover:scale-[1.02] border-l-[12px] border-[#182a45]"
+                            style="width: 100%; max-width: 320px; height: auto; border-radius: 0 1.5rem 1.5rem 0.5rem; box-shadow: 20px 20px 60px rgba(0,0,0,0.3); border-left: 14px solid #182a45; transform: perspective(1000px) rotateY(-12deg) rotateZ(-3deg); transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);"
+                            onmouseover="this.style.transform='perspective(1000px) rotateY(0) rotateZ(0) scale(1.05)'"
+                            onmouseout="this.style.transform='perspective(1000px) rotateY(-12deg) rotateZ(-3deg) scale(1)'"
                         >
-                        <!-- Badge "Si Simple" overlay -->
-                        <div class="absolute -bottom-4 -left-4 md:-bottom-8 md:-left-8 bg-white text-pep-dark p-4 md:p-5 rounded-2xl shadow-2xl border border-gray-100 transform -rotate-3 group-hover:rotate-0 transition-transform hidden sm:block">
-                            <div class="text-[10px] uppercase font-bold text-gray-400 tracking-widest mb-1">Méthodologie</div>
-                            <div class="font-black text-lg text-pep-accent">Testé & Approuvé</div>
+                        <!-- Floating Badge -->
+                        <div style="position: absolute; bottom: -20px; left: -20px; background-color: white; padding: 1.25rem 1.5rem; border-radius: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #f1f5f9; display: flex; align-items: center; gap: 1rem; transform: rotate(-5deg); transition: transform 0.4s ease; z-index: 20;" onmouseover="this.style.transform='rotate(0) scale(1.05)'" onmouseout="this.style.transform='rotate(-5deg) scale(1)'">
+                            <div style="width: 3rem; height: 3rem; border-radius: 50%; background-color: #eff6ff; color: #3b82f6; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
+                                <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; color: #94a3b8; margin-bottom: 0.125rem;">Méthodologie</div>
+                                <div style="font-size: 1rem; font-weight: 900; color: #0f172a;">Testé & Approuvé</div>
+                            </div>
                         </div>
                     </div>
                 </div>
