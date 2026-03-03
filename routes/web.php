@@ -1,3 +1,5 @@
+<?php
+
 use App\Models\Post;
 
 Route::get('/', function () {
