@@ -3,8 +3,13 @@
 use App\Models\Post;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $latestPosts = \App\Models\Post::published()
+        ->latest()
+        ->take(3)
+        ->get();
+        
+    return view('home', compact('latestPosts'));
+})->name('home');
 
 Route::get('/blog', function () {
     $posts = Post::published()->orderBy('published_at', 'desc')->paginate(12);
