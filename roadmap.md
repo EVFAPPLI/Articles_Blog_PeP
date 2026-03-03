@@ -42,12 +42,12 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 - **[ ] Système de Recherche** : Ajout d'une barre de recherche sur le blog.
 - **[ ] Newsletters / E-letters** : Intégration du système de diffusion basé sur les articles.
 
-## 🔄 Phase 7 : Module FAQ Administrable (En cours)
+## ✅ Phase 7 : Module FAQ Administrable (Terminé)
 
-- **[ ] Architecture Data** : Modèle `Faq` et Migration.
-- **[ ] Back-Office** : Création de `FaqResource` pour Filament.
-- **[ ] Seeding** : Injection des 4 questions/réponses initiales.
-- **[ ] Frontend** : Route, lien dans la Navbar et page publique (Design Premium Accordéon).
+- **[x] Architecture Data** : Modèle `Faq` et Migration.
+- **[x] Back-Office** : Création de `FaqResource` pour Filament.
+- **[x] Seeding** : Injection des 4 questions/réponses initiales via Seeder.
+- **[x] Frontend** : Route `/faq`, intégration d'un header illustré, et page publique avec design Premium Liquid Glass Accordéon.
 
 ---
 
