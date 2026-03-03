@@ -24,9 +24,9 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 - **[ ] Intégration Google Indexing API** : Automatiser l'indexation dès la publication.
 - **[ ] Configuration Gemini (GenAI)** : Ajout des clés services pour l'aide à la rédaction.
 
-## 📅 Phase 4 : Design & UX (À venir)
+## ✅ Phase 4 : Design & UX
 
-- **[ ] Refonte Graphique Blog** : Application d'un design premium (Liquid Glass / Modern Blog layout).
+- **[x] Refonte Graphique Blog / Home** : Application d'un design premium éditorial.
 - **[ ] Système de Recherche** : Ajout d'une barre de recherche sur le blog.
 - **[ ] Newsletters / E-letters** : Intégration du système de diffusion basé sur les articles.
 
