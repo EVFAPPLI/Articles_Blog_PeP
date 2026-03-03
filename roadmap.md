@@ -42,6 +42,13 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 - **[ ] Système de Recherche** : Ajout d'une barre de recherche sur le blog.
 - **[ ] Newsletters / E-letters** : Intégration du système de diffusion basé sur les articles.
 
+## 🔄 Phase 7 : Module FAQ Administrable (En cours)
+
+- **[ ] Architecture Data** : Modèle `Faq` et Migration.
+- **[ ] Back-Office** : Création de `FaqResource` pour Filament.
+- **[ ] Seeding** : Injection des 4 questions/réponses initiales.
+- **[ ] Frontend** : Route, lien dans la Navbar et page publique (Design Premium Accordéon).
+
 ---
 
 _Dernière mise à jour : 3 mars 2026_

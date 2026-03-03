@@ -36,3 +36,11 @@ Route::get('/blog/{slug}', function (string $slug) {
     $post = Post::where('slug', $slug)->firstOrFail();
     return view('blog.show', compact('post'));
 })->name('blog.show');
+
+Route::get('/faq', function () {
+    $faqs = \App\Models\Faq::where('is_active', true)
+        ->orderBy('sort_order', 'asc')
+        ->get();
+        
+    return view('faq.index', compact('faqs'));
+})->name('faq.index');
