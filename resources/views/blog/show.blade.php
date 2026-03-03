@@ -22,9 +22,19 @@
         @endif
 
         <!-- 2. Header Expert -->
-        <header class="mb-10 text-center">
+        <header class="mb-14 text-center">
             @if($post->category)
-                <span class="inline-block text-white bg-pep-accent px-4 py-1.5 rounded-full uppercase tracking-widest text-[10px] font-black shadow-sm mb-6">
+                @php
+                    $badgeClass = match($post->category) {
+                        'Esprit PEP' => 'badge-esprit-pep',
+                        'Boîte à outils' => 'badge-boite-a-outils',
+                        'Pilotage' => 'badge-pilotage',
+                        'Leadership' => 'badge-leadership',
+                        'Flow' => 'badge-flow',
+                        default => 'bg-gray-100 text-gray-700 border-gray-200'
+                    };
+                @endphp
+                <span class="inline-block px-5 py-2 rounded-full uppercase tracking-[0.2em] text-[11px] font-black border {{ $badgeClass }} shadow-sm mb-8">
                     {{ $post->category }}
                 </span>
             @endif
@@ -47,11 +57,12 @@
 
         <!-- 3. HTML Content (Advanced Prose) -->
         <div class="prose prose-lg prose-slate max-w-none 
-                    prose-h2:text-3xl prose-h2:font-black prose-h2:text-pep-dark prose-h2:mt-16 prose-h2:mb-8 prose-h2:tracking-tight
-                    prose-p:text-slate-600 prose-p:leading-[1.8] prose-p:mb-8 prose-p:text-lg
-                    prose-strong:text-pep-dark prose-strong:font-bold
-                    prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-4 prose-ul:mb-8
-                    prose-img:rounded-3xl prose-img:shadow-xl">
+                    prose-h2:text-3xl prose-h2:font-black prose-h2:text-pep-dark prose-h2:mt-20 prose-h2:mb-10 prose-h2:tracking-tight
+                    prose-p:text-slate-600 prose-p:leading-[2] prose-p:mb-12 prose-p:text-[1.15rem]
+                    prose-strong:text-pep-dark prose-strong:font-extrabold
+                    prose-em:text-pep-accent prose-em:italic prose-em:font-medium
+                    prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-6 prose-ul:mb-12
+                    prose-img:rounded-[2rem] prose-img:shadow-2xl prose-img:my-16">
             {!! preg_replace('/<h1(.*?)>(.*?)<\/h1>/is', '<h2$1>$2</h2>', $post->html_content) !!}
         </div>
 
