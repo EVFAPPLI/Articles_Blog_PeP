@@ -38,15 +38,11 @@ class PostResource extends Resource
                         
                         Forms\Components\Select::make('category')
                             ->options([
-                                'IA' => 'IA',
-                                'SEO' => 'SEO',
-                                'Marketing' => 'Marketing',
-                                'Immobilier' => 'Immobilier',
-                                'Tech' => 'Tech',
-                                'Social' => 'Social',
-                                'Ecommerce' => 'E-commerce',
-                                'Ecologie' => 'Ékologie/Environnement',
-                                'Securite' => 'Sécurité',
+                                'Esprit PEP' => 'Esprit PEP (Charge mentale, moteur humain)',
+                                'Boîte à outils' => 'Boîte à outils (Logiciels, IA au quotidien)',
+                                'Pilotage' => 'Pilotage (Gestion du temps, priorisation)',
+                                'Leadership' => 'Leadership (Management, collaboration)',
+                                'Flow' => 'Flow (Équilibre perso/pro, detox)',
                             ])
                             ->searchable()
                             ->required(),

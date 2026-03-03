@@ -39,7 +39,7 @@ class PostSyncController extends Controller
                 'image' => 'nullable|string',
                 'meta_description' => 'nullable|string|max:255',
                 'keywords' => 'nullable',
-                'category' => 'nullable|string',
+                'category' => 'required|string|in:Esprit PEP,Boîte à outils,Pilotage,Leadership,Flow',
             ]);
 
             $slug = Str::slug($validated['slug']);
