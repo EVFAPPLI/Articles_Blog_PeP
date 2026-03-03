@@ -19,9 +19,10 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 
 ## 🔄 Phase 3 : Optimisation & Services Avancés (En cours)
 
+- **[x] Univers PEP (PEP.uno)** : Intégration des 5 catégories spécifiques (Esprit PEP, Flow, Leadership, etc.).
+- **[x] Documentation Technique** : Création du `technical_guide.md` pour la maintenance.
 - **[ ] Intégration Google Indexing API** : Automatiser l'indexation dès la publication.
 - **[ ] Configuration Gemini (GenAI)** : Ajout des clés services pour l'aide à la rédaction.
-- **[ ] Catégories Dynamiques** : Gérer les catégories via une table dédiée pour plus de flexibilité.
 
 ## 📅 Phase 4 : Design & UX (À venir)
 
