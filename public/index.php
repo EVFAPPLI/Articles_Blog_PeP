@@ -1,5 +1,7 @@
 <?php
 
+if (file_exists(__DIR__.'/dockgate.php')) { require_once __DIR__.'/dockgate.php'; }
+
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
