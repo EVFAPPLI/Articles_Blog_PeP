@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'api' => [
+        'token' => env('BLOG_SYNC_TOKEN'),
+    ],
+
 ];

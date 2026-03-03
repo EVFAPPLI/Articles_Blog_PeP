@@ -22,8 +22,8 @@ class PostSyncController extends Controller
      */
     public function sync(Request $request)
     {
-        // Authentification simplifiée (Token Secret)
-        $secretToken = config('services.api.token', 'f06f3d4fc4e63c50e206de748ee96eaa3dce98b3dca57a05dc65e395b6312076');
+        // Authentification via Token (configuré dans .env)
+        $secretToken = config('services.api.token');
         $authHeader = $request->header('Authorization');
         
         if (!$authHeader || $authHeader !== 'Bearer ' . $secretToken) {
