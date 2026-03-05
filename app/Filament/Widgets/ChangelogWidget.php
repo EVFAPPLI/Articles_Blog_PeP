@@ -29,6 +29,7 @@ class ChangelogWidget extends Widget
                         ['type' => 'NOUVEAU', 'color' => 'success', 'text' => 'Baguette Magique IA : Extraction automatique de 5 à 8 mots-clés hyper-pertinents.'],
                         ['type' => 'AMÉLIORATION', 'color' => 'info', 'text' => 'Baguette Magique IA (Améliorer) : Correction, copywriting, et optimisation syntaxique de vos articles en 1 clic.'],
                         ['type' => 'UX', 'color' => 'primary', 'text' => 'Système de fenêtres (Modules) "Avant / Après" introduites pour valider et modifier le texte de l\'IA avant tout remplacement.'],
+                        ['type' => 'CORRECTION', 'color' => 'danger', 'text' => 'Résolution du problème de débordement du texte (overflow) sur la vue publique des articles.'],
                     ],
                 ],
                 [
