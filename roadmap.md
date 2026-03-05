@@ -17,10 +17,11 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 - **[x] Administration Filament** : Interface `PostResource` avec sections SEO et gestion HTML.
 - **[x] Vues Publiques (MVP)** : Routes `/blog` et `/blog/{slug}` avec rendu HTML brut.
 
-## 🔄 Phase 3 : Optimisation & Services Avancés (En cours)
+## ✅ Phase 3 : Optimisation & Services Avancés (Complet)
 
 - **[x] Univers PEP (PEP.uno)** : Intégration des 5 catégories spécifiques (Esprit PEP, Flow, Leadership, etc.).
 - **[x] Documentation Technique** : Création du `technical_guide.md` pour la maintenance.
+- **[x] Portabilité des Articles (JSON)** : Système d'export/import indépendant pour le développement local.
 - **[ ] Intégration Google Indexing API** : Automatiser l'indexation dès la publication.
 - **[ ] Configuration Gemini (GenAI)** : Ajout des clés services pour l'aide à la rédaction.
 
@@ -42,13 +43,12 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 - **[ ] Système de Recherche** : Ajout d'une barre de recherche sur le blog.
 - **[ ] Newsletters / E-letters** : Intégration du système de diffusion basé sur les articles.
 
-## ✅ Phase 7 : Module FAQ Administrable (Terminé)
+## ✅ Phase 8 : Confort Visuel & Navigation (Terminé)
 
-- **[x] Architecture Data** : Modèle `Faq` et Migration.
-- **[x] Back-Office** : Création de `FaqResource` pour Filament.
-- **[x] Seeding** : Injection des 4 questions/réponses initiales via Seeder.
-- **[x] Frontend** : Route `/faq`, intégration d'un header illustré, et page publique avec design Premium Liquid Glass Accordéon.
+- **[x] Optimisation des Tables** : Actions Filament par icônes avec tooltips.
+- **[x] Navigation permanente** : Ajout du lien "Accueil" et suppression du bouton de retour flottant.
+- **[x] Dashboard Épuré** : Retrait du widget d'information standard.
 
 ---
 
-_Dernière mise à jour : 3 mars 2026_
+_Dernière mise à jour : 5 mars 2026_

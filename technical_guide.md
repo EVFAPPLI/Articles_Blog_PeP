@@ -84,8 +84,25 @@ La section "Promo Livre" (homepage) s'appuie délibérément sur du **CSS Inline
 
 ---
 
+## 🐳 Développement Local (Docker Sail)
+
+### 1. Lien de stockage (Symbolic Link)
+
+Dans un environnement Docker Sail, le lien symbolique `public/storage` doit être créé **depuis l'intérieur** du conteneur pour pointer correctement vers `/var/www/html/storage/app/public`.
+
+```bash
+./vendor/bin/sail artisan storage:link
+```
+
+### 2. Configuration .env
+
+- **APP_URL** : Doit correspondre à l'URL utilisée dans le navigateur (ex: `http://localhost`).
+- **FILESYSTEM_DISK** : Réglez sur `public` pour permettre l'accès aux images téléchargées via Filament/API.
+
+---
+
 ## 📝 Commandes de Maintenance
 
-- **Vider le cache des routes** : `php artisan route:clear`
-- **Voir les logs en temps réel** : `tail -f storage/logs/laravel.log`
-- **Forcer une migration** : `php artisan migrate --force`
+- **Vider les caches (Configuration & Routes)** : `php artisan config:clear && php artisan route:clear`
+- **Réparer le lien de stockage** : `rm public/storage && ./vendor/bin/sail artisan storage:link`
+- **Voir les logs Sail** : `./vendor/bin/sail logs -f`

@@ -7,6 +7,13 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Modules & Fonctionnalités Clés
+
+- **Blog Premium** : Système d'articles avec synchronisation par API, gestion SEO et rendu éditorial fluide.
+- **Portabilité JSON** : Exportation et importation d'articles par fichiers JSON pour faciliter le transfert d'environnements.
+- **Module FAQ** : Interface administrable pour gérer une foire aux questions avec un design accordéon "Liquid Glass".
+- **Interface Optimisée** : Tableau de bord Filament épuré, actions de table par icônes et navigation simplifiée.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
