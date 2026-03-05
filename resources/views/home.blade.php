@@ -351,7 +351,7 @@
             <p>© {{ date('Y') }} PEP.uno. Tous droits réservés.</p>
             <div class="flex space-x-6">
                 <a href="{{ route('legal.mentions') }}" class="hover:text-white transition-colors">Mentions légales</a>
-                <a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a>
+                <a href="{{ route('legal.privacy') }}" class="hover:text-white transition-colors">Politique de confidentialité</a>
             </div>
         </div>
     </div>

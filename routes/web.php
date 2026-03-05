@@ -47,3 +47,6 @@ Route::get('/faq', function () {
 Route::get('/mentions-legales', function () {
     return view('legal.mentions');
 })->name('legal.mentions');
+Route::get('/politique-confidentialite', function () {
+    return view('legal.privacy');
+})->name('legal.privacy');
