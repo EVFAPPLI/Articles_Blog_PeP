@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-pep-bg pt-72 pb-20 px-6">
+<div class="min-h-screen bg-pep-bg pb-20 px-6" style="padding-top: 12rem;">
     <article class="max-w-4xl mx-auto">
         <!-- Header -->
         <header class="mb-16 text-center">
