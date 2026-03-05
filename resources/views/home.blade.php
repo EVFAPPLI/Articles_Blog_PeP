@@ -313,6 +313,20 @@
                 <p class="text-gray-400 max-w-sm mb-8 leading-relaxed">
                     Plateforme dédiée à l'efficience personnelle et collective. Inspiré par les méthodes PEP® internationales.
                 </p>
+                <!-- Coordonnées -->
+                <div class="text-gray-400 text-sm space-y-2">
+                    <p class="font-bold text-white mb-2">Coordonnées :</p>
+                    <p class="font-bold text-white uppercase tracking-wider">PEPworldwide SARL</p>
+                    <p class="flex items-center gap-2">
+                        <span>📍</span> 66 avenue des Champs-Elysées, CS40152, 75008 Paris
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <span>📞</span> +33 9 77 21 55 77
+                    </p>
+                    <p class="flex items-center gap-2">
+                        <span>✉️</span> <a href="mailto:contact@pep.uno" class="hover:text-pep-accent">contact@pep.uno</a>
+                    </p>
+                </div>
             </div>
             <div>
                 <h4 class="font-bold uppercase tracking-widest text-xs mb-8 text-gray-500">Univers</h4>
@@ -336,8 +350,8 @@
         <div class="pt-10 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-4">
             <p>© {{ date('Y') }} PEP.uno. Tous droits réservés.</p>
             <div class="flex space-x-6">
-                <a href="#" class="hover:text-white transition-colors">mentions légales</a>
-                <a href="#" class="hover:text-white transition-colors">politique de confidentialité</a>
+                <a href="#" class="hover:text-white transition-colors">Mentions légales</a>
+                <a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a>
             </div>
         </div>
     </div>
