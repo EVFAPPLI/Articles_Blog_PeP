@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Actions\Action;
+use App\Services\GeminiService;
 
 class PostResource extends Resource
 {
@@ -70,11 +72,51 @@ class PostResource extends Resource
                         
                         \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('vignette_content')
                             ->label('Extrait (Vignette)')
+                            ->hintAction(
+                                Action::make('generate_vignette')
+                                    ->label('Générer IA')
+                                    ->icon('heroicon-o-sparkles')
+                                    ->action(function (Forms\Get $get, Forms\Set $set) {
+                                        $source = $get('html_content');
+                                        if (empty($source)) {
+                                            \Filament\Notifications\Notification::make()->warning()->title('Veuillez rédiger l\'article complet d\'abord.')->send();
+                                            return;
+                                        }
+                                        $prompt = "Rédige un court extrait très attractif et percutant (2 à 3 phrases max) résumant parfaitement cet article de blog. Ne retourne que la vignette, avec de légères balises de mise en forme HTML (comme <strong> ou <em>) si approprié.";
+                                        $generated = GeminiService::generateContent($prompt, strip_tags($source));
+                                        if ($generated) {
+                                            $set('vignette_content', preg_replace('/```html\n?(.*?)\n?```/is', '$1', $generated));
+                                            \Filament\Notifications\Notification::make()->success()->title('Vignette IA générée !')->send();
+                                        } else {
+                                            \Filament\Notifications\Notification::make()->danger()->title('Problème avec l\'IA.')->send();
+                                        }
+                                    })
+                            )
                             ->profile('default')
                             ->columnSpanFull(),
                         
                         \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('html_content')
                             ->label('Contenu de l\'Article')
+                            ->hintAction(
+                                Action::make('improve_html')
+                                    ->label('Améliorer')
+                                    ->icon('heroicon-o-sparkles')
+                                    ->requiresConfirmation()
+                                    ->action(function (Forms\Set $set, $state) {
+                                        if (empty($state)) {
+                                            \Filament\Notifications\Notification::make()->warning()->title('Le contenu est vide.')->send();
+                                            return;
+                                        }
+                                        $prompt = "Tu es un copywriter web expert. Améliore ce texte de blog pour le rendre plus professionnel, attractif et agréable à lire. Corrige les fautes, optimise la fluidité. IMPORTANT : CONSERVE STRICTEMENT LE CODE HTML, les balises de paragraphe, liste, titre. Ne renvoie que le code HTML amélioré de l'article.";
+                                        $improved = GeminiService::generateContent($prompt, $state);
+                                        if ($improved) {
+                                            $set('html_content', preg_replace('/```html\n?(.*?)\n?```/is', '$1', $improved));
+                                            \Filament\Notifications\Notification::make()->success()->title('Texte amélioré avec succès !')->send();
+                                        } else {
+                                            \Filament\Notifications\Notification::make()->danger()->title('Problème avec l\'IA. Vérifiez les logs.')->send();
+                                        }
+                                    })
+                            )
                             ->profile('default')
                             ->fileAttachmentsDisk('public')
                             ->fileAttachmentsVisibility('public')
@@ -87,9 +129,51 @@ class PostResource extends Resource
                     ->schema([
                         Forms\Components\Textarea::make('meta_description')
                             ->label('Méta Description')
+                            ->hintAction(
+                                Action::make('generate_meta')
+                                    ->label('Optimiser SEO (IA)')
+                                    ->icon('heroicon-o-sparkles')
+                                    ->action(function (Forms\Get $get, Forms\Set $set) {
+                                        $source = $get('html_content');
+                                        if (empty($source)) {
+                                            \Filament\Notifications\Notification::make()->warning()->title('Rédigez l\'article d\'abord.')->send();
+                                            return;
+                                        }
+                                        $prompt = "Rédige une balise meta-description ultra optimisée SEO pour ce texte. Idéalement entre 140 et 160 caractères. Orientée conversion et appel au clic. RETOURNE UNIQUEMENT LA META DESCRIPTION, SANS GUILLEMETS, SANS TEXTE AVANT OU APRES.";
+                                        $generated = GeminiService::generateContent($prompt, strip_tags($source));
+                                        if ($generated) {
+                                            $set('meta_description', \Illuminate\Support\Str::limit($generated, 255, ''));
+                                            \Filament\Notifications\Notification::make()->success()->title('Meta SEO générée !')->send();
+                                        } else {
+                                            \Filament\Notifications\Notification::make()->danger()->title('Problème IA.')->send();
+                                        }
+                                    })
+                            )
                             ->maxLength(255),
                         Forms\Components\TagsInput::make('keywords')
                             ->label('Mots-clés SEO')
+                            ->hintAction(
+                                Action::make('generate_keywords')
+                                    ->label('Mots-clés (IA)')
+                                    ->icon('heroicon-o-sparkles')
+                                    ->action(function (Forms\Get $get, Forms\Set $set) {
+                                        $source = $get('html_content');
+                                        if (empty($source)) {
+                                            \Filament\Notifications\Notification::make()->warning()->title('Rédigez l\'article d\'abord.')->send();
+                                            return;
+                                        }
+                                        $prompt = "Analyse ce texte et retourne une liste de 5 à 8 mots-clés hyper ciblés SEO. RETOURNE EXCLUSIVEMENT LES MOTS-CLÉS SÉPARÉS PAR DES VIRGULES. Exemple: mot1, mot2, mot clé composé 3, etc. SANS puces, SANS texte introductif.";
+                                        $generated = GeminiService::generateContent($prompt, strip_tags($source));
+                                        if ($generated) {
+                                            $kw = array_map('trim', explode(',', $generated));
+                                            $kw = array_filter($kw);
+                                            $set('keywords', $kw);
+                                            \Filament\Notifications\Notification::make()->success()->title('Mots-clés insérés !')->send();
+                                        } else {
+                                            \Filament\Notifications\Notification::make()->danger()->title('Problème IA.')->send();
+                                        }
+                                    })
+                            )
                             ->separator(','),
                     ]),
             ]);
