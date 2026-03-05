@@ -69,13 +69,14 @@ class PostResource extends Resource
                             ->columnSpanFull(),
                         
                         Forms\Components\Textarea::make('vignette_content')
-                            ->label('Code HTML de la Vignette (Extrait)')
+                            ->label('Extrait (Vignette)')
                             ->rows(5)
                             ->columnSpanFull(),
                         
-                        Forms\Components\Textarea::make('html_content')
-                            ->label('Code HTML de l\'Article Complet')
-                            ->rows(15)
+                        Forms\Components\RichEditor::make('html_content')
+                            ->label('Contenu de l\'Article')
+                            ->fileAttachmentsDisk('public')
+                            ->fileAttachmentsDirectory('blog-images')
                             ->columnSpanFull(),
                     ]),
 
