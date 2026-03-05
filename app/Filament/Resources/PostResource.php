@@ -124,22 +124,30 @@ class PostResource extends Resource
                     ->label('Statut'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->iconButton()
+                    ->tooltip('Modifier'),
                 Tables\Actions\Action::make('export_json')
                     ->label('Exporter JSON')
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('success')
+                    ->iconButton()
+                    ->tooltip('Exporter en JSON')
                     ->action(fn (Post $record) => response()->streamDownload(
                         fn () => print json_encode($record->toArray(), JSON_PRETTY_PRINT),
                         "article-{$record->slug}-" . now()->format('Y-m-d') . ".json"
                     )),
                 Tables\Actions\Action::make('view_public')
                     ->label('Voir sur le site')
-                    ->icon('heroicon-o-arrow-top-right-on-square')
+                    ->icon('heroicon-o-eye')
                     ->color('info')
+                    ->iconButton()
+                    ->tooltip('Voir sur le site public')
                     ->url(fn (Post $record): string => route('blog.show', $record->slug))
                     ->openUrlInNewTab(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->iconButton()
+                    ->tooltip('Supprimer'),
             ])
             ->headerActions([
                 Tables\Actions\Action::make('import_json')
