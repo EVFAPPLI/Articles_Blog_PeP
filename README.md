@@ -13,6 +13,7 @@
 - **Portabilité JSON** : Exportation et importation d'articles par fichiers JSON pour faciliter le transfert d'environnements.
 - **Module FAQ** : Interface administrable pour gérer une foire aux questions avec un design accordéon "Liquid Glass".
 - **Interface Optimisée** : Tableau de bord Filament épuré, actions de table par icônes et navigation simplifiée.
+- **Conformité & Légal** : Pages de Mentions Légales et Politique de Confidentialité avec design épuré, directement liées dans le pied de page.
 
 ## About Laravel
 

@@ -48,6 +48,7 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 - **[x] Optimisation des Tables** : Actions Filament par icônes avec tooltips.
 - **[x] Navigation permanente** : Ajout du lien "Accueil" et suppression du bouton de retour flottant.
 - **[x] Dashboard Épuré** : Retrait du widget d'information standard.
+- **[x] Conformité & Legal** : Création des pages Mentions Légales et Politique de Confidentialité au design "Premium".
 
 ---
 
