@@ -125,6 +125,14 @@ class PostResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('export_json')
+                    ->label('Exporter JSON')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('success')
+                    ->action(fn (Post $record) => response()->streamDownload(
+                        fn () => print json_encode($record->toArray(), JSON_PRETTY_PRINT),
+                        "article-{$record->slug}-" . now()->format('Y-m-d') . ".json"
+                    )),
                 Tables\Actions\Action::make('view_public')
                     ->label('Voir sur le site')
                     ->icon('heroicon-o-arrow-top-right-on-square')
@@ -132,6 +140,55 @@ class PostResource extends Resource
                     ->url(fn (Post $record): string => route('blog.show', $record->slug))
                     ->openUrlInNewTab(),
                 Tables\Actions\DeleteAction::make(),
+            ])
+            ->headerActions([
+                Tables\Actions\Action::make('import_json')
+                    ->label('Importer JSON')
+                    ->icon('heroicon-o-arrow-up-tray')
+                    ->color('primary')
+                    ->form([
+                        Forms\Components\FileUpload::make('json_file')
+                            ->label('Fichier JSON')
+                            ->required()
+                            ->acceptedFileTypes(['application/json'])
+                            ->disk('local')
+                            ->directory('temp-imports'),
+                    ])
+                    ->action(function (array $data) {
+                        $path = storage_path('app/' . $data['json_file']);
+                        $content = file_get_contents($path);
+                        $articleData = json_decode($content, true);
+                        
+                        if (!$articleData || !isset($articleData['slug'])) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Erreur')
+                                ->body('Fichier JSON invalide.')
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+
+                        // Nettoyer les champs que l'on ne veut pas écraser bêtement ou qui sont gérés par le système
+                        $toUpdate = collect($articleData)->only([
+                            'title', 'slug', 'category', 'author', 'html_content', 
+                            'vignette_content', 'meta_description', 'keywords', 
+                            'is_published', 'published_at'
+                        ])->toArray();
+
+                        Post::updateOrCreate(
+                            ['slug' => $articleData['slug']],
+                            $toUpdate
+                        );
+
+                        // Supprimer le fichier temporaire
+                        @unlink($path);
+
+                        \Filament\Notifications\Notification::make()
+                            ->title('Succès')
+                            ->body('L\'article a été importé avec succès.')
+                            ->success()
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
