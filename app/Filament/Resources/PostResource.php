@@ -68,9 +68,17 @@ class PostResource extends Resource
                             ->image()
                             ->columnSpanFull(),
                         
-                        Forms\Components\Textarea::make('vignette_content')
+                        Forms\Components\RichEditor::make('vignette_content')
                             ->label('Extrait (Vignette)')
-                            ->rows(5)
+                            ->toolbarButtons([
+                                'bold',
+                                'italic',
+                                'link',
+                                'bulletList',
+                                'orderedList',
+                                'undo',
+                                'redo',
+                            ])
                             ->columnSpanFull(),
                         
                         Forms\Components\RichEditor::make('html_content')
