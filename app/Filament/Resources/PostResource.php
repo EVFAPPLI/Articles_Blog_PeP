@@ -74,9 +74,19 @@ class PostResource extends Resource
                             ->label('Extrait (Vignette)')
                             ->hintAction(
                                 Action::make('generate_vignette')
-                                    ->label('Générer IA')
+                                    ->label('Générer l\'extrait-vignette par l\'IA')
                                     ->icon('heroicon-o-sparkles')
-                                    ->action(function (Forms\Get $get, Forms\Set $set) {
+                                    ->modalHeading('Proposition d\'extrait par l\'IA')
+                                    ->modalSubmitActionLabel('Accepter et Remplacer')
+                                    ->form([
+                                        \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('suggested_vignette')
+                                            ->label('Extrait proposé')
+                                            ->profile('default')
+                                            ->minHeight(200)
+                                            ->maxHeight(300)
+                                            ->required(),
+                                    ])
+                                    ->mountUsing(function (Forms\ComponentContainer $form, Forms\Get $get) {
                                         $source = $get('html_content');
                                         if (empty($source)) {
                                             \Filament\Notifications\Notification::make()->warning()->title('Veuillez rédiger l\'article complet d\'abord.')->send();
@@ -85,35 +95,60 @@ class PostResource extends Resource
                                         $prompt = "Rédige un court extrait très attractif et percutant (2 à 3 phrases max) résumant parfaitement cet article de blog. Ne retourne que la vignette, avec de légères balises de mise en forme HTML (comme <strong> ou <em>) si approprié.";
                                         $generated = GeminiService::generateContent($prompt, strip_tags($source));
                                         if ($generated) {
-                                            $set('vignette_content', preg_replace('/```html\n?(.*?)\n?```/is', '$1', $generated));
-                                            \Filament\Notifications\Notification::make()->success()->title('Vignette IA générée !')->send();
+                                            $form->fill([
+                                                'suggested_vignette' => preg_replace('/```html\n?(.*?)\n?```/is', '$1', $generated)
+                                            ]);
                                         } else {
                                             \Filament\Notifications\Notification::make()->danger()->title('Problème avec l\'IA.')->send();
                                         }
                                     })
+                                    ->action(function (Forms\Set $set, array $data) {
+                                        if (!empty($data['suggested_vignette'])) {
+                                            $set('vignette_content', $data['suggested_vignette']);
+                                            \Filament\Notifications\Notification::make()->success()->title('Vignette remplacée avec succès !')->send();
+                                        }
+                                    })
                             )
                             ->profile('default')
+                            ->minHeight(200)
+                            ->maxHeight(300)
                             ->columnSpanFull(),
                         
                         \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('html_content')
                             ->label('Contenu de l\'Article')
                             ->hintAction(
                                 Action::make('improve_html')
-                                    ->label('Améliorer')
+                                    ->label('Améliorer le contenu')
                                     ->icon('heroicon-o-sparkles')
-                                    ->requiresConfirmation()
-                                    ->action(function (Forms\Set $set, $state) {
-                                        if (empty($state)) {
+                                    ->modalHeading('Proposition d\'amélioration par l\'IA')
+                                    ->modalDescription('L\'IA a généré une version améliorée de votre texte. Vous pouvez la modifier avant de l\'accepter.')
+                                    ->modalSubmitActionLabel('Accepter et Remplacer')
+                                    ->form([
+                                        \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('suggested_content')
+                                            ->label('Texte amélioré par Gemini')
+                                            ->profile('default')
+                                            ->required(),
+                                    ])
+                                    ->mountUsing(function (Forms\ComponentContainer $form, Forms\Get $get) {
+                                        $source = $get('html_content');
+                                        if (empty($source)) {
                                             \Filament\Notifications\Notification::make()->warning()->title('Le contenu est vide.')->send();
                                             return;
                                         }
                                         $prompt = "Tu es un copywriter web expert. Améliore ce texte de blog pour le rendre plus professionnel, attractif et agréable à lire. Corrige les fautes, optimise la fluidité. IMPORTANT : CONSERVE STRICTEMENT LE CODE HTML, les balises de paragraphe, liste, titre. Ne renvoie que le code HTML amélioré de l'article.";
-                                        $improved = GeminiService::generateContent($prompt, $state);
+                                        $improved = GeminiService::generateContent($prompt, $source);
                                         if ($improved) {
-                                            $set('html_content', preg_replace('/```html\n?(.*?)\n?```/is', '$1', $improved));
-                                            \Filament\Notifications\Notification::make()->success()->title('Texte amélioré avec succès !')->send();
+                                            $form->fill([
+                                                'suggested_content' => preg_replace('/```html\n?(.*?)\n?```/is', '$1', $improved)
+                                            ]);
                                         } else {
                                             \Filament\Notifications\Notification::make()->danger()->title('Problème avec l\'IA. Vérifiez les logs.')->send();
+                                        }
+                                    })
+                                    ->action(function (Forms\Set $set, array $data) {
+                                        if (!empty($data['suggested_content'])) {
+                                            $set('html_content', $data['suggested_content']);
+                                            \Filament\Notifications\Notification::make()->success()->title('Texte remplacé avec succès !')->send();
                                         }
                                     })
                             )
@@ -133,7 +168,15 @@ class PostResource extends Resource
                                 Action::make('generate_meta')
                                     ->label('Optimiser SEO (IA)')
                                     ->icon('heroicon-o-sparkles')
-                                    ->action(function (Forms\Get $get, Forms\Set $set) {
+                                    ->modalHeading('Proposition de Méta Description')
+                                    ->modalSubmitActionLabel('Accepter et Remplacer')
+                                    ->form([
+                                        Forms\Components\Textarea::make('suggested_meta')
+                                            ->label('Méta Description proposée')
+                                            ->required()
+                                            ->maxLength(255),
+                                    ])
+                                    ->mountUsing(function (Forms\ComponentContainer $form, Forms\Get $get) {
                                         $source = $get('html_content');
                                         if (empty($source)) {
                                             \Filament\Notifications\Notification::make()->warning()->title('Rédigez l\'article d\'abord.')->send();
@@ -142,10 +185,17 @@ class PostResource extends Resource
                                         $prompt = "Rédige une balise meta-description ultra optimisée SEO pour ce texte. Idéalement entre 140 et 160 caractères. Orientée conversion et appel au clic. RETOURNE UNIQUEMENT LA META DESCRIPTION, SANS GUILLEMETS, SANS TEXTE AVANT OU APRES.";
                                         $generated = GeminiService::generateContent($prompt, strip_tags($source));
                                         if ($generated) {
-                                            $set('meta_description', \Illuminate\Support\Str::limit($generated, 255, ''));
-                                            \Filament\Notifications\Notification::make()->success()->title('Meta SEO générée !')->send();
+                                            $form->fill([
+                                                'suggested_meta' => \Illuminate\Support\Str::limit($generated, 255, '')
+                                            ]);
                                         } else {
                                             \Filament\Notifications\Notification::make()->danger()->title('Problème IA.')->send();
+                                        }
+                                    })
+                                    ->action(function (Forms\Set $set, array $data) {
+                                        if (!empty($data['suggested_meta'])) {
+                                            $set('meta_description', $data['suggested_meta']);
+                                            \Filament\Notifications\Notification::make()->success()->title('Meta SEO remplacée !')->send();
                                         }
                                     })
                             )
@@ -156,7 +206,15 @@ class PostResource extends Resource
                                 Action::make('generate_keywords')
                                     ->label('Mots-clés (IA)')
                                     ->icon('heroicon-o-sparkles')
-                                    ->action(function (Forms\Get $get, Forms\Set $set) {
+                                    ->modalHeading('Propositions de Mots-clés SEO')
+                                    ->modalSubmitActionLabel('Accepter et Remplacer')
+                                    ->form([
+                                        Forms\Components\TagsInput::make('suggested_keywords')
+                                            ->label('Mots-clés proposés')
+                                            ->separator(',')
+                                            ->required(),
+                                    ])
+                                    ->mountUsing(function (Forms\ComponentContainer $form, Forms\Get $get) {
                                         $source = $get('html_content');
                                         if (empty($source)) {
                                             \Filament\Notifications\Notification::make()->warning()->title('Rédigez l\'article d\'abord.')->send();
@@ -167,10 +225,17 @@ class PostResource extends Resource
                                         if ($generated) {
                                             $kw = array_map('trim', explode(',', $generated));
                                             $kw = array_filter($kw);
-                                            $set('keywords', $kw);
-                                            \Filament\Notifications\Notification::make()->success()->title('Mots-clés insérés !')->send();
+                                            $form->fill([
+                                                'suggested_keywords' => $kw
+                                            ]);
                                         } else {
                                             \Filament\Notifications\Notification::make()->danger()->title('Problème IA.')->send();
+                                        }
+                                    })
+                                    ->action(function (Forms\Set $set, array $data) {
+                                        if (!empty($data['suggested_keywords'])) {
+                                            $set('keywords', $data['suggested_keywords']);
+                                            \Filament\Notifications\Notification::make()->success()->title('Mots-clés insérés !')->send();
                                         }
                                     })
                             )
