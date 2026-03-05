@@ -60,12 +60,18 @@
             {!! preg_replace('/<h1(.*?)>(.*?)<\/h1>/is', '<h2$1>$2</h2>', $post->html_content) !!}
         </div>
 
-        @if($post->keywords)
+        @php
+            $keywords = is_array($post->keywords) ? $post->keywords : json_decode($post->keywords ?? '', true);
+        @endphp
+
+        @if(is_array($keywords) && count($keywords) > 0)
             <div class="mt-20 pt-10 border-t border-gray-100 flex flex-wrap justify-center gap-2">
-                @foreach(is_array($post->keywords) ? $post->keywords : json_decode($post->keywords, true) as $keyword)
-                    <span class="px-4 py-1.5 bg-gray-50 text-gray-500 rounded-full text-xs font-semibold hover:bg-pep-accent hover:text-white transition-colors">
-                        #{{ $keyword }}
-                    </span>
+                @foreach($keywords as $keyword)
+                    @if($keyword)
+                        <span class="px-4 py-1.5 bg-gray-50 text-gray-500 rounded-full text-xs font-semibold hover:bg-pep-accent hover:text-white transition-colors">
+                            #{{ $keyword }}
+                        </span>
+                    @endif
                 @endforeach
             </div>
         @endif
