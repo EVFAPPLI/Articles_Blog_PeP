@@ -37,7 +37,7 @@
                         <div class="text-blue-600 mb-4">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                         </div>
-                        <h3 class="font-serif font-bold text-lg mb-2">Méthodes PEP®</h3>
+                        <h3 class="font-serif font-bold text-lg mb-2">Méthode PEP®</h3>
                         <p class="text-sm text-gray-500 mb-4">L'expertise internationale pour regagner votre temps et votre sérénité.</p>
                         <a href="https://pep.world/" target="_blank" class="text-sm font-bold flex items-center text-blue-600 group">
                             Découvrir <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
@@ -51,7 +51,7 @@
     <!-- Bento Grid Univers PEP -->
     <section class="py-20 bg-gray-50/50 border-y border-gray-100">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-3xl md:text-4xl font-serif font-bold mb-12 text-center lg:text-left">Inspirations par Univers</h2>
+            <h2 class="text-3xl md:text-4xl font-serif font-bold mb-12 text-center lg:text-left">Inspirations par univers</h2>
             <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6">
                 <!-- Esprit PEP -->
                 <div class="md:col-span-2 lg:col-span-3 group bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden relative min-h-[300px] flex flex-col justify-end">
@@ -259,8 +259,8 @@
                                 <svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                             </div>
                             <div>
-                                <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; color: #94a3b8; margin-bottom: 0.125rem;">Méthodologie</div>
-                                <div style="font-size: 1rem; font-weight: 900; color: #0f172a;">Testé & Approuvé</div>
+                                <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 800; color: #94a3b8; margin-bottom: 0.125rem;">METHODOLOGIE</div>
+                                <div style="font-size: 1rem; font-weight: 900; color: #0f172a; line-height: 1.2; max-width: 220px;">Une approche éprouvée par plus d’un million de professionnels</div>
                             </div>
                         </div>
                     </div>
@@ -277,7 +277,7 @@
             <div class="w-16 h-16 bg-white rounded-2xl shadow-lg flex items-center justify-center mx-auto mb-8 text-blue-600">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7 8.914a.5.5 0 00.828 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
             </div>
-            <h2 class="text-4xl font-serif font-bold mb-6">Rejoignez le HUB Réflexion</h2>
+            <h2 class="text-4xl font-serif font-bold mb-6">Rejoignez le HUB réflexion</h2>
             <p class="text-lg text-gray-600 mb-10 leading-relaxed">
                 Chaque semaine, recevez les meilleures stratégies d'efficacité et d'équilibre directement dans votre boîte mail.
             </p>
