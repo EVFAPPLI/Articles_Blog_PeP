@@ -350,7 +350,7 @@
         <div class="pt-10 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-4">
             <p>© {{ date('Y') }} PEP.uno. Tous droits réservés.</p>
             <div class="flex space-x-6">
-                <a href="#" class="hover:text-white transition-colors">Mentions légales</a>
+                <a href="{{ route('legal.mentions') }}" class="hover:text-white transition-colors">Mentions légales</a>
                 <a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a>
             </div>
         </div>

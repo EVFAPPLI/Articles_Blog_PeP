@@ -44,3 +44,6 @@ Route::get('/faq', function () {
         
     return view('faq.index', compact('faqs'));
 })->name('faq.index');
+Route::get('/mentions-legales', function () {
+    return view('legal.mentions');
+})->name('legal.mentions');
