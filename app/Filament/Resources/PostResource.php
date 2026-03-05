@@ -101,7 +101,9 @@ class PostResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->label('Titre')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->formatStateUsing(fn (string $state): string => \Illuminate\Support\Str::before($state, ':'))
+                    ->tooltip(fn (Post $record): string => $record->title),
                 Tables\Columns\TextColumn::make('category')
                     ->label('Catégorie')
                     ->sortable()
