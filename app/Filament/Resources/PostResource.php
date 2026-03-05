@@ -155,8 +155,18 @@ class PostResource extends Resource
                             ->directory('temp-imports'),
                     ])
                     ->action(function (array $data) {
-                        $path = storage_path('app/' . $data['json_file']);
-                        $content = file_get_contents($path);
+                        $disk = \Illuminate\Support\Facades\Storage::disk('local');
+                        
+                        if (!$disk->exists($data['json_file'])) {
+                            \Filament\Notifications\Notification::make()
+                                ->title('Erreur')
+                                ->body('Le fichier temporaire est introuvable.')
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+
+                        $content = $disk->get($data['json_file']);
                         $articleData = json_decode($content, true);
                         
                         if (!$articleData || !isset($articleData['slug'])) {
@@ -180,8 +190,8 @@ class PostResource extends Resource
                             $toUpdate
                         );
 
-                        // Supprimer le fichier temporaire
-                        @unlink($path);
+                        // Supprimer le fichier temporaire via le disque
+                        $disk->delete($data['json_file']);
 
                         \Filament\Notifications\Notification::make()
                             ->title('Succès')
