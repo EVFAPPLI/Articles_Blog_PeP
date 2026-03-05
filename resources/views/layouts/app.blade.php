@@ -25,6 +25,7 @@
             </div>
 
             <div class="hidden md:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest">
+                <a href="{{ url('/') }}" class="hover:text-pep-accent transition-colors">Accueil</a>
                 <a href="{{ url('/faq') }}" class="hover:text-pep-accent transition-colors">FAQ</a>
                 <a href="{{ route('blog.index') }}" class="hover:text-pep-accent transition-colors">Articles</a>
                 <a href="https://pep.world/" target="_blank" class="hover:text-pep-accent transition-colors">Méthode PEP</a>
