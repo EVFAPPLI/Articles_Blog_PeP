@@ -318,6 +318,7 @@
                 <h4 class="font-bold uppercase tracking-widest text-xs mb-8 text-gray-500">Univers</h4>
                 <ul class="space-y-4 text-gray-400 text-sm">
                     <li><a href="{{ route('blog.index', ['category' => 'Esprit PEP']) }}" class="hover:text-white transition-colors">Esprit PEP</a></li>
+                    <li><a href="{{ route('blog.index', ['category' => 'Boîte à outils']) }}" class="hover:text-white transition-colors">Boîte à outils</a></li>
                     <li><a href="{{ route('blog.index', ['category' => 'Pilotage']) }}" class="hover:text-white transition-colors">Pilotage</a></li>
                     <li><a href="{{ route('blog.index', ['category' => 'Leadership']) }}" class="hover:text-white transition-colors">Leadership</a></li>
                     <li><a href="{{ route('blog.index', ['category' => 'Flow']) }}" class="hover:text-white transition-colors">Flow</a></li>
@@ -328,15 +329,15 @@
                 <ul class="space-y-4 text-gray-400 text-sm">
                     <li><a href="https://bruno-savoyat.com/" target="_blank" class="hover:text-white transition-colors">Le site Officiel</a></li>
                     <li><a href="https://pep.world/" target="_blank" class="hover:text-white transition-colors">PEP World</a></li>
-                    <li><a href="https://linkedin.com/in/brunosavoyat" target="_blank" class="hover:text-white transition-colors">LinkedIn</a></li>
+                    <li><a href="https://www.linkedin.com/in/bruno-savoyat-pepworldwide/" target="_blank" class="hover:text-white transition-colors">LinkedIn</a></li>
                 </ul>
             </div>
         </div>
         <div class="pt-10 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 gap-4">
             <p>© {{ date('Y') }} PEP.uno. Tous droits réservés.</p>
             <div class="flex space-x-6">
-                <a href="#" class="hover:text-white transition-colors">Mentions Légales</a>
-                <a href="#" class="hover:text-white transition-colors">Politique de Confidentialité</a>
+                <a href="#" class="hover:text-white transition-colors">mentions légales</a>
+                <a href="#" class="hover:text-white transition-colors">politique de confidentialité</a>
             </div>
         </div>
     </div>
