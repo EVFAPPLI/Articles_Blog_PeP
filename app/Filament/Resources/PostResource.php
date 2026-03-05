@@ -68,22 +68,16 @@ class PostResource extends Resource
                             ->image()
                             ->columnSpanFull(),
                         
-                        Forms\Components\RichEditor::make('vignette_content')
+                        \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('vignette_content')
                             ->label('Extrait (Vignette)')
-                            ->toolbarButtons([
-                                'bold',
-                                'italic',
-                                'link',
-                                'bulletList',
-                                'orderedList',
-                                'undo',
-                                'redo',
-                            ])
+                            ->profile('default')
                             ->columnSpanFull(),
                         
-                        Forms\Components\RichEditor::make('html_content')
+                        \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('html_content')
                             ->label('Contenu de l\'Article')
+                            ->profile('default')
                             ->fileAttachmentsDisk('public')
+                            ->fileAttachmentsVisibility('public')
                             ->fileAttachmentsDirectory('blog-images')
                             ->columnSpanFull(),
                     ]),
