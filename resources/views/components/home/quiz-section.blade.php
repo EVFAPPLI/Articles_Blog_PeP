@@ -1,23 +1,30 @@
+<style>
+    [x-cloak] { display: none !important; }
+</style>
+
 <!-- Quiz Interactif PEP (IA Powered) -->
 @if(isset($activeQuiz) && $activeQuiz->questions->count() > 0)
-<section class="py-24 relative overflow-hidden bg-white border-y border-gray-100">
+<section class="py-12 md:py-16 relative overflow-hidden bg-gray-50/30 border-y border-gray-100/50">
     <!-- Motif de fond discret -->
-    <div class="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-bl from-blue-50/40 to-transparent -z-10 transform skew-x-12 translate-x-1/2"></div>
-    <div class="absolute left-0 bottom-0 w-1/4 h-3/4 bg-gradient-to-tr from-emerald-50/40 to-transparent -z-10 rounded-tr-full"></div>
+    <div class="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-bl from-blue-50/20 to-transparent -z-10 transform skew-x-12 translate-x-1/2"></div>
+    <div class="absolute left-0 bottom-0 w-1/4 h-3/4 bg-gradient-to-tr from-emerald-50/20 to-transparent -z-10 rounded-tr-full"></div>
 
-    <div class="max-w-4xl mx-auto px-6" x-data="quizModule({{ $activeQuiz->questions->toJson() }})">
+    <script>
+        window.pepQuizData = @json($activeQuiz->questions);
+    </script>
+    <div class="max-w-3xl mx-auto px-6" x-data="quizModule(window.pepQuizData)" x-cloak>
         
         <!-- En-tête du Quiz "Le Défi PEP" -->
-        <div class="text-center mb-12" x-show="!finished">
+        <div class="text-center mb-8" x-show="!finished">
             <span class="inline-flex items-center gap-2 px-3 py-1 mb-4 text-[10px] font-bold uppercase tracking-widest bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100 shadow-sm">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 Le Défi PEP
             </span>
-            <h2 class="text-3xl md:text-5xl font-serif font-bold text-pep-dark mb-4">
+            <h2 class="text-2xl md:text-3xl font-serif font-bold text-pep-dark mb-3">
                 {{ $activeQuiz->title }}
             </h2>
-            <p class="text-lg text-gray-500 max-w-2xl mx-auto mb-2">
-                {{ $activeQuiz->description ?: 'Prenez quelques minutes pour tester vos bons réflexes et affiner votre expertise.' }}
+            <p class="text-base text-gray-500 max-w-xl mx-auto mb-2">
+                {{ $activeQuiz->description ?: 'Prenez quelques minutes pour tester vos bons reflexes.' }}
             </p>
             
             <div class="w-full max-w-md mx-auto bg-gray-100 rounded-full h-1 mt-8 mb-2 overflow-hidden">
@@ -32,9 +39,9 @@
         </div>
 
         <!-- Carte de Question Actuelle -->
-        <div x-show="!finished" class="bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-3xl p-8 md:p-12 relative transition-all duration-500 transform" :class="{'scale-95 opacity-50 pointer-events-none': transition}">
+        <div x-show="!finished" class="bg-white/80 backdrop-blur-md border border-white shadow-sm rounded-3xl p-6 md:p-10 relative transition-all duration-500 transform" :class="{'scale-95 opacity-50 pointer-events-none': transition}">
             
-            <h3 class="text-2xl md:text-3xl font-bold text-pep-dark mb-10 leading-relaxed text-center" x-text="getCurrentQuestion().question_text"></h3>
+            <h3 class="text-xl md:text-2xl font-bold text-pep-dark mb-8 leading-relaxed text-center" x-text="getCurrentQuestion()?.question_text"></h3>
 
             <!-- Options -->
             <div class="space-y-4 max-w-3xl mx-auto">
@@ -42,7 +49,7 @@
                     <button 
                         @click="selectOption(index)"
                         :disabled="showExplanation"
-                        class="w-full text-left p-5 md:p-6 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden group flex items-center justify-between"
+                        class="w-full text-left p-4 md:p-5 rounded-2xl border transition-all duration-300 relative overflow-hidden group flex items-center justify-between"
                         :class="{
                             'border-gray-50 hover:border-blue-100 hover:bg-blue-50/30 hover:shadow-md bg-white': !showExplanation,
                             'border-emerald-500 bg-emerald-50 text-emerald-900 shadow-inner ring-4 ring-emerald-500/10': showExplanation && option.is_correct,
@@ -82,7 +89,7 @@
         </div>
 
         <!-- Écran de Résultat -->
-        <div x-cloak x-show="finished" class="bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-3xl p-12 md:p-16 text-center max-w-2xl mx-auto transform transition-all duration-700"
+        <div x-cloak x-show="finished" class="bg-white/80 backdrop-blur-md border border-white shadow-sm rounded-3xl p-10 md:p-14 text-center max-w-xl mx-auto transform transition-all duration-700"
              x-transition:enter="ease-out duration-700 delay-300" x-transition:enter-start="opacity-0 scale-95 translate-y-8" x-transition:enter-end="opacity-100 scale-100 translate-y-0">
             
             <div class="relative inline-block mb-10">
@@ -116,7 +123,7 @@
                 transition: false,
 
                 getCurrentQuestion() {
-                    return this.questions[this.currentQuestion];
+                    return this.questions ? this.questions[this.currentQuestion] : null;
                 },
                 selectOption(index) {
                     if (this.showExplanation) return;
