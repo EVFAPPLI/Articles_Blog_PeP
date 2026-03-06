@@ -16,10 +16,13 @@ Route::get('/', function () {
         ->pluck('total', 'category')
         ->toArray();
 
-    $activeQuiz = \App\Models\Quiz::where('is_active', true)->with('questions')->first();
-
-    return view('home', compact('latestPosts', 'categoryCounts', 'activeQuiz'));
+    return view('home', compact('latestPosts', 'categoryCounts'));
 })->name('home');
+
+Route::get('/quiz', function () {
+    $activeQuiz = \App\Models\Quiz::where('is_active', true)->with('questions')->first();
+    return view('quiz.index', compact('activeQuiz'));
+})->name('quiz.index');
 
 Route::get('/blog', function () {
     $category = request('category');

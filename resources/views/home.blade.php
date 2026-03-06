@@ -272,9 +272,6 @@
         </div>
     </section>
 
-    <!-- Quiz Challenge (Intégration via Component) -->
-    @include('components.home.quiz-section')
-
     <!-- Newsletter Section -->
     <section class="py-24 px-6 overflow-hidden relative bg-pep-bg">
         <div class="absolute top-0 right-0 w-1/3 h-full bg-blue-50/50 -skew-x-12 translate-x-1/2 -z-10"></div>
@@ -341,6 +338,13 @@
                     <li><a href="{{ route('blog.index', ['category' => 'Pilotage']) }}" class="hover:text-white transition-colors">Pilotage</a></li>
                     <li><a href="{{ route('blog.index', ['category' => 'Leadership']) }}" class="hover:text-white transition-colors">Leadership</a></li>
                     <li><a href="{{ route('blog.index', ['category' => 'Flow']) }}" class="hover:text-white transition-colors">Flow</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold uppercase tracking-widest text-xs mb-8 text-gray-500">Explorer</h4>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li><a href="{{ route('quiz.index') }}" class="text-emerald-400 hover:text-white transition-colors font-bold flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Le Défi PEP</a></li>
+                    <li><a href="{{ url('/faq') }}" class="hover:text-white transition-colors">Questions fréquentes (FAQ)</a></li>
                 </ul>
             </div>
             <div>
