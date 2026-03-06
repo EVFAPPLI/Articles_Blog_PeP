@@ -41,7 +41,7 @@
         <!-- Carte de Question Actuelle -->
         <div x-show="!finished" class="bg-white/80 backdrop-blur-md border border-white shadow-sm rounded-3xl p-6 md:p-10 relative transition-all duration-500 transform" :class="{'scale-95 opacity-50 pointer-events-none': transition}">
             
-            <h3 class="text-xl md:text-2xl font-bold text-pep-dark mb-8 leading-relaxed text-center" x-text="getCurrentQuestion()?.question_text"></h3>
+            <h3 class="text-xl md:text-2xl font-serif font-bold text-pep-dark mb-8 leading-relaxed text-center" x-text="getCurrentQuestion()?.question_text"></h3>
 
             <!-- Options -->
             <div class="space-y-4 max-w-3xl mx-auto">
@@ -57,7 +57,7 @@
                             'border-gray-50 bg-gray-50/50 opacity-40': showExplanation && !option.is_correct && selectedIndex !== index
                         }"
                     >
-                        <span class="font-medium text-lg relative z-10" x-text="option.text"></span>
+                        <span class="font-sans font-medium text-lg relative z-10" x-text="option.text"></span>
                         
                         <!-- Icônes de validation -->
                         <div x-show="showExplanation" class="relative z-10 transition-all duration-500">
@@ -79,7 +79,7 @@
                         <div class="flex items-center gap-2 mb-2">
                             <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600">Le saviez-vous ?</span>
                         </div>
-                        <p class="text-gray-600 text-sm italic leading-relaxed" x-text="getCurrentQuestion().explanation || 'Très bien joué !'"></p>
+                        <p class="font-sans text-gray-600 text-sm italic leading-relaxed" x-text="getCurrentQuestion().explanation || 'Très bien joué !'"></p>
                     </div>
                     <button @click="nextQuestion()" class="bg-pep-dark text-white px-8 py-4 rounded-xl font-bold hover:bg-black transition-all flex-shrink-0 flex items-center justify-center transform hover:-translate-y-1 shadow-lg group">
                         Suivant <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
