@@ -16,7 +16,9 @@ Route::get('/', function () {
         ->pluck('total', 'category')
         ->toArray();
 
-    return view('home', compact('latestPosts', 'categoryCounts'));
+    $activeQuiz = \App\Models\Quiz::where('is_active', true)->with('questions')->first();
+
+    return view('home', compact('latestPosts', 'categoryCounts', 'activeQuiz'));
 })->name('home');
 
 Route::get('/blog', function () {

@@ -65,4 +65,68 @@ class GeminiService
 
         return null;
     }
+
+    /**
+     * Suggère ou améliore un titre de quiz en fonction de la catégorie.
+     */
+    public static function improveQuizTitle(string $category, ?string $draftTitle = null): ?string
+    {
+        $prompt = "Tu es un expert en conception de titres accrocheurs et professionnels pour la plateforme PEP (Esprit PEP, Leadership, Flow, etc.).\n";
+        $prompt .= "Ta tâche est de générer un titre de quiz pertinent. Le titre doit être : court, percutant, et directement lié au thème.\n\n";
+        $prompt .= "Thème / Catégorie : " . $category . "\n";
+        
+        if ($draftTitle) {
+            $prompt .= "L'utilisateur a donné ce brouillon de titre : \"{$draftTitle}\". Améliore-le.\n";
+            $prompt .= "Retourne UNIQUEMENT le titre final, sans aucune ponctuation, guillemets ou commentaire. Juste le titre pur.";
+        } else {
+            $prompt .= "Invente un titre de quiz très accrocheur pour cette catégorie.\n";
+            $prompt .= "Retourne UNIQUEMENT le titre final, sans aucune ponctuation inutile ni commentaire.";
+        }
+
+        return self::generateContent($prompt, "Génère le titre maintenant.");
+    }
+
+    /**
+     * Génère un lot de 10 questions de quiz en utilisant la méthode Deep Research stricte.
+     */
+    public static function generateQuizQuestions(string $category, string $title): ?array
+    {
+        $prompt = "Tu es un expert pédagogique travaillant pour PEP (Esprit PEP). Ton objectif est de concevoir un quiz d'exactement 10 questions.\n";
+        $prompt .= "IL EST STRICTEMENT INTERDIT d'inventer des faits (pas d'hallucinations). Base tes questions sur des faits établis concernant le thème demandé.\n";
+        $prompt .= "Catégorie : {$category}\n";
+        $prompt .= "Titre du Quiz : {$title}\n\n";
+        
+        $prompt .= "Tu dois retourner UNIQUEMENT un objet JSON valide, et RIEN D'AUTRE (pas de markdown, pas d'explication avant ou après).\n";
+        $prompt .= "Le JSON doit respecter scrupuleusement cette structure :\n";
+        $prompt .= "[\n";
+        $prompt .= "  {\n";
+        $prompt .= "    \"question_text\": \"Texte de la question ?\",\n";
+        $prompt .= "    \"options\": [\n";
+        $prompt .= "      {\"text\": \"Première option\", \"is_correct\": false},\n";
+        $prompt .= "      {\"text\": \"Deuxième option vrai\", \"is_correct\": true},\n";
+        $prompt .= "      {\"text\": \"Troisième option\", \"is_correct\": false},\n";
+        $prompt .= "      {\"text\": \"Quatrième option\", \"is_correct\": false}\n";
+        $prompt .= "    ],\n";
+        $prompt .= "    \"explanation\": \"Explication détaillée de la bonne réponse.\"\n";
+        $prompt .= "  }\n";
+        $prompt .= "]\n";
+        
+        $prompt .= "Assure-toi qu'il y a toujours exactement une option 'is_correct' à true, et 3 à false. Il doit y avoir exactement 10 questions.";
+
+        $response = self::generateContent($prompt, "Génère le JSON strict maintenant.");
+
+        if ($response) {
+            // Nettoyage au cas où Gemini renvoie du texte/markdown autour du JSON
+            $response = preg_replace('/```(?:json)?|```/i', '', $response);
+            $response = trim($response);
+
+            $decoded = json_decode($response, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                return $decoded;
+            } else {
+                Log::error('Erreur de décodage JSON depuis Gemini', ['error' => json_last_error_msg(), 'raw' => $response]);
+            }
+        }
+        return null;
+    }
 }
