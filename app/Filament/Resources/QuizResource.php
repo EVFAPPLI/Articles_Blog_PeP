@@ -71,7 +71,7 @@ class QuizResource extends Resource
                 Forms\Components\Section::make('Questions du Quiz')
                     ->headerActions([
                         Forms\Components\Actions\Action::make('generate_questions')
-                            ->label('Ask Gemini (Deep Research)')
+                            ->label('Générer via l\'IA (Deep Research)')
                             ->icon('heroicon-m-bolt')
                             ->color('warning')
                             ->requiresConfirmation()
@@ -98,6 +98,7 @@ class QuizResource extends Resource
                         Forms\Components\Repeater::make('questions')
                             ->relationship()
                             ->label('')
+                            ->itemLabel(fn (array $state): ?string => $state['question_text'] ?? 'Nouvelle question')
                             ->schema([
                                 Forms\Components\TextInput::make('question_text')
                                     ->label('La question')
@@ -105,6 +106,7 @@ class QuizResource extends Resource
                                     
                                 Forms\Components\Repeater::make('options')
                                     ->label('Options de réponse')
+                                    ->itemLabel(fn (array $state): ?string => $state['text'] ?? 'Nouvelle option')
                                     ->schema([
                                         Forms\Components\TextInput::make('text')->label('Texte de la réponse')->required(),
                                         Forms\Components\Toggle::make('is_correct')->label('Bonne réponse'),

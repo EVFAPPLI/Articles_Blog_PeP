@@ -48,143 +48,7 @@
         </div>
     </header>
 
-    <!-- Quiz Interactif PEP (IA Powered) -->
-    @if(isset($activeQuiz) && $activeQuiz->questions->count() > 0)
-    <section class="py-16 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-emerald-50/50 -z-10"></div>
-        <div class="max-w-4xl mx-auto px-6" x-data="quizModule({{ $activeQuiz->questions->toJson() }})">
-            
-            <!-- En-tête du Quiz -->
-            <div class="text-center mb-10" x-show="!finished">
-                <span class="inline-block px-3 py-1 mb-4 text-[10px] font-bold uppercase tracking-widest bg-white text-blue-600 rounded-full border border-blue-100 shadow-sm">
-                    {{ $activeQuiz->category }}
-                </span>
-                <h2 class="text-3xl md:text-5xl font-serif font-bold text-pep-dark mb-4">{{ $activeQuiz->title }}</h2>
-                @if($activeQuiz->description)
-                <p class="text-gray-600 mb-2">{{ $activeQuiz->description }}</p>
-                @endif
-                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-6 mb-2 overflow-hidden">
-                    <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-500 ease-out" 
-                         :style="'width: ' + ((currentQuestion) / totalQuestions * 100) + '%'"></div>
-                </div>
-                <div class="text-xs text-gray-400 font-bold uppercase tracking-widest text-right">
-                    Question <span x-text="currentQuestion + 1"></span> / <span x-text="totalQuestions"></span>
-                </div>
-            </div>
-
-            <!-- Carte de Question Actuelle -->
-            <div x-show="!finished" class="bg-white/80 backdrop-blur-xl border border-white/60 shadow-2xl rounded-3xl p-8 md:p-12 relative transition-all duration-300 transform" :class="{'scale-95 opacity-50 pointer-events-none': transition}">
-                
-                <h3 class="text-2xl font-bold text-pep-dark mb-8 leading-relaxed" x-text="getCurrentQuestion().question_text"></h3>
-
-                <!-- Options -->
-                <div class="space-y-4">
-                    <template x-for="(option, index) in getCurrentQuestion().options" :key="index">
-                        <button 
-                            @click="selectOption(index)"
-                            :disabled="showExplanation"
-                            class="w-full text-left p-5 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden group flex items-center justify-between"
-                            :class="{
-                                'border-white hover:border-blue-200 hover:bg-white hover:shadow-lg bg-white/50': !showExplanation,
-                                'border-emerald-500 bg-emerald-50 text-emerald-900 shadow-inner ring-4 ring-emerald-500/20': showExplanation && option.is_correct,
-                                'border-red-200 bg-red-50 text-red-900 opacity-60': showExplanation && selectedIndex === index && !option.is_correct,
-                                'border-white/50 bg-white/30 opacity-40': showExplanation && !option.is_correct && selectedIndex !== index
-                            }"
-                        >
-                            <span class="font-medium text-lg relative z-10" x-text="option.text"></span>
-                            
-                            <!-- Icônes de validation -->
-                            <div x-show="showExplanation" class="relative z-10 transition-all duration-500">
-                                <svg x-show="option.is_correct" class="w-7 h-7 text-emerald-500 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <svg x-show="!option.is_correct && selectedIndex === index" class="w-7 h-7 text-red-500 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                        </button>
-                    </template>
-                </div>
-
-                <!-- Explication & Bouton Suivant -->
-                <div x-show="showExplanation" 
-                     x-transition:enter="transition ease-out duration-500 delay-300" 
-                     x-transition:enter-start="opacity-0 translate-y-4" 
-                     x-transition:enter-end="opacity-100 translate-y-0" 
-                     class="mt-8 pt-6 border-t border-gray-100">
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div class="flex-1">
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600 mb-1 block">Le saviez-vous ?</span>
-                            <p class="text-gray-600 text-sm italic leading-relaxed" x-text="getCurrentQuestion().explanation || 'Très bien joué !'"></p>
-                        </div>
-                        <button @click="nextQuestion()" class="bg-pep-dark text-white px-8 py-4 rounded-xl font-bold hover:bg-pep-accent transition-colors flex-shrink-0 flex items-center justify-center transform hover:-translate-y-1 shadow-lg">
-                            Suivant <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Écran de Résultat -->
-            <div x-cloak x-show="finished" class="bg-white/90 backdrop-blur-xl border border-white/60 shadow-2xl rounded-3xl p-12 text-center max-w-2xl mx-auto transform transition-all duration-700"
-                 x-transition:enter="ease-out duration-700" x-transition:enter-start="opacity-0 scale-90 translate-y-8" x-transition:enter-end="opacity-100 scale-100 translate-y-0">
-                <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-600 mb-8 mt-4 shadow-inner">
-                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
-                <h3 class="text-4xl font-serif font-bold text-pep-dark mb-4">Quiz terminé !</h3>
-                <p class="text-xl text-gray-600 mb-8">Votre score : <span class="font-bold text-blue-600 text-4xl" x-text="score"></span> / <span x-text="totalQuestions"></span></p>
-                
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <button @click="restart()" class="bg-gray-100 text-pep-dark px-8 py-4 rounded-xl font-bold hover:bg-gray-200 transition-colors shadow-sm cursor-pointer">Rejouer</button>
-                    <a href="{{ route('blog.index', ['category' => $activeQuiz->category]) }}" class="bg-pep-dark text-white px-8 py-4 rounded-xl font-bold hover:bg-pep-accent transition-colors shadow-lg hover:-translate-y-1 transform">Articles liés</a>
-                </div>
-            </div>
-            
-        </div>
-
-        <script>
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('quizModule', (questions) => ({
-                    questions: questions,
-                    currentQuestion: 0,
-                    totalQuestions: questions.length,
-                    showExplanation: false,
-                    selectedIndex: null,
-                    score: 0,
-                    finished: false,
-                    transition: false,
-
-                    getCurrentQuestion() {
-                        return this.questions[this.currentQuestion];
-                    },
-                    selectOption(index) {
-                        if (this.showExplanation) return;
-                        this.selectedIndex = index;
-                        this.showExplanation = true;
-                        if (this.getCurrentQuestion().options[index].is_correct) {
-                            this.score++;
-                        }
-                    },
-                    nextQuestion() {
-                        this.transition = true;
-                        setTimeout(() => {
-                            this.currentQuestion++;
-                            this.showExplanation = false;
-                            this.selectedIndex = null;
-                            if (this.currentQuestion >= this.totalQuestions) {
-                                this.finished = true;
-                            }
-                            this.transition = false;
-                        }, 300);
-                    },
-                    restart() {
-                        this.currentQuestion = 0;
-                        this.showExplanation = false;
-                        this.selectedIndex = null;
-                        this.score = 0;
-                        this.finished = false;
-                        this.transition = false;
-                    }
-                }))
-            })
-        </script>
-    </section>
-    @endif
+    <!-- En-tête déplacé -->
 
     <!-- Bento Grid Univers PEP -->
     <section class="py-20 bg-gray-50/50 border-y border-gray-100">
@@ -407,6 +271,9 @@
             </div>
         </div>
     </section>
+
+    <!-- Quiz Challenge (Intégration via Component) -->
+    @include('components.home.quiz-section')
 
     <!-- Newsletter Section -->
     <section class="py-24 px-6 overflow-hidden relative bg-pep-bg">
