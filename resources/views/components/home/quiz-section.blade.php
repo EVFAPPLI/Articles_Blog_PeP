@@ -4,157 +4,150 @@
 
 <!-- Quiz Interactif PEP (IA Powered) -->
 @if(isset($activeQuiz) && $activeQuiz->questions->count() > 0)
-<section class="py-12 md:py-16 relative overflow-hidden bg-gray-50/30 border-y border-gray-100/50">
-    <!-- Motif de fond discret -->
-    <div class="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-bl from-blue-50/20 to-transparent -z-10 transform skew-x-12 translate-x-1/2"></div>
-    <div class="absolute left-0 bottom-0 w-1/4 h-3/4 bg-gradient-to-tr from-emerald-50/20 to-transparent -z-10 rounded-tr-full"></div>
+<script>
+    window.pepQuizData = @json($activeQuiz->questions);
+</script>
 
-    <script>
-        window.pepQuizData = @json($activeQuiz->questions);
-    </script>
-    <div class="max-w-3xl mx-auto px-6" x-data="quizModule(window.pepQuizData)" x-cloak>
+<main class="flex-1 w-full max-w-4xl flex flex-col justify-center p-6 md:p-12 pb-20" x-data="quizModule(window.pepQuizData)" x-cloak>
+    
+    <!-- Zone active du Quiz -->
+    <div x-show="!isFinished" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="w-full">
         
-        <!-- En-tête du Quiz "Le Défi PEP" -->
-        <div class="text-center mb-8" x-show="!finished">
-            <span class="inline-flex items-center gap-2 px-3 py-1 mb-4 text-[10px] font-bold uppercase tracking-widest bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100 shadow-sm">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                Le Défi PEP
-            </span>
-            <h2 class="text-2xl md:text-3xl font-serif font-bold text-pep-dark mb-3">
-                {{ $activeQuiz->title }}
-            </h2>
-            <p class="text-base text-gray-500 max-w-xl mx-auto mb-2">
-                {{ $activeQuiz->description ?: 'Prenez quelques minutes pour tester vos bons reflexes.' }}
-            </p>
-            
-            <div class="w-full max-w-md mx-auto bg-gray-100 rounded-full h-1 mt-8 mb-2 overflow-hidden">
-                <div class="bg-pep-dark h-1 rounded-full transition-all duration-500 ease-out" 
-                     :style="'width: ' + ((currentQuestion) / totalQuestions * 100) + '%'"></div>
+        <!-- Progression Discrète -->
+        <div class="max-w-xs mx-auto mb-10 text-center">
+            <div class="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2">
+                <span>{{ $activeQuiz->category ?? 'ESPRIT PEP' }}</span>
+                <span><span x-text="currentStep + 1"></span> / <span x-text="questions.length"></span></span>
             </div>
-            <div class="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center">
-                Question <span x-text="currentQuestion + 1" class="text-pep-dark"></span> / <span x-text="totalQuestions"></span>
-                <span class="mx-2 text-gray-300">|</span>
-                Univers : <span class="text-blue-600">{{ $activeQuiz->category }}</span>
+            <div class="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
+                <div class="h-full bg-[#00B5AD] transition-all duration-500 ease-out" :style="'width: ' + progress + '%'"></div>
             </div>
         </div>
 
-        <!-- Carte de Question Actuelle -->
-        <div x-show="!finished" class="bg-white/80 backdrop-blur-md border border-white shadow-sm rounded-3xl p-6 md:p-10 relative transition-all duration-500 transform" :class="{'scale-95 opacity-50 pointer-events-none': transition}">
+        <div class="flex flex-col items-center relative transition-all duration-300" :class="{'opacity-0 scale-95': transition, 'opacity-100 scale-100': !transition}">
             
-            <h3 class="text-xl md:text-2xl font-bold text-pep-dark mb-8 leading-relaxed text-center" x-text="getCurrentQuestion()?.question_text"></h3>
+            <!-- Animation SVG Focus -->
+            <div class="flex justify-center mb-6">
+                <svg width="120" height="40" viewBox="0 0 120 40" class="opacity-80">
+                    <circle cx="60" cy="20" r="15" fill="none" stroke="#00B5AD" stroke-width="1" class="animate-[pulse_4s_ease-in-out_infinite]" />
+                    <path d="M20,20 Q60,5 100,20 Q60,35 20,20" fill="none" stroke="#00B5AD" stroke-width="0.5" stroke-dasharray="4 4" class="animate-[spin_10s_linear_infinite]" />
+                    <circle cx="60" cy="20" r="2" fill="#00B5AD" class="animate-ping" />
+                </svg>
+            </div>
 
-            <!-- Options -->
-            <div class="space-y-4 max-w-3xl mx-auto">
-                <template x-for="(option, index) in getCurrentQuestion().options" :key="index">
-                    <button 
-                        @click="selectOption(index)"
-                        :disabled="showExplanation"
-                        class="w-full text-left p-4 md:p-5 rounded-2xl border transition-all duration-300 relative overflow-hidden group flex items-center justify-between"
-                        :class="{
-                            'border-gray-50 hover:border-blue-100 hover:bg-blue-50/30 hover:shadow-md bg-white': !showExplanation,
-                            'border-emerald-500 bg-emerald-50 text-emerald-900 shadow-inner ring-4 ring-emerald-500/10': showExplanation && option.is_correct,
-                            'border-red-200 bg-red-50 text-red-900 opacity-60': showExplanation && selectedIndex === index && !option.is_correct,
-                            'border-gray-50 bg-gray-50/50 opacity-40': showExplanation && !option.is_correct && selectedIndex !== index
-                        }"
+            <!-- Question text -->
+            <h1 class="text-xl md:text-2xl font-serif font-medium text-center text-slate-800 italic mb-8 max-w-2xl" x-text="'&quot;' + currentQuestion?.question_text + '&quot;'"></h1>
+
+            <!-- Réponses Resserrées en Grille -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full mb-10">
+                <template x-for="(option, index) in currentQuestion?.options" :key="index">
+                    <button
+                        @click="handleSelect(index)"
+                        class="group relative flex items-center p-4 rounded-xl border transition-all duration-200"
+                        :class="selectedOption === index 
+                            ? 'border-[#00B5AD] bg-white shadow-md ring-1 ring-[#00B5AD]/20' 
+                            : 'border-slate-200 bg-white hover:bg-slate-50'"
                     >
-                        <span class="font-medium text-lg relative z-10" x-text="option.text"></span>
-                        
-                        <!-- Icônes de validation -->
-                        <div x-show="showExplanation" class="relative z-10 transition-all duration-500">
-                            <svg x-show="option.is_correct" class="w-6 h-6 text-emerald-600 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                            <svg x-show="!option.is_correct && selectedIndex === index" class="w-6 h-6 text-red-500 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <div class="w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 flex items-center justify-center transition-all"
+                             :class="selectedOption === index ? 'border-[#00B5AD] bg-[#00B5AD]' : 'border-slate-300'">
+                            <div x-show="selectedOption === index" class="w-1.5 h-1.5 bg-white rounded-full"></div>
                         </div>
+                        <span class="text-sm font-medium leading-tight text-left"
+                              :class="selectedOption === index ? 'text-slate-900' : 'text-slate-600'" x-text="option.text">
+                        </span>
                     </button>
                 </template>
             </div>
 
-            <!-- Explication & Bouton Suivant -->
-            <div x-show="showExplanation" 
-                 x-transition:enter="transition ease-out duration-500 delay-300" 
-                 x-transition:enter-start="opacity-0 translate-y-4" 
-                 x-transition:enter-end="opacity-100 translate-y-0" 
-                 class="mt-10 pt-8 border-t border-gray-100">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-8 bg-gray-50/50 rounded-2xl p-6 border border-gray-100/50">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-600">Le saviez-vous ?</span>
-                        </div>
-                        <p class="text-gray-600 text-sm italic leading-relaxed" x-text="getCurrentQuestion().explanation || 'Très bien joué !'"></p>
-                    </div>
-                    <button @click="nextQuestion()" class="bg-pep-dark text-white px-8 py-4 rounded-xl font-bold hover:bg-black transition-all flex-shrink-0 flex items-center justify-center transform hover:-translate-y-1 shadow-lg group">
-                        Suivant <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
-                    </button>
-                </div>
+            <!-- Boutons de validation -->
+            <div class="flex flex-col items-center gap-4">
+                <button
+                    @click="handleNext()"
+                    :disabled="selectedOption === null"
+                    class="group flex items-center gap-2 px-12 py-3 rounded-full font-bold text-sm transition-all focus:outline-none"
+                    :class="selectedOption !== null 
+                        ? 'bg-slate-900 text-white shadow-lg shadow-black/10 hover:shadow-[#00B5AD]/20 hover:bg-[#00B5AD]' 
+                        : 'bg-slate-200 text-slate-400 cursor-not-allowed'"
+                >
+                    <span x-text="currentStep === questions.length - 1 ? 'Finaliser' : 'Continuer'"></span>
+                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest" x-show="selectedOption === null">Appuyez pour valider votre réponse</p>
+                <p class="text-[10px] text-[#00B5AD] font-bold uppercase tracking-widest" x-show="selectedOption !== null" x-cloak>RÉPONSE ENREGISTRÉE</p>
             </div>
         </div>
-
-        <!-- Écran de Résultat -->
-        <div x-cloak x-show="finished" class="bg-white/80 backdrop-blur-md border border-white shadow-sm rounded-3xl p-10 md:p-14 text-center max-w-xl mx-auto transform transition-all duration-700"
-             x-transition:enter="ease-out duration-700 delay-300" x-transition:enter-start="opacity-0 scale-95 translate-y-8" x-transition:enter-end="opacity-100 scale-100 translate-y-0">
-            
-            <div class="relative inline-block mb-10">
-                <div class="absolute inset-0 bg-emerald-100 rounded-full blur-xl opacity-60 animate-pulse"></div>
-                <div class="relative inline-flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-br from-emerald-50 to-emerald-100 text-emerald-600 shadow-inner border border-emerald-200/50">
-                    <svg class="w-14 h-14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
-                </div>
-            </div>
-            
-            <h3 class="text-4xl font-serif font-bold text-pep-dark mb-4">Quiz terminé !</h3>
-            <p class="text-xl text-gray-500 mb-8">Votre score d'expertise : <br/><span class="font-black text-emerald-600 text-6xl block mt-4" x-text="score + ' / ' + totalQuestions"></span></p>
-            
-            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-12">
-                <button @click="restart()" class="bg-gray-50 text-pep-dark px-8 py-4 rounded-xl font-bold hover:bg-gray-100 border border-gray-200 transition-all cursor-pointer">Rejouer le défi</button>
-                <a href="{{ route('blog.index', ['category' => $activeQuiz->category]) }}" class="bg-pep-dark text-white px-8 py-4 rounded-xl font-bold hover:bg-pep-accent transition-all shadow-lg hover:-translate-y-1 transform">Approfondir ce sujet</a>
-            </div>
-        </div>
-        
     </div>
 
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('quizModule', (questions) => ({
-                questions: questions,
-                currentQuestion: 0,
-                totalQuestions: questions.length,
-                showExplanation: false,
-                selectedIndex: null,
-                score: 0,
-                finished: false,
-                transition: false,
+    <!-- Écran de Fin / Résultat -->
+    <div x-cloak x-show="isFinished" x-transition:enter="transition ease-out duration-700 delay-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="w-full max-w-lg mx-auto bg-white p-10 rounded-3xl shadow-xl border border-slate-100 text-center">
+        <div class="inline-flex p-3 bg-[#00B5AD]/10 rounded-2xl text-[#00B5AD] mb-6">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        </div>
+        <h2 class="text-3xl font-serif font-bold text-slate-800 mb-6 italic">Diagnostic Terminé</h2>
+        
+        <div class="flex justify-center items-baseline gap-1 mb-8 text-slate-900">
+            <span class="text-6xl font-black" x-text="Math.round((score/questions.length)*100)"></span>
+            <span class="text-xl font-bold text-[#00B5AD]">% d'efficience</span>
+        </div>
 
-                getCurrentQuestion() {
-                    return this.questions ? this.questions[this.currentQuestion] : null;
-                },
-                selectOption(index) {
-                    if (this.showExplanation) return;
-                    this.selectedIndex = index;
-                    this.showExplanation = true;
-                    if (this.getCurrentQuestion().options[index].is_correct) {
-                        this.score++;
-                    }
-                },
-                nextQuestion() {
+        <div class="bg-slate-50 p-5 rounded-2xl mb-8 text-left border-l-4 border-[#00B5AD]">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Votre Profil</p>
+            <p class="text-sm text-slate-700 italic font-medium leading-relaxed" x-text="score === questions.length ? 'Excellence opérationnelle détectée. Vos réflexes PEP sont optimisés au maximum.' : 'Bonne compréhension globale. Focalisez-vous sur les détails pour optimiser votre efficience.'"></p>
+        </div>
+
+        <button @click="window.location.reload()" class="w-full bg-[#00B5AD] text-white py-4 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-[#00B5AD]/30 transition-all flex items-center justify-center gap-2 focus:outline-none">
+            Recommencer l'analyse
+            <svg class="w-4 h-4 relative top-[1px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </button>
+    </div>
+
+</main> <!-- /x-data -->
+
+<!-- Footer minimaliste -->
+<footer class="w-full py-6 flex flex-col items-center bg-transparent mt-auto opacity-70">
+    <span class="text-slate-400 text-[9px] font-black uppercase tracking-[0.5em] mb-1">Methodology PEP.uno</span>
+    <span class="text-slate-400 text-[8px] font-medium tracking-widest uppercase opacity-70">Think Clear • Act Fast • Lead Better</span>
+</footer>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('quizModule', (questions) => ({
+            questions: questions,
+            currentStep: 0,
+            selectedOption: null,
+            score: 0,
+            isFinished: false,
+            transition: false,
+
+            get currentQuestion() {
+                return this.questions ? this.questions[this.currentStep] : null;
+            },
+            get progress() {
+                return ((this.currentStep + 1) / this.questions.length) * 100;
+            },
+            handleSelect(index) {
+                this.selectedOption = index;
+            },
+            handleNext() {
+                // Check if current answer is correct
+                if (this.currentQuestion.options[this.selectedOption].is_correct) {
+                    this.score++;
+                }
+                
+                // Go to next or finish
+                if (this.currentStep < this.questions.length - 1) {
                     this.transition = true;
                     setTimeout(() => {
-                        this.currentQuestion++;
-                        this.showExplanation = false;
-                        this.selectedIndex = null;
-                        if (this.currentQuestion >= this.totalQuestions) {
-                            this.finished = true;
-                        }
+                        this.currentStep++;
+                        this.selectedOption = null;
                         this.transition = false;
-                    }, 400);
-                },
-                restart() {
-                    this.currentQuestion = 0;
-                    this.showExplanation = false;
-                    this.selectedIndex = null;
-                    this.score = 0;
-                    this.finished = false;
-                    this.transition = false;
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 300); // match duration
+                } else {
+                    this.isFinished = true;
                 }
-            }))
-        })
-    </script>
-</section>
+            }
+        }))
+    })
+</script>
 @endif
