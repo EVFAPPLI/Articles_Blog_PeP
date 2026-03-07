@@ -23,7 +23,7 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 - **[x] Documentation Technique** : Création du `technical_guide.md` pour la maintenance.
 - **[x] Portabilité des Articles (JSON)** : Système d'export/import indépendant pour le développement local.
 - **[ ] Intégration Google Indexing API** : Automatiser l'indexation dès la publication.
-- **[ ] Configuration Gemini (GenAI)** : Ajout des clés services pour l'aide à la rédaction.
+- **[x] Configuration Gemini (GenAI)** : Ajout des clés services pour l'aide à la rédaction.
 
 ## ✅ Phase 4 : Design Homepage & Bento Grid (Terminé)
 
