@@ -41,7 +41,7 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 ## 🔄 Phase 6 : Recherche & SEO avancé (À venir)
 
 - **[ ] Système de Recherche** : Ajout d'une barre de recherche sur le blog.
-- **[ ] Newsletters / E-letters** : Intégration du système de diffusion basé sur les articles.
+- [x] Newsletters / E-letters : Intégration du système de diffusion basé sur les articles (via Export JSON).
 
 ## ✅ Phase 8 : Confort Visuel & Navigation (Terminé)
 
