@@ -31,7 +31,7 @@
                 <a href="{{ route('blog.index') }}" class="hover:text-pep-accent transition-colors">Articles</a>
                 <a href="{{ route('quiz.index') }}" class="text-blue-600 font-extrabold flex items-center gap-1 hover:text-pep-accent transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    Le Défi
+                    Le défi
                 </a>
                 <a href="https://pep.world/" target="_blank" class="hover:text-pep-accent transition-colors">Méthode PEP</a>
                 <a href="{{ url('/admin/login') }}" class="bg-pep-dark text-white px-5 py-2.5 rounded-full hover:bg-pep-accent transition-all">

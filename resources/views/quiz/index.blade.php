@@ -14,7 +14,7 @@
                 <span class="text-xs font-bold uppercase tracking-widest text-emerald-700">Test d'Expertise IA</span>
             </div>
             <h1 class="text-5xl md:text-7xl font-serif font-black text-pep-dark mb-6 tracking-tight leading-tight">
-                Le Défi <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-blue-600">PEP</span>
+                Le défi <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-blue-600">PEP</span>
             </h1>
             <p class="text-xl md:text-2xl text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
                 Mettez à l'épreuve vos connaissances et vos réflexes en matière d'efficacité professionnelle.

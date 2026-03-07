@@ -14,11 +14,11 @@
     </script>
     <div class="max-w-3xl mx-auto px-6" x-data="quizModule(window.pepQuizData)" x-cloak>
         
-        <!-- En-tête du Quiz "Le Défi PEP" -->
+        <!-- En-tête du Quiz "Le défi PEP" -->
         <div class="text-center mb-8" x-show="!finished">
             <span class="inline-flex items-center gap-2 px-3 py-1 mb-4 text-[10px] font-bold uppercase tracking-widest bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100 shadow-sm">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                Le Défi PEP
+                Le défi PEP
             </span>
             <h2 class="text-2xl md:text-3xl font-serif font-bold text-pep-dark mb-3">
                 {{ $activeQuiz->title }}

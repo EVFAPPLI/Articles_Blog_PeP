@@ -343,7 +343,7 @@
             <div>
                 <h4 class="font-bold uppercase tracking-widest text-xs mb-8 text-gray-500">Explorer</h4>
                 <ul class="space-y-4 text-gray-400 text-sm">
-                    <li><a href="{{ route('quiz.index') }}" class="text-emerald-400 hover:text-white transition-colors font-bold flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Le Défi PEP</a></li>
+                    <li><a href="{{ route('quiz.index') }}" class="text-emerald-400 hover:text-white transition-colors font-bold flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Le défi PEP</a></li>
                     <li><a href="{{ url('/faq') }}" class="hover:text-white transition-colors">Questions fréquentes (FAQ)</a></li>
                 </ul>
             </div>
