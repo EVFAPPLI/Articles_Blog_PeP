@@ -72,7 +72,7 @@
                             </a>
                         </h3>
                         <div class="text-gray-500 text-sm mb-6 line-clamp-3 leading-relaxed">
-                            {!! strip_tags($post->vignette_content) !!}
+                            {!! strip_tags($post->vignette_content, '<strong><em><b><i>') !!}
                         </div>
                     </div>
 

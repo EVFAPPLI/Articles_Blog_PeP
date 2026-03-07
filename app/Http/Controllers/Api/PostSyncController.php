@@ -67,7 +67,18 @@ class PostSyncController extends Controller
                 $keywords = array_map('trim', explode(',', $keywords));
             }
 
-            // 5. Synchro
+            // 5. Nettoyage final du contenu (Suppression des scories de l'IA)
+            $unwantedPatterns = [
+                '/<p>.*?Et plus.*?<\/p>/is',
+                '/<p>.*?Lire la suite.*?<\/p>/is',
+                '/<p>.*?Vignette.*?<\/p>/is',
+                '/Et plus\.\.\./i',
+                '/Lire la suite/i',
+            ];
+            $processedContent = preg_replace($unwantedPatterns, '', $processedContent);
+            $processedExcerpt = preg_replace($unwantedPatterns, '', $processedExcerpt);
+
+            // 6. Synchro
             $post = Post::updateOrCreate(
                 ['slug' => $slug],
                 [
@@ -78,7 +89,7 @@ class PostSyncController extends Controller
                     'meta_description' => $validated['meta_description'] ?? null,
                     'keywords' => $keywords,
                     'category' => $validated['category'] ?? null,
-                    'author' => 'Visibloo',
+                    'author' => 'PEP worldwide',
                     'is_published' => true,
                     'published_at' => Post::where('slug', $slug)->first()?->published_at ?? now(),
                 ]
