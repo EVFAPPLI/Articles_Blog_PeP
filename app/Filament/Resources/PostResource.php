@@ -214,12 +214,17 @@ class PostResource extends Resource
 
                                         \Filament\Notifications\Notification::make()->info()->title('Analyse de la structure HTML en cours... Ce processus peut prendre quelques secondes.')->send();
 
-                                        $prompt = "Tu es un intégrateur web expert. Prends ce texte ou code HTML et refais une mise en page parfaite. 
-                                        RÈGLE D'OR ABSOLUE : TU NE DOIS CHANGER AUCUN MOT OU PHRASE. Ton seul travail est de:
-                                        1. Ajouter/nettoyer les balises HTML de base (<h2>, <p>, <ul>, <strong>...).
-                                        2. Rendre TOUS les liens (URLs brutes ou textes évoquant un lien) cliquables avec une balise <a href='...' target='_blank' rel='noopener' class='text-blue-500 hover:text-blue-700 underline'>.
-                                        3. DÉTECTION DES SOURCES : Si le texte mentionne des sources bibliographiques, des mentions légales, ou des liens de référence (souvent en fin de texte), TU DOIS obligerrement envelopper ce bloc entier dans une balise <div class=\"ai-sources\"> ... </div>.
-                                        Garde exactement le texte global. N'invente pas de paragraphes. Renvoie UNIQUEMENT le code HTML pur sans markdown.";
+                                        $prompt = "Tu es un intégrateur web expert et Designer UI TailwindCSS. Refais la mise en page de ce texte pour le rendre ultra-moderne, premium et 'sexy'.
+                                        RÈGLE D'OR ABSOLUE : NE CHANGE AUCUN MOT DU TEXTE ORIGINAL. N'efface rien, n'ajoute aucune phrase de conclusion.
+                                        Applique obligatoirement ces classes Tailwind exactes sur tes balises :
+                                        1. <h2 class='text-2xl md:text-3xl font-bold text-slate-800 mt-12 mb-6 border-b border-slate-200 pb-2'>
+                                        2. <h3 class='text-xl md:text-2xl font-semibold text-slate-700 mt-8 mb-4'>
+                                        3. <p class='text-lg text-slate-600 leading-relaxed mb-6'>
+                                        4. <ul class='list-none pl-0 space-y-4 mb-8'> avec des <li> contenant une puce colorée (ex: <li class='flex items-start'><span class='text-blue-500 mr-2'>•</span><span class='text-lg text-slate-600'>...</span></li>)
+                                        5. LIENS : Rends TOUS les liens (URLs brutes ou textes évoquant un lien) cliquables avec <a href='...' target='_blank' rel='noopener' class='text-blue-600 hover:text-blue-800 font-medium underline decoration-blue-300 underline-offset-4 transition-colors'>
+                                        6. SOURCES STRICTES : DÉTECTE absolument le bloc de données, statistiques ou sources (souvent à la fin). Tu DOIS l'envelopper dans : <div class='mt-12 p-6 bg-slate-50/80 backdrop-blur-sm rounded-2xl border border-slate-200 text-sm italic text-blue-600/90 space-y-2 shadow-sm ai-sources'>...</div>. Les liens à l'intérieur doivent être cliquables.
+                                        7. METTRE EN VALEUR (Call to action / Idée forte) : Tu peux entourer un concept clé d'un <div class='p-6 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-900 rounded-xl font-medium my-8 shadow-sm border border-blue-100'>.
+                                        Renvoie UNIQUEMENT le code HTML final pur, sans blocs de commentaires Markdown.";
                                         
                                         $improved = GeminiService::generateContent($prompt, $source);
                                         
