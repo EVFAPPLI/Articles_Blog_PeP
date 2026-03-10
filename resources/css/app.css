@@ -76,7 +76,7 @@
     }
 
     .ai-content ul {
-        @apply mb-10 space-y-4 pl-8 list-disc !important;
+        @apply mb-10 space-y-4 pl-8 list-disc;
         list-style-type: disc !important;
     }
 
