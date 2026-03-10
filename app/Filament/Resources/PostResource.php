@@ -214,10 +214,6 @@ class PostResource extends Resource
                                         }
                                     }),
                             ])
-                            ->profile('default')
-                            ->fileAttachmentsDisk('public')
-                            ->fileAttachmentsVisibility('public')
-                            ->fileAttachmentsDirectory('blog-images')
                             ->columnSpanFull(),
                     ]),
 
