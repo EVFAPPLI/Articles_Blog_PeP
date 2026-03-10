@@ -180,7 +180,11 @@ class PostResource extends Resource
                                                     }
                                                 }),
                                         ])->alignCenter(),
-                                        Forms\Components\Hidden::make('ai_generated_result'),
+                                        Forms\Components\Hidden::make('ai_generated_result')
+                                            ->required()
+                                            ->validationMessages([
+                                                'required' => 'Vous devez d\'abord générer l\'aperçu avant d\'accepter la modification.',
+                                            ]),
                                         Forms\Components\Placeholder::make('ai_generated_preview')
                                             ->label('Aperçu du nouveau rendu')
                                             ->content(function (Forms\Get $get) {
@@ -193,7 +197,6 @@ class PostResource extends Resource
                                             ->visible(fn (Forms\Get $get): bool => filled($get('ai_generated_result'))),
                                     ])
                                     ->modalSubmitActionLabel('Accepter la modification et remplacer')
-                                    ->modalSubmitAction(fn ($action) => $action->disabled(fn (Forms\Get $get) => empty($get('ai_generated_result'))))
                                     ->action(function (array $data, \Filament\Forms\Components\Actions\Action $action) {
                                         if (!empty($data['ai_generated_result'])) {
                                             $action->getLivewire()->data['html_content'] = $data['ai_generated_result'];
