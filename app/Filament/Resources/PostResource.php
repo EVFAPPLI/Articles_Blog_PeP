@@ -141,12 +141,12 @@ class PostResource extends Resource
                                         $prompt = "Tu es un expert en mise en page HTML sémantique et en typographie française. Ton rôle est d'apporter une structure 'Premium' à cet article de blog.
 
                                         CONSIGNES :
-                                        1. NE TOUCHE PAS AU TEXTE ORIGINAL. Aucun mot ne doit être ajouté, supprimé ou modifié.
-                                        2. Respecte rigoureusement la LANGUE FRANÇAISE : pas de majuscules à chaque mot dans les titres.
-                                        3. Ajoute des balises H2 et H3 logiques pour la hiérarchie.
-                                        4. Utilise <ul>/<li> pour les listes. IMPORTANT : Ne mets pas de styles inline sur les <ul>, le CSS global s'en chargera.
-                                        5. Utilise <strong> pour le relief SEO.
-                                        6. SOURCES : Si tu détectes une section 'Sources' ou des références en fin d'article, encapsule-les dans une div avec le style inline suivant : 'font-size: 0.85rem; color: #3b82f6; font-style: italic; opacity: 0.8;'.
+                                        1. ENVELOPPE TOUT TON CONTENU dans une balise <div class='ai-content'>...</div>.
+                                        2. NE TOUCHE PAS AU TEXTE ORIGINAL. Aucun mot ne doit être ajouté, supprimé ou modifié.
+                                        3. Respecte rigoureusement la LANGUE FRANÇAISE : pas de majuscules à chaque mot dans les titres.
+                                        4. Ajoute des balises H2 et H3 logiques pour la hiérarchie.
+                                        5. Utilise <ul>/<li> pour les listes.
+                                        6. SOURCES : Si tu détectes une section 'Sources' ou des références, encapsule toute la section dans une <div class='ai-sources'>...</div>.
                                         7. Nettoie le code HTML (styles parasites, balises inutiles).
                                         8. Retourne UNIQUEMENT le code HTML propre.";
 
