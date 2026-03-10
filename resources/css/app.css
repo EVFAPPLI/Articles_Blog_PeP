@@ -55,18 +55,20 @@
 
     /* Forced Prose Styling (V4) */
     .prose {
-        max-width: none !important;
+        max-width: none;
     }
 
     .prose p {
-        @apply mb-14 leading-[2.2] text-slate-700 text-[1.2rem] opacity-90;
-        margin-bottom: 3.5rem !important;
+        @apply mb-10 leading-[2.2] text-slate-700 text-[1.2rem] opacity-90;
     }
 
     .prose em {
+        @apply italic text-pep-accent font-medium text-[1.15rem];
+    }
+
+    /* Citation style spécifique pour quand on veut vraiment le bloc bleu */
+    .prose blockquote {
         @apply block my-12 pl-8 border-l-4 border-pep-accent/40 italic text-pep-accent font-medium text-[1.15rem];
-        display: block !important;
-        font-style: italic !important;
     }
 
     .prose h2 {
