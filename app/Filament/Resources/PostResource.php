@@ -215,8 +215,11 @@ class PostResource extends Resource
                                         \Filament\Notifications\Notification::make()->info()->title('Analyse de la structure HTML en cours... Ce processus peut prendre quelques secondes.')->send();
 
                                         $prompt = "Tu es un intégrateur web expert. Prends ce texte ou code HTML et refais une mise en page parfaite. 
-                                        RÈGLE D'OR ABSOLUE : TU NE DOIS CHANGER AUCUN MOT OU PHRASE. Ton seul travail est d'ajouter ou de nettoyer les balises HTML (ex: <h2>, <h3>, <p>, <ul>, <li>, <strong>) pour avoir une belle présentation. N'écourte rien, n'allonge rien. Garde exactement le texte.
-                                        Renvoie UNIQUEMENT le code HTML final.";
+                                        RÈGLE D'OR ABSOLUE : TU NE DOIS CHANGER AUCUN MOT OU PHRASE. Ton seul travail est de:
+                                        1. Ajouter/nettoyer les balises HTML de base (<h2>, <p>, <ul>, <strong>...).
+                                        2. Rendre TOUS les liens (URLs brutes ou textes évoquant un lien) cliquables avec une balise <a href='...' target='_blank' rel='noopener' class='text-blue-500 hover:text-blue-700 underline'>.
+                                        3. DÉTECTION DES SOURCES : Si le texte mentionne des sources bibliographiques, des mentions légales, ou des liens de référence (souvent en fin de texte), TU DOIS obligerrement envelopper ce bloc entier dans une balise <div class=\"ai-sources\"> ... </div>.
+                                        Garde exactement le texte global. N'invente pas de paragraphes. Renvoie UNIQUEMENT le code HTML pur sans markdown.";
                                         
                                         $improved = GeminiService::generateContent($prompt, $source);
                                         
