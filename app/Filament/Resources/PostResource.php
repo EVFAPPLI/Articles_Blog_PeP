@@ -115,14 +115,32 @@ class PostResource extends Resource
                             ->columnSpanFull(),
                         
                         // L'éditeur de code HTML "Safe" pour les retouches manuelles sans filtrages (avec coloration VSCode)
-                        \Dotswan\FilamentCodeEditor\Fields\CodeEditor::make('html_content')
-                            ->label('Code Source HTML (Article)')
-                            ->minHeight(500)
-                            ->hintActions([
-                                Action::make('auto_layout')
-                                    ->label('✨ Assistant IA (Modification & Correction)')
+                        Forms\Components\Section::make('Éditeur HTML & Assistant IA')
+                            ->description('Modifiez le code source manuellement ou demandez à l\'IA de le faire pour vous.')
+                            ->headerActions([
+                                Action::make('preview_html')
+                                    ->label('👁️ Aperçu visuel final')
+                                    ->color('gray')
+                                    ->modalHeading('Aperçu du rendu HTML')
+                                    ->modalWidth('7xl')
+                                    ->modalSubmitAction(false)
+                                    ->modalCancelActionLabel('Fermer')
+                                    ->form([
+                                        Forms\Components\Placeholder::make('html_preview_render')
+                                            ->label('')
+                                            ->content(function (Forms\Get $get) {
+                                                $html = $get('../../html_content');
+                                                if (empty($html)) {
+                                                    return new \Illuminate\Support\HtmlString('<p class="text-gray-500">Aucun contenu à afficher.</p>');
+                                                }
+                                                // Encapsulation dans les classes Tailwind pour la preview
+                                                return new \Illuminate\Support\HtmlString('<div class="prose max-w-none ai-content" style="padding:2rem; background:white; border-radius:8px;">' . $html . '</div>');
+                                            })
+                                    ]),
+                                
+                                Action::make('assistant_ia')
+                                    ->label('✨ Assistant IA (Demander une modification)')
                                     ->color('success')
-                                    ->icon('heroicon-o-sparkles')
                                     ->modalHeading('Que voulez-vous modifier dans cet article ?')
                                     ->modalWidth('7xl')
                                     ->modalDescription('Donnez une instruction à l\'IA en langage naturel (ex: "Mets le deuxième paragraphe en rouge", "Corrige la faute", "Ajoute un H2").')
@@ -144,7 +162,8 @@ class PostResource extends Resource
                                             ->label('1. Générer l\'aperçu')
                                             ->color('primary')
                                             ->action(function (Forms\Set $set, Forms\Get $get) {
-                                                $source = $get('../../html_content'); // Remonter au niveau du Field parent
+                                                // Le state de l'action header est différent, donc on remonte 2 niveaux
+                                                $source = $get('../../html_content');
                                                 $instruction = $get('ia_instruction');
 
                                                 if (empty($source) || empty($instruction)) {
@@ -172,7 +191,7 @@ class PostResource extends Resource
                                     ])
                                     ->action(function (Forms\Set $set, array $data, Forms\Get $get) {
                                         if (!empty($data['ai_generated_result'])) {
-                                            $set('html_content', $data['ai_generated_result']);
+                                            $set('../../html_content', $data['ai_generated_result']);
                                             \Filament\Notifications\Notification::make()->success()->title('Article mis à jour avec succès par l\'IA !')->send();
                                         } else {
                                             \Filament\Notifications\Notification::make()->danger()->title('Veuillez générer un aperçu avant d\'appliquer.')->send();
@@ -180,19 +199,20 @@ class PostResource extends Resource
                                     }),
 
                                 Action::make('improve_html')
-                                    ->label('Améliorer le contenu')
+                                    ->label('Améliorer le contenu complet')
                                     ->icon('heroicon-o-sparkles')
+                                    ->color('info')
                                     ->modalHeading('Proposition d\'amélioration par l\'IA')
-                                    ->modalDescription('L\'IA a généré une version améliorée de votre texte. Vous pouvez la modifier avant de l\'accepter.')
+                                    ->modalDescription('L\'IA va générer une version améliorée de votre texte (correction, fluidité). Vérifiez bien le HTML en retour.')
                                     ->modalSubmitActionLabel('Accepter et Remplacer')
                                     ->form([
-                                        \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('suggested_content')
+                                        \Dotswan\FilamentCodeEditor\Fields\CodeEditor::make('suggested_content')
                                             ->label('Texte amélioré par Gemini')
-                                            ->profile('default')
+                                            ->minHeight(400)
                                             ->required(),
                                     ])
                                     ->mountUsing(function (Forms\ComponentContainer $form, Forms\Get $get) {
-                                        $source = $get('html_content');
+                                        $source = $get('../../html_content');
                                         if (empty($source)) {
                                             \Filament\Notifications\Notification::make()->warning()->title('Le contenu est vide.')->send();
                                             return;
@@ -209,10 +229,16 @@ class PostResource extends Resource
                                     })
                                     ->action(function (Forms\Set $set, array $data) {
                                         if (!empty($data['suggested_content'])) {
-                                            $set('html_content', $data['suggested_content']);
+                                            $set('../../html_content', $data['suggested_content']);
                                             \Filament\Notifications\Notification::make()->success()->title('Texte remplacé avec succès !')->send();
                                         }
                                     }),
+                            ])
+                            ->schema([
+                                \Dotswan\FilamentCodeEditor\Fields\CodeEditor::make('html_content')
+                                    ->label('')
+                                    ->minHeight(600)
+                                    ->columnSpanFull(),
                             ])
                             ->columnSpanFull(),
                     ]),
