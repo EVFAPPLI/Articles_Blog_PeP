@@ -193,7 +193,7 @@ class PostResource extends Resource
                                             ->visible(fn (Forms\Get $get): bool => filled($get('ai_generated_result'))),
                                     ])
                                     ->modalSubmitActionLabel('Accepter la modification et remplacer')
-                                    ->modalSubmitAction(fn (\Filament\Forms\Components\Actions\Action $action) => $action->disabled(fn (Forms\Get $get) => empty($get('ai_generated_result'))))
+                                    ->modalSubmitAction(fn ($action) => $action->disabled(fn (Forms\Get $get) => empty($get('ai_generated_result'))))
                                     ->action(function (array $data, \Filament\Forms\Components\Actions\Action $action) {
                                         if (!empty($data['ai_generated_result'])) {
                                             $action->getLivewire()->data['html_content'] = $data['ai_generated_result'];
