@@ -168,10 +168,10 @@ class PostResource extends Resource
                                                     $prompt = "Tu es un copywriter et développeur expert. 
                                                     Voici la demande de l'utilisateur : '{$instruction}'.
                                                     Applique CETTE demande sur le code HTML suivant sans rien détériorer.
-                                                    CONSIGNES :
-                                                    1. Renvoie UNIQUEMENT le code HTML modifié.
-                                                    2. Ne supprime AUCUNE balise existante sauf si demandé.
-                                                    3. Conserve rigoureusement les classes et la structure.";
+                                                    CONSIGNES CRITIQUES :
+                                                    1. Renvoie UNIQUEMENT le code HTML, sans blocs markdown.
+                                                    2. Ne supprime aucune balise existante, n'altère pas la structure de base.
+                                                    3. DESIGN OBLIGATOIRE : N'utilise JAMAIS de classes utilitaires CSS (comme Tailwind, ex: text-red-500). Elles sont purgées en administration ! Si l'utilisateur demande une couleur, taille ou style, tu DOIS obligatoirement appliquer des styles CSS INLINE via l'attribut `style=\"...\"` (ex: `<span style=\"color: #ef4444; font-weight: bold;\">`).";
                                                     
                                                     $result = GeminiService::generateContent($prompt, $source);
                                                     if ($result) {
@@ -193,6 +193,7 @@ class PostResource extends Resource
                                             ->visible(fn (Forms\Get $get): bool => filled($get('ai_generated_result'))),
                                     ])
                                     ->modalSubmitActionLabel('Accepter la modification et remplacer')
+                                    ->modalSubmitAction(fn (\Filament\Forms\Components\Actions\Action $action) => $action->disabled(fn (Forms\Get $get) => empty($get('ai_generated_result'))))
                                     ->action(function (array $data, \Filament\Forms\Components\Actions\Action $action) {
                                         if (!empty($data['ai_generated_result'])) {
                                             $action->getLivewire()->data['html_content'] = $data['ai_generated_result'];
