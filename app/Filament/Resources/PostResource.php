@@ -116,7 +116,7 @@ class PostResource extends Resource
                         
                         \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('html_content')
                             ->label('Contenu de l\'Article')
-                            ->hintAction([
+                            ->hintActions([
                                 Action::make('auto_layout')
                                     ->label('Mise en page intelligente (SEO/GEO)')
                                     ->icon('heroicon-o-sparkles')
