@@ -137,14 +137,17 @@ class PostResource extends Resource
                                             return;
                                         }
 
-                                        $prompt = "Tu es un expert en mise en page HTML sémantique. Ton rôle est d'apporter une structure 'Premium' à cet article de blog. 
+                                        $prompt = "Tu es un expert en mise en page HTML sémantique et en typographie française. Ton rôle est d'apporter une structure 'Premium' à cet article de blog.
+
                                         CONSIGNES :
                                         1. NE TOUCHE PAS AU TEXTE ORIGINAL. Aucun mot ne doit être ajouté, supprimé ou modifié. L'intégrité du texte est sacrée.
-                                        2. Ajoute des balises H2 et H3 logiques pour la hiérarchie.
-                                        3. Utilise <ul>/<li> pour les listes.
-                                        4. Utilise <strong> pour le relief SEO.
-                                        5. Nettoie le code HTML (styles parasites, balises inutiles).
-                                        6. Retourne UNIQUEMENT le code HTML propre, sans aucun texte autour ni blocs markdown.";
+                                        2. Respecte rigoureusement la LANGUE FRANÇAISE : pas de majuscules à chaque mot dans les titres (Majuscule uniquement au premier mot et aux noms propres). 
+                                        3. Ajoute des balises H2 et H3 logiques pour la hiérarchie.
+                                        4. Utilise <ul>/<li> pour transformer les énumérations en listes à puces élégantes.
+                                        5. Utilise <strong> pour le relief SEO.
+                                        6. Utilise de la COULEUR (via inline style color: #2D3E50 ou similaire selon la charte) pour souligner certains éléments clés si besoin, sans en abuser.
+                                        7. Nettoie le code HTML (styles parasites, balises inutiles).
+                                        8. Retourne UNIQUEMENT le code HTML propre, sans aucun texte autour ni blocs markdown.";
 
                                         $restructured = GeminiService::generateContent($prompt, $source);
                                         
