@@ -134,7 +134,7 @@ class PostResource extends Resource
                                                 if (empty($html)) {
                                                     return new \Illuminate\Support\HtmlString('<p class="text-gray-500">Aucun contenu à afficher.</p>');
                                                 }
-                                                return new \Illuminate\Support\HtmlString('<div class="prose max-w-none ai-content" style="padding:2rem; background:white; border-radius:8px;">' . $html . '</div>');
+                                                return new \Illuminate\Support\HtmlString('<div class="prose max-w-none ai-content break-words whitespace-pre-wrap overflow-hidden" style="padding:2rem; background:white; border-radius:8px;">' . $html . '</div>');
                                             })
                                     ]),
                                 
@@ -180,11 +180,16 @@ class PostResource extends Resource
                                                     }
                                                 }),
                                         ])->alignCenter(),
-                                        \Dotswan\FilamentCodeEditor\Fields\CodeEditor::make('ai_generated_result')
-                                            ->label('Nouveau code HTML proposé')
-                                            ->minHeight(400)
-                                            ->disabled()
-                                            ->dehydrated(false)
+                                        Forms\Components\Hidden::make('ai_generated_result'),
+                                        Forms\Components\Placeholder::make('ai_generated_preview')
+                                            ->label('Aperçu du nouveau rendu')
+                                            ->content(function (Forms\Get $get) {
+                                                $html = $get('ai_generated_result');
+                                                if (empty($html)) {
+                                                    return new \Illuminate\Support\HtmlString('<p class="text-gray-500 italic">L\'aperçu apparaîtra ici...</p>');
+                                                }
+                                                return new \Illuminate\Support\HtmlString('<div class="prose max-w-none ai-content break-words whitespace-pre-wrap overflow-hidden" style="padding:2rem; background:white; border-radius:8px; border:1px solid #e2e8f0;">' . $html . '</div>');
+                                            })
                                             ->visible(fn (Forms\Get $get): bool => filled($get('ai_generated_result'))),
                                     ])
                                     ->modalSubmitActionLabel('Accepter la modification et remplacer')

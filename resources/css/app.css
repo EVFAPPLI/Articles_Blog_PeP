@@ -61,6 +61,8 @@
     /* Style dédié pour le contenu généré par l'IA */
     .ai-content {
         @apply space-y-8;
+        word-break: break-word;
+        overflow-wrap: anywhere;
     }
 
     .ai-content a {
