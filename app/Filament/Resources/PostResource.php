@@ -118,7 +118,7 @@ class PostResource extends Resource
                         Forms\Components\Section::make('Éditeur HTML & Assistant IA')
                             ->description('Modifiez le code source manuellement ou demandez à l\'IA de le faire pour vous.')
                             ->headerActions([
-                                Action::make('preview_html')
+                                \Filament\Forms\Components\Actions\Action::make('preview_html')
                                     ->label('👁️ Aperçu visuel final')
                                     ->color('gray')
                                     ->modalHeading('Aperçu du rendu HTML')
@@ -128,36 +128,34 @@ class PostResource extends Resource
                                     ->form([
                                         Forms\Components\Placeholder::make('html_preview_render')
                                             ->label('')
-                                            ->content(function (Forms\Get $get) {
-                                                $html = $get('../../html_content');
+                                            ->content(function (\Filament\Forms\Components\Placeholder $component) {
+                                                // Accès 100% robuste à la donnée globale
+                                                $html = data_get($component->getLivewire(), 'data.html_content', '');
                                                 if (empty($html)) {
                                                     return new \Illuminate\Support\HtmlString('<p class="text-gray-500">Aucun contenu à afficher.</p>');
                                                 }
-                                                // Encapsulation dans les classes Tailwind pour la preview
                                                 return new \Illuminate\Support\HtmlString('<div class="prose max-w-none ai-content" style="padding:2rem; background:white; border-radius:8px;">' . $html . '</div>');
                                             })
                                     ]),
                                 
-                                Action::make('assistant_ia')
+                                \Filament\Forms\Components\Actions\Action::make('assistant_ia')
                                     ->label('✨ Assistant IA (Demander une modification)')
                                     ->color('success')
-                                    ->modalHeading('Que voulez-vous modifier dans cet article ?')
+                                    ->modalHeading('Demander une retouche ciblée')
                                     ->modalWidth('7xl')
-                                    ->modalDescription('Donnez une instruction à l\'IA en langage naturel (ex: "Mets le deuxième paragraphe en rouge", "Corrige la faute", "Ajoute un H2").')
-                                    ->modalSubmitActionLabel('Appliquer sur l\'article')
+                                    ->modalDescription('Donnez une instruction à l\'IA (ex: "Mets cette phrase en bleu", "Passe tous les H2 en H3").')
                                     ->form([
                                         Forms\Components\TextInput::make('ia_instruction')
                                             ->label('Votre instruction')
-                                            ->placeholder('Ex: Remplace "Bientôt" par "Immédiatement" dans l\'intro...')
+                                            ->placeholder('Ex: Corrige la faute dans le titre...')
                                             ->required(),
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('generate_draft')
-                                                ->label('Demander à l\'IA')
+                                                ->label('Générer l\'aperçu')
                                                 ->icon('heroicon-m-sparkles')
                                                 ->color('primary')
-                                                ->action(function (Forms\Set $set, Forms\Get $get) {
-                                                    // Le state de l'action header est différent, donc on remonte 2 niveaux
-                                                    $source = $get('../../html_content');
+                                                ->action(function (Forms\Get $get, Forms\Set $set, \Filament\Forms\Components\Actions\Action $action) {
+                                                    $source = data_get($action->getLivewire(), 'data.html_content', '');
                                                     $instruction = $get('ia_instruction');
 
                                                     if (empty($source) || empty($instruction)) {
@@ -183,55 +181,52 @@ class PostResource extends Resource
                                                 }),
                                         ])->alignCenter(),
                                         \Dotswan\FilamentCodeEditor\Fields\CodeEditor::make('ai_generated_result')
-                                            ->label('Aperçu du nouveau code HTML généré')
+                                            ->label('Nouveau code HTML proposé')
                                             ->minHeight(400)
                                             ->disabled()
                                             ->dehydrated(false)
                                             ->visible(fn (Forms\Get $get): bool => filled($get('ai_generated_result'))),
                                     ])
-                                    ->modalSubmitActionLabel('Appliquer ce résultat sur l\'article')
-                                    ->action(function (Forms\Set $set, array $data, Forms\Get $get) {
+                                    ->modalSubmitActionLabel('Accepter la modification et remplacer')
+                                    ->action(function (array $data, \Filament\Forms\Components\Actions\Action $action) {
                                         if (!empty($data['ai_generated_result'])) {
-                                            $set('../../html_content', $data['ai_generated_result']);
-                                            \Filament\Notifications\Notification::make()->success()->title('Article mis à jour avec succès par l\'IA !')->send();
+                                            $action->getLivewire()->data['html_content'] = $data['ai_generated_result'];
+                                            \Filament\Notifications\Notification::make()->success()->title('La modification a été appliquée !')->send();
                                         } else {
-                                            \Filament\Notifications\Notification::make()->danger()->title('Veuillez d\'abord "Demander à l\'IA" pour obtenir un aperçu.')->send();
+                                            \Filament\Notifications\Notification::make()->danger()->title('Veuillez d\'abord "Générer" un aperçu.')->send();
                                         }
                                     }),
 
-                                Action::make('improve_html')
-                                    ->label('Améliorer le contenu complet')
-                                    ->icon('heroicon-o-sparkles')
+                                \Filament\Forms\Components\Actions\Action::make('auto_layout')
+                                    ->label('🪄 Mise en page Intelligente')
                                     ->color('info')
-                                    ->modalHeading('Proposition d\'amélioration par l\'IA')
-                                    ->modalDescription('L\'IA va générer une version améliorée de votre texte (correction, fluidité). Vérifiez bien le HTML en retour.')
-                                    ->modalSubmitActionLabel('Accepter et Remplacer')
-                                    ->form([
-                                        \Dotswan\FilamentCodeEditor\Fields\CodeEditor::make('suggested_content')
-                                            ->label('Texte amélioré par Gemini')
-                                            ->minHeight(400)
-                                            ->required(),
-                                    ])
-                                    ->mountUsing(function (Forms\ComponentContainer $form, Forms\Get $get) {
-                                        $source = $get('../../html_content');
+                                    ->requiresConfirmation()
+                                    ->modalHeading('Embellir la structure HTML ?')
+                                    ->modalDescription('L\'IA va ajouter les bonnes balises HTML (titres h2, h3, paragraphes, listes) au texte actuel pour le rendre magnifique. RÈGLE D\'OR : L\'IA ne modifiera ou ne supprimera AUCUN mot ou phrase. Confirmez-vous ?')
+                                    ->modalSubmitActionLabel('Oui, embellir la mise en page')
+                                    ->action(function (Forms\Set $set, \Filament\Forms\Components\Actions\Action $action) {
+                                        $source = data_get($action->getLivewire(), 'data.html_content', '');
+                                        
                                         if (empty($source)) {
                                             \Filament\Notifications\Notification::make()->warning()->title('Le contenu est vide.')->send();
                                             return;
                                         }
-                                        $prompt = "Tu es un copywriter web expert. Améliore ce texte de blog pour le rendre plus professionnel, attractif et agréable à lire. Corrige les fautes, optimise la fluidité. IMPORTANT : CONSERVE STRICTEMENT LE CODE HTML, les balises de paragraphe, liste, titre. Ne renvoie que le code HTML amélioré de l'article.";
+
+                                        \Filament\Notifications\Notification::make()->info()->title('Analyse de la structure HTML en cours... Ce processus peut prendre quelques secondes.')->send();
+
+                                        $prompt = "Tu es un intégrateur web expert. Prends ce texte ou code HTML et refais une mise en page parfaite. 
+                                        RÈGLE D'OR ABSOLUE : TU NE DOIS CHANGER AUCUN MOT OU PHRASE. Ton seul travail est d'ajouter ou de nettoyer les balises HTML (ex: <h2>, <h3>, <p>, <ul>, <li>, <strong>) pour avoir une belle présentation. N'écourte rien, n'allonge rien. Garde exactement le texte.
+                                        Renvoie UNIQUEMENT le code HTML final.";
+                                        
                                         $improved = GeminiService::generateContent($prompt, $source);
+                                        
                                         if ($improved) {
-                                            $form->fill([
-                                                'suggested_content' => preg_replace('/```html\n?(.*?)\n?```/is', '$1', $improved)
-                                            ]);
+                                            $cleaned = preg_replace('/```html\n?(.*?)\n?```/is', '$1', $improved);
+                                            // Modification globale de la Form parent
+                                            $action->getLivewire()->data['html_content'] = $cleaned;
+                                            \Filament\Notifications\Notification::make()->success()->title('Mise en page automatique réussie !')->send();
                                         } else {
                                             \Filament\Notifications\Notification::make()->danger()->title('Problème avec l\'IA. Vérifiez les logs.')->send();
-                                        }
-                                    })
-                                    ->action(function (Forms\Set $set, array $data) {
-                                        if (!empty($data['suggested_content'])) {
-                                            $set('../../html_content', $data['suggested_content']);
-                                            \Filament\Notifications\Notification::make()->success()->title('Texte remplacé avec succès !')->send();
                                         }
                                     }),
                             ])
