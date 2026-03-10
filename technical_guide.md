@@ -33,7 +33,7 @@ Ce document sert de référence technique pour comprendre le fonctionnement inte
 
 ### Sécurité & CORS
 
-- **Token** : Défini dans le contrôleur (ou via `.env` avec `API_SERVICE_TOKEN`).
+- **Token** : Défini dans le contrôleur (ou via `.env` avec `BLOG_SYNC_TOKEN`).
 - **CORS** : Configuré dans `config/cors.php` pour autoriser `outils.visibloo.fr`.
 
 ---

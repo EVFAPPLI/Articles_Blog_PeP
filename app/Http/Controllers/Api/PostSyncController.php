@@ -90,8 +90,8 @@ class PostSyncController extends Controller
                     'keywords' => $keywords,
                     'category' => $validated['category'] ?? null,
                     'author' => 'PEP worldwide',
-                    'is_published' => true,
-                    'published_at' => Post::where('slug', $slug)->first()?->published_at ?? now(),
+                    'is_published' => false,
+                    'published_at' => Post::where('slug', $slug)->first()?->published_at ?? null,
                 ]
             );
 

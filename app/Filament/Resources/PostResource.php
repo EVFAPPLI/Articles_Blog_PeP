@@ -116,7 +116,53 @@ class PostResource extends Resource
                         
                         \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('html_content')
                             ->label('Contenu de l\'Article')
-                            ->hintAction(
+                            ->hintAction([
+                                Action::make('auto_layout')
+                                    ->label('Mise en page intelligente (SEO/GEO)')
+                                    ->icon('heroicon-o-sparkles')
+                                    ->color('primary')
+                                    ->modalHeading('Mise en page optimisée par l\'IA')
+                                    ->modalDescription('L\'IA va restructurer votre article (titres, listes, mise en forme) pour un rendu SEO/GEO Premium. LE TEXTE DE L\'AUTEUR SERA CONSERVÉ À 100%.')
+                                    ->modalSubmitActionLabel('Appliquer la structure IA')
+                                    ->form([
+                                        \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('ai_restructured_content')
+                                            ->label('Aperçu de la nouvelle structure')
+                                            ->profile('default')
+                                            ->required(),
+                                    ])
+                                    ->mountUsing(function (Forms\ComponentContainer $form, Forms\Get $get) {
+                                        $source = $get('html_content');
+                                        if (empty($source)) {
+                                            \Filament\Notifications\Notification::make()->warning()->title('Le contenu est vide.')->send();
+                                            return;
+                                        }
+
+                                        $prompt = "Tu es un expert en mise en page HTML sémantique. Ton rôle est d'apporter une structure 'Premium' à cet article de blog. 
+                                        CONSIGNES :
+                                        1. NE TOUCHE PAS AU TEXTE ORIGINAL. Aucun mot ne doit être ajouté, supprimé ou modifié. L'intégrité du texte est sacrée.
+                                        2. Ajoute des balises H2 et H3 logiques pour la hiérarchie.
+                                        3. Utilise <ul>/<li> pour les listes.
+                                        4. Utilise <strong> pour le relief SEO.
+                                        5. Nettoie le code HTML (styles parasites, balises inutiles).
+                                        6. Retourne UNIQUEMENT le code HTML propre, sans aucun texte autour ni blocs markdown.";
+
+                                        $restructured = GeminiService::generateContent($prompt, $source);
+                                        
+                                        if ($restructured) {
+                                            $cleaned = preg_replace('/```html\n?(.*?)\n?```/is', '$1', $restructured);
+                                            $form->fill([
+                                                'ai_restructured_content' => $cleaned
+                                            ]);
+                                        } else {
+                                            \Filament\Notifications\Notification::make()->danger()->title('Problème avec l\'IA. Vérifiez les logs.')->send();
+                                        }
+                                    })
+                                    ->action(function (Forms\Set $set, array $data) {
+                                        if (!empty($data['ai_restructured_content'])) {
+                                            $set('html_content', $data['ai_restructured_content']);
+                                            \Filament\Notifications\Notification::make()->success()->title('Mise en page IA appliquée avec succès !')->send();
+                                        }
+                                    }),
                                 Action::make('improve_html')
                                     ->label('Améliorer le contenu')
                                     ->icon('heroicon-o-sparkles')
@@ -150,8 +196,8 @@ class PostResource extends Resource
                                             $set('html_content', $data['suggested_content']);
                                             \Filament\Notifications\Notification::make()->success()->title('Texte remplacé avec succès !')->send();
                                         }
-                                    })
-                            )
+                                    }),
+                            ])
                             ->profile('default')
                             ->fileAttachmentsDisk('public')
                             ->fileAttachmentsVisibility('public')
