@@ -114,59 +114,71 @@ class PostResource extends Resource
                             ->maxHeight(300)
                             ->columnSpanFull(),
                         
-                        \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('html_content')
-                            ->label('Contenu de l\'Article')
+                        // L'éditeur de code HTML "Safe" pour les retouches manuelles sans filtrages (avec coloration VSCode)
+                        \Dotswan\FilamentCodeEditor\Fields\CodeEditor::make('html_content')
+                            ->label('Code Source HTML (Article)')
+                            ->minHeight(500)
                             ->hintActions([
                                 Action::make('auto_layout')
-                                    ->label('Mise en page intelligente (SEO/GEO)')
+                                    ->label('✨ Assistant IA (Modification & Correction)')
+                                    ->color('success')
                                     ->icon('heroicon-o-sparkles')
-                                    ->color('primary')
-                                    ->modalHeading('Mise en page optimisée par l\'IA')
+                                    ->modalHeading('Que voulez-vous modifier dans cet article ?')
                                     ->modalWidth('7xl')
-                                    ->modalDescription('L\'IA va restructurer votre article (titres, listes, mise en forme) pour un rendu SEO/GEO Premium. LE TEXTE DE L\'AUTEUR SERA CONSERVÉ À 100%.')
-                                    ->modalSubmitActionLabel('Appliquer la structure IA')
+                                    ->modalDescription('Donnez une instruction à l\'IA en langage naturel (ex: "Mets le deuxième paragraphe en rouge", "Corrige la faute", "Ajoute un H2").')
+                                    ->modalSubmitActionLabel('Appliquer sur l\'article')
                                     ->form([
-                                        \AmidEsfahani\FilamentTinyEditor\TinyEditor::make('ai_restructured_content')
-                                            ->label('Aperçu de la nouvelle structure')
-                                            ->profile('default')
+                                        Forms\Components\TextInput::make('ia_instruction')
+                                            ->label('Votre instruction')
+                                            ->placeholder('Ex: Remplace "Bientôt" par "Immédiatement" dans l\'intro...')
                                             ->required(),
+                                        \Dotswan\FilamentCodeEditor\Fields\CodeEditor::make('ai_generated_result')
+                                            ->label('Aperçu du nouveau code HTML généré')
+                                            ->minHeight(400)
+                                            ->disabled()
+                                            ->dehydrated(false)
+                                            ->visible(fn (Forms\Get $get): bool => filled($get('ai_generated_result'))),
                                     ])
-                                    ->mountUsing(function (Forms\ComponentContainer $form, Forms\Get $get) {
-                                        $source = $get('html_content');
-                                        if (empty($source)) {
-                                            \Filament\Notifications\Notification::make()->warning()->title('Le contenu est vide.')->send();
-                                            return;
-                                        }
+                                    ->modalFooterActions(fn (Action $action): array => [
+                                        Action::make('generate_draft')
+                                            ->label('1. Générer l\'aperçu')
+                                            ->color('primary')
+                                            ->action(function (Forms\Set $set, Forms\Get $get) {
+                                                $source = $get('../../html_content'); // Remonter au niveau du Field parent
+                                                $instruction = $get('ia_instruction');
 
-                                        $prompt = "Tu es un expert en mise en page HTML sémantique et en typographie française. Ton rôle est d'apporter une structure 'Premium' à cet article de blog.
+                                                if (empty($source) || empty($instruction)) {
+                                                    \Filament\Notifications\Notification::make()->warning()->title('L\'article ou l\'instruction est vide.')->send();
+                                                    return;
+                                                }
 
-                                        CONSIGNES :
-                                        1. ENVELOPPE TOUT TON CONTENU dans une balise <div class='ai-content'>...</div>.
-                                        2. NE TOUCHE PAS AU TEXTE ORIGINAL. Aucun mot ne doit être ajouté, supprimé ou modifié.
-                                        3. Respecte rigoureusement la LANGUE FRANÇAISE : pas de majuscules à chaque mot dans les titres.
-                                        4. Ajoute des balises H2 et H3 logiques pour la hiérarchie.
-                                        5. Utilise <ul>/<li> pour les listes.
-                                        6. SOURCES : Si tu détectes une section 'Sources' ou des références, encapsule toute la section dans une <div class='ai-sources'>...</div>.
-                                        7. Nettoie le code HTML (styles parasites, balises inutiles).
-                                        8. Retourne UNIQUEMENT le code HTML propre.";
-
-                                        $restructured = GeminiService::generateContent($prompt, $source);
-                                        
-                                        if ($restructured) {
-                                            $cleaned = preg_replace('/```html\n?(.*?)\n?```/is', '$1', $restructured);
-                                            $form->fill([
-                                                'ai_restructured_content' => $cleaned
-                                            ]);
+                                                $prompt = "Tu es un expert développeur et copywriter. 
+                                                Voici la demande de l'utilisateur : '{$instruction}'.
+                                                Applique CETTE demande sur le code HTML suivant sans rien détériorer.
+                                                CONSIGNES :
+                                                1. Renvoie UNIQUEMENT le code HTML modifié.
+                                                2. Ne supprime AUCUNE balise existante sauf si demandé.
+                                                3. Aucun style parasite, respecte la structure.";
+                                                
+                                                $result = GeminiService::generateContent($prompt, $source);
+                                                if ($result) {
+                                                    $cleaned = preg_replace('/```html\n?(.*?)\n?```/is', '$1', $result);
+                                                    $set('ai_generated_result', $cleaned);
+                                                    \Filament\Notifications\Notification::make()->success()->title('Aperçu généré ! Vous pouvez appliquer.')->send();
+                                                }
+                                            }),
+                                        $action->getModalSubmitAction()->label('2. Appliquer la modification')->color('success'),
+                                        $action->getModalCancelAction(),
+                                    ])
+                                    ->action(function (Forms\Set $set, array $data, Forms\Get $get) {
+                                        if (!empty($data['ai_generated_result'])) {
+                                            $set('html_content', $data['ai_generated_result']);
+                                            \Filament\Notifications\Notification::make()->success()->title('Article mis à jour avec succès par l\'IA !')->send();
                                         } else {
-                                            \Filament\Notifications\Notification::make()->danger()->title('Problème avec l\'IA. Vérifiez les logs.')->send();
-                                        }
-                                    })
-                                    ->action(function (Forms\Set $set, array $data) {
-                                        if (!empty($data['ai_restructured_content'])) {
-                                            $set('html_content', $data['ai_restructured_content']);
-                                            \Filament\Notifications\Notification::make()->success()->title('Mise en page IA appliquée avec succès !')->send();
+                                            \Filament\Notifications\Notification::make()->danger()->title('Veuillez générer un aperçu avant d\'appliquer.')->send();
                                         }
                                     }),
+
                                 Action::make('improve_html')
                                     ->label('Améliorer le contenu')
                                     ->icon('heroicon-o-sparkles')
