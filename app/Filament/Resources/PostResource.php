@@ -150,6 +150,38 @@ class PostResource extends Resource
                                             ->label('Votre instruction')
                                             ->placeholder('Ex: Remplace "Bientôt" par "Immédiatement" dans l\'intro...')
                                             ->required(),
+                                        Forms\Components\Actions::make([
+                                            Forms\Components\Actions\Action::make('generate_draft')
+                                                ->label('Demander à l\'IA')
+                                                ->icon('heroicon-m-sparkles')
+                                                ->color('primary')
+                                                ->action(function (Forms\Set $set, Forms\Get $get) {
+                                                    // Le state de l'action header est différent, donc on remonte 2 niveaux
+                                                    $source = $get('../../html_content');
+                                                    $instruction = $get('ia_instruction');
+
+                                                    if (empty($source) || empty($instruction)) {
+                                                        \Filament\Notifications\Notification::make()->warning()->title('L\'article ou l\'instruction est vide.')->send();
+                                                        return;
+                                                    }
+
+                                                    \Filament\Notifications\Notification::make()->info()->title('Génération de l\'aperçu en cours...')->send();
+
+                                                    $prompt = "Tu es un copywriter et développeur expert. 
+                                                    Voici la demande de l'utilisateur : '{$instruction}'.
+                                                    Applique CETTE demande sur le code HTML suivant sans rien détériorer.
+                                                    CONSIGNES :
+                                                    1. Renvoie UNIQUEMENT le code HTML modifié.
+                                                    2. Ne supprime AUCUNE balise existante sauf si demandé.
+                                                    3. Conserve rigoureusement les classes et la structure.";
+                                                    
+                                                    $result = GeminiService::generateContent($prompt, $source);
+                                                    if ($result) {
+                                                        $cleaned = preg_replace('/```html\n?(.*?)\n?```/is', '$1', $result);
+                                                        $set('ai_generated_result', $cleaned);
+                                                    }
+                                                }),
+                                        ])->alignCenter(),
                                         \Dotswan\FilamentCodeEditor\Fields\CodeEditor::make('ai_generated_result')
                                             ->label('Aperçu du nouveau code HTML généré')
                                             ->minHeight(400)
@@ -157,44 +189,13 @@ class PostResource extends Resource
                                             ->dehydrated(false)
                                             ->visible(fn (Forms\Get $get): bool => filled($get('ai_generated_result'))),
                                     ])
-                                    ->modalFooterActions(fn (Action $action): array => [
-                                        Action::make('generate_draft')
-                                            ->label('1. Générer l\'aperçu')
-                                            ->color('primary')
-                                            ->action(function (Forms\Set $set, Forms\Get $get) {
-                                                // Le state de l'action header est différent, donc on remonte 2 niveaux
-                                                $source = $get('../../html_content');
-                                                $instruction = $get('ia_instruction');
-
-                                                if (empty($source) || empty($instruction)) {
-                                                    \Filament\Notifications\Notification::make()->warning()->title('L\'article ou l\'instruction est vide.')->send();
-                                                    return;
-                                                }
-
-                                                $prompt = "Tu es un expert développeur et copywriter. 
-                                                Voici la demande de l'utilisateur : '{$instruction}'.
-                                                Applique CETTE demande sur le code HTML suivant sans rien détériorer.
-                                                CONSIGNES :
-                                                1. Renvoie UNIQUEMENT le code HTML modifié.
-                                                2. Ne supprime AUCUNE balise existante sauf si demandé.
-                                                3. Aucun style parasite, respecte la structure.";
-                                                
-                                                $result = GeminiService::generateContent($prompt, $source);
-                                                if ($result) {
-                                                    $cleaned = preg_replace('/```html\n?(.*?)\n?```/is', '$1', $result);
-                                                    $set('ai_generated_result', $cleaned);
-                                                    \Filament\Notifications\Notification::make()->success()->title('Aperçu généré ! Vous pouvez appliquer.')->send();
-                                                }
-                                            }),
-                                        $action->getModalSubmitAction()->label('2. Appliquer la modification')->color('success'),
-                                        $action->getModalCancelAction(),
-                                    ])
+                                    ->modalSubmitActionLabel('Appliquer ce résultat sur l\'article')
                                     ->action(function (Forms\Set $set, array $data, Forms\Get $get) {
                                         if (!empty($data['ai_generated_result'])) {
                                             $set('../../html_content', $data['ai_generated_result']);
                                             \Filament\Notifications\Notification::make()->success()->title('Article mis à jour avec succès par l\'IA !')->send();
                                         } else {
-                                            \Filament\Notifications\Notification::make()->danger()->title('Veuillez générer un aperçu avant d\'appliquer.')->send();
+                                            \Filament\Notifications\Notification::make()->danger()->title('Veuillez d\'abord "Demander à l\'IA" pour obtenir un aperçu.')->send();
                                         }
                                     }),
 
