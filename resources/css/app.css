@@ -78,7 +78,8 @@
     }
 
     .prose ul {
-        @apply mb-14 space-y-6 pl-8;
+        @apply mb-14 space-y-6 pl-8 list-disc;
+        list-style-type: disc !important;
     }
 
     .prose li {

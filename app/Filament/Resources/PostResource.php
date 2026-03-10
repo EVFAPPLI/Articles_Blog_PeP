@@ -122,6 +122,7 @@ class PostResource extends Resource
                                     ->icon('heroicon-o-sparkles')
                                     ->color('primary')
                                     ->modalHeading('Mise en page optimisée par l\'IA')
+                                    ->modalWidth('7xl')
                                     ->modalDescription('L\'IA va restructurer votre article (titres, listes, mise en forme) pour un rendu SEO/GEO Premium. LE TEXTE DE L\'AUTEUR SERA CONSERVÉ À 100%.')
                                     ->modalSubmitActionLabel('Appliquer la structure IA')
                                     ->form([
@@ -140,14 +141,14 @@ class PostResource extends Resource
                                         $prompt = "Tu es un expert en mise en page HTML sémantique et en typographie française. Ton rôle est d'apporter une structure 'Premium' à cet article de blog.
 
                                         CONSIGNES :
-                                        1. NE TOUCHE PAS AU TEXTE ORIGINAL. Aucun mot ne doit être ajouté, supprimé ou modifié. L'intégrité du texte est sacrée.
-                                        2. Respecte rigoureusement la LANGUE FRANÇAISE : pas de majuscules à chaque mot dans les titres (Majuscule uniquement au premier mot et aux noms propres). 
+                                        1. NE TOUCHE PAS AU TEXTE ORIGINAL. Aucun mot ne doit être ajouté, supprimé ou modifié.
+                                        2. Respecte rigoureusement la LANGUE FRANÇAISE : pas de majuscules à chaque mot dans les titres.
                                         3. Ajoute des balises H2 et H3 logiques pour la hiérarchie.
-                                        4. Utilise <ul>/<li> pour transformer les énumérations en listes à puces élégantes.
+                                        4. Utilise <ul>/<li> pour les listes. IMPORTANT : Ne mets pas de styles inline sur les <ul>, le CSS global s'en chargera.
                                         5. Utilise <strong> pour le relief SEO.
-                                        6. Utilise de la COULEUR (via inline style color: #2D3E50 ou similaire selon la charte) pour souligner certains éléments clés si besoin, sans en abuser.
+                                        6. SOURCES : Si tu détectes une section 'Sources' ou des références en fin d'article, encapsule-les dans une div avec le style inline suivant : 'font-size: 0.85rem; color: #3b82f6; font-style: italic; opacity: 0.8;'.
                                         7. Nettoie le code HTML (styles parasites, balises inutiles).
-                                        8. Retourne UNIQUEMENT le code HTML propre, sans aucun texte autour ni blocs markdown.";
+                                        8. Retourne UNIQUEMENT le code HTML propre.";
 
                                         $restructured = GeminiService::generateContent($prompt, $source);
                                         
