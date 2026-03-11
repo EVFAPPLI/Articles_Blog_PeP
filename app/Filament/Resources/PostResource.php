@@ -134,7 +134,7 @@ class PostResource extends Resource
                                                 if (empty($html)) {
                                                     return new \Illuminate\Support\HtmlString('<p class="text-gray-500">Aucun contenu à afficher.</p>');
                                                 }
-                                                return new \Illuminate\Support\HtmlString('<div class="prose max-w-none ai-content overflow-hidden" style="padding:2rem; background:white; border-radius:8px;">' . $html . '</div>');
+                                                return new \Illuminate\Support\HtmlString('<div class="prose max-w-none ai-content" style="padding:2rem; background:white; border-radius:8px;">' . $html . '</div>');
                                             })
                                     ]),
                                 
@@ -192,7 +192,7 @@ class PostResource extends Resource
                                                 if (empty($html)) {
                                                     return new \Illuminate\Support\HtmlString('<p class="text-gray-500 italic">L\'aperçu apparaîtra ici...</p>');
                                                 }
-                                                return new \Illuminate\Support\HtmlString('<div class="prose max-w-none ai-content overflow-hidden" style="padding:2rem; background:white; border-radius:8px; border:1px solid #e2e8f0;">' . $html . '</div>');
+                                                return new \Illuminate\Support\HtmlString('<div class="prose max-w-none ai-content" style="padding:2rem; background:white; border-radius:8px; border:1px solid #e2e8f0;">' . $html . '</div>');
                                             })
                                             ->visible(fn (Forms\Get $get): bool => filled($get('ai_generated_result'))),
                                     ])
@@ -231,10 +231,10 @@ class PostResource extends Resource
                                         3. Rends TOUS les liens (URLs ou textes évoquant un lien) cliquables avec <a href=\"...\" target=\"_blank\" style=\"color: #2563eb; text-decoration: underline;\">
                                         4. DÉTECTION DES SOURCES : Enveloppe OBLIGATOIREMENT tout paragraphe parlant de sources, références ou statistiques (surtout en fin de texte) dans une <div class=\"ai-sources\">...</div>.
                                         5. INTERDICTION ABSOLUE DE COUPER LES MOTS (CÉSURE) : 
-                                           - Tu ne dois JAMAIS JAMAIS JAMAIS utiliser 'word-break: break-all' ou 'word-break: break-word' ou 'overflow-wrap: anywhere'.
+                                           - Tu ne dois JAMAIS JAMAIS JAMAIS utiliser 'word-break: break-all' ou 'overflow-wrap: anywhere'.
                                            - N'applique AUCUN style CSS qui coupe les mots en milieu de mot (comme couper 'DE' en 'D' et 'E' sur deux lignes).
-                                           - Si tu dois gérer les retours à la ligne, utilise UNIQUEMENT ces propriétés CSS inline sur les paragraphes et divs : style=\"word-break: keep-all; overflow-wrap: normal; hyphens: none;\"
-                                           - Les mots doivent TOUJOURS rester entiers. Seuls les espaces naturels permettent les retours à la ligne.
+                                           - Si tu dois gérer les retours à la ligne, utilise UNIQUEMENT ces propriétés CSS inline sur les paragraphes et divs : style=\"word-break: normal; word-wrap: break-word; overflow-wrap: break-word; hyphens: none;\"
+                                           - Les mots doivent TOUJOURS rester entiers. Les retours à la ligne se font aux espaces naturels, et les mots longs peuvent passer à la ligne suivante entièrement.
                                         
                                         Renvoie UNIQUEMENT le code HTML final pur stylisé en inline, sans blocs markdown de code.";
                                         

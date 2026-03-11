@@ -56,16 +56,18 @@
     /* Forced Prose Styling (V4) */
     .prose {
         max-width: none;
-        word-break: keep-all;
-        overflow-wrap: normal;
+        word-break: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
         hyphens: none;
     }
 
     /* Style dédié pour le contenu généré par l'IA */
     .ai-content {
         @apply space-y-8;
-        word-break: keep-all;
-        overflow-wrap: normal;
+        word-break: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
         hyphens: none;
     }
 
@@ -75,8 +77,9 @@
 
     .ai-content p {
         @apply mb-8 leading-[2.1] text-slate-700 text-[1.15rem] opacity-100;
-        word-break: keep-all;
-        overflow-wrap: normal;
+        word-break: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
         hyphens: none;
     }
 
@@ -112,8 +115,9 @@
     /* Styles legacy pour compatibilité */
     .prose p {
         @apply mb-10 leading-[2.2] text-slate-700 text-[1.2rem] opacity-90;
-        word-break: keep-all;
-        overflow-wrap: normal;
+        word-break: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
         hyphens: none;
     }
     
