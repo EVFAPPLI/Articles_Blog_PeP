@@ -228,9 +228,13 @@ class PostResource extends Resource
                                         RÈGLES D'OR ABSOLUES POUR QUE CELA FONCTIONNE DANS MON SYSTEME : 
                                         1. NE CHANGE AUCUN MOT DU TEXTE ORIGINAL. N'efface RIEN.
                                         2. Tu DOIS utiliser du CSS inline (attribut style=\"...\") pour TOUTES tes mises en page (tailles de police, gras, couleurs, marges). N'utilise AUCUNE classe CSS utilitaire externe (ex: pas de 'text-red-500'). 
-                                        3. Rends TOUS les liens (URLs ou textes évoquant un lien) cliquables avec <a href=\"...\" target=\"_blank\" style=\"color: #2563eb; text-decoration: underline;\">.
+                                        3. Rends TOUS les liens (URLs ou textes évoquant un lien) cliquables avec <a href=\"...\" target=\"_blank\" style=\"color: #2563eb; text-decoration: underline;\">
                                         4. DÉTECTION DES SOURCES : Enveloppe OBLIGATOIREMENT tout paragraphe parlant de sources, références ou statistiques (surtout en fin de texte) dans une <div class=\"ai-sources\">...</div>.
-                                        5. INTERDICTION DE COUPER LES MOTS (CÉSURE) : Tu ne dois JAMAIS appliquer de style CSS qui coupe les mots brutalement en fin de ligne (comme word-break: break-all). Utilise TOUJOURS `word-break: normal;` et `overflow-wrap: break-word;` pour que les paragraphes soient fluides et professionnels.
+                                        5. INTERDICTION ABSOLUE DE COUPER LES MOTS (CÉSURE) : 
+                                           - Tu ne dois JAMAIS JAMAIS JAMAIS utiliser 'word-break: break-all' ou 'word-break: break-word' ou 'overflow-wrap: anywhere'.
+                                           - N'applique AUCUN style CSS qui coupe les mots en milieu de mot (comme couper 'DE' en 'D' et 'E' sur deux lignes).
+                                           - Si tu dois gérer les retours à la ligne, utilise UNIQUEMENT ces propriétés CSS inline sur les paragraphes et divs : style=\"word-break: keep-all; overflow-wrap: normal; hyphens: none;\"
+                                           - Les mots doivent TOUJOURS rester entiers. Seuls les espaces naturels permettent les retours à la ligne.
                                         
                                         Renvoie UNIQUEMENT le code HTML final pur stylisé en inline, sans blocs markdown de code.";
                                         
