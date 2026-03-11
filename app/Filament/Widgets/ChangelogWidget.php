@@ -20,6 +20,16 @@ class ChangelogWidget extends Widget
         return [
             'releases' => [
                 [
+                    'version' => '1.3.0',
+                    'date' => Carbon::now()->translatedFormat('d F Y'),
+                    'title' => 'Amélioration de l\'Intelligence Artificielle 🎨',
+                    'changes' => [
+                        ['type' => 'UX', 'color' => 'primary', 'text' => 'Baguette Magique IA (Modale) : L\'aperçu visuel final avant acceptation des modifications est sécurisé contre les débordements CSS.'],
+                        ['type' => 'EXPLICATION', 'color' => 'warning', 'text' => 'Assistant IA (Demande Modif) : Destiné à donner des instructions PRÉCISES à l\'IA sur son texte ("Met ce paragraphe en exergue", "Change tous les H2 en H3"). Il PEUT modifier, effacer ou ajouter des mots.'],
+                        ['type' => 'EXPLICATION', 'color' => 'success', 'text' => 'Mise en page Intelligente : Destiné à "Habiller" un texte brut. L\'IA ajoute des couleurs, des puces (<ul>) et des titres (<h2>, <h3>) avec un design Ultra Moderne sans JAMAIS changer ou effacer un seul de vos mots.'],
+                    ],
+                ],
+                [
                     'version' => '1.2.0',
                     'date' => Carbon::now()->translatedFormat('d F Y'),
                     'title' => 'L\'IA s\'invite dans votre Blog ! 🪄',
