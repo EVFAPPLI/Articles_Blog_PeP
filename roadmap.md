@@ -50,6 +50,14 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 - **[x] Dashboard Épuré** : Retrait du widget d'information standard.
 - **[x] Conformité & Legal** : Création des pages Mentions Légales et Politique de Confidentialité au design "Premium".
 
+## ✅ Phase 9 : Corrections Affichage & Mise en Page Intelligente (Terminé)
+
+- **[x] Correction Césure des Mots** : Résolution du problème de coupure brutale des mots (ex: "DE" coupé en "D" et "E").
+- **[x] Correction Texte Tronqué** : Retrait de `overflow-hidden` qui coupait les phrases à droite.
+- **[x] Règles CSS Optimisées** : Application de `word-break: normal`, `word-wrap: break-word`, `overflow-wrap: break-word` sur `.prose` et `.ai-content`.
+- **[x] Prompt IA Amélioré** : Instructions explicites pour interdire `word-break: break-all` et garantir des retours à la ligne naturels.
+- **[x] Aperçus Filament** : Suppression de `overflow-hidden` dans les prévisualisations HTML de l'éditeur et de l'assistant IA.
+
 ---
 
-_Dernière mise à jour : 5 mars 2026_
+_Dernière mise à jour : 11 mars 2026_
