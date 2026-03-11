@@ -223,13 +223,19 @@ class PostResource extends Resource
 
                                         \Filament\Notifications\Notification::make()->info()->title('Analyse de la structure HTML en cours... Ce processus peut prendre quelques secondes.')->send();
 
-                                        $prompt = "Tu es un expert formateur web. Refais la mise en page de ce texte pour le structurer intelligemment.
-                                        RÈGLES D'OR ABSOLUES : 
-                                        1. NE CHANGE AUCUN MOT DU TEXTE ORIGINAL. N'efface RIEN, particulièrement les sources.
-                                        2. Ajoute des balises de base propres (<h2>, <h3>, <p>, <ul>, <li>, <strong>) mais AUCUNE classe (sauf pour le point 4).
-                                        3. Rends TOUS les liens (URLs ou textes évoquant un lien) cliquables avec <a href=\"...\" target=\"_blank\">.
-                                        4. DÉTECTION DES SOURCES : Enveloppe OBLIGATOIREMENT tout paragraphe parlant de sources, références ou statistiques (surtout en fin de texte) dans une <div class=\"ai-sources\">...</div>.
-                                        Renvoie UNIQUEMENT le code HTML final pur, sans blocs de commentaires Markdown.";
+                                        $prompt = "Tu es un expert formateur web et un designer UI/UX de pointe (style Tailwind, moderne, premium).
+                                        Refais la mise en page de ce texte pour le rendre SUPER PROFESSIONNEL, agréable à regarder et moderne.
+                                        
+                                        RÈGLES D'OR ABSOLUES (CRITIQUES) : 
+                                        1. NE CHANGE AUCUN MOT DU TEXTE ORIGINAL. N'efface RIEN, ne réécris RIEN.
+                                        2. La hiérarchie visuelle est primordiale : les titres (<h2>, <h3>) doivent OBLIGATOIREMENT être beaucoup plus gros que les contenus paragraphes. Utilise du CSS inline (ex: style=\"font-size: 1.5rem; font-weight: bold; color: #1e293b; margin-bottom: 1rem;\").
+                                        3. Si le texte s'y prête (énumérations, étapes), n'hésite pas à insérer de jolies puces (<ul>, <li>) bien espacées et stylisées.
+                                        4. Mets de la couleur ! Fais quelque chose de joli, sympathique et moderne avec des couleurs harmonieuses (bleu pro, ardoise, etc.) en CSS inline.
+                                        5. N'utilise AUCUNE classe CSS utilitaire externe (ex: pas de 'text-red-500'). TOUT le design doit être injecté via l'attribut `style=\"...\"`.  (Exception : conserve uniquement la classe pour le point 7).
+                                        6. Rends TOUS les liens (URLs ou textes évoquant un lien) cliquables avec <a href=\"...\" target=\"_blank\" style=\"color: #2563eb; text-decoration: underline;\">.
+                                        7. DÉTECTION DES SOURCES : Enveloppe OBLIGATOIREMENT tout paragraphe parlant de sources, références ou statistiques (surtout en fin de texte) dans une <div class=\"ai-sources\">...</div>.
+                                        
+                                        Renvoie UNIQUEMENT le code HTML final pur, superbement stylisé en inline, sans blocs de commentaires Markdown.";
                                         
                                         $improved = GeminiService::generateContent($prompt, $source);
                                         
