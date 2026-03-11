@@ -49,7 +49,7 @@
         </header>
 
         <!-- 3. HTML Content (Advanced Prose V4) -->
-        <div class="prose max-w-none break-words">
+        <div class="prose max-w-none">
             {!! preg_replace('/<h1(.*?)>(.*?)<\/h1>/is', '<h2$1>$2</h2>', $post->html_content) !!}
         </div>
 
