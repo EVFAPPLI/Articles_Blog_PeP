@@ -230,6 +230,7 @@ class PostResource extends Resource
                                         2. Tu DOIS utiliser du CSS inline (attribut style=\"...\") pour TOUTES tes mises en page (tailles de police, gras, couleurs, marges). N'utilise AUCUNE classe CSS utilitaire externe (ex: pas de 'text-red-500'). 
                                         3. Rends TOUS les liens (URLs ou textes évoquant un lien) cliquables avec <a href=\"...\" target=\"_blank\" style=\"color: #2563eb; text-decoration: underline;\">.
                                         4. DÉTECTION DES SOURCES : Enveloppe OBLIGATOIREMENT tout paragraphe parlant de sources, références ou statistiques (surtout en fin de texte) dans une <div class=\"ai-sources\">...</div>.
+                                        5. INTERDICTION DE COUPER LES MOTS (CÉSURE) : Tu ne dois JAMAIS appliquer de style CSS qui coupe les mots brutalement en fin de ligne (comme word-break: break-all). Utilise TOUJOURS `word-break: normal;` et `overflow-wrap: break-word;` pour que les paragraphes soient fluides et professionnels.
                                         
                                         Renvoie UNIQUEMENT le code HTML final pur stylisé en inline, sans blocs markdown de code.";
                                         
