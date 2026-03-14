@@ -134,7 +134,7 @@ class GeminiService
      * Génère une image via le modèle Imagen 3 (Accessible via Gemini / Vertex AI).
      * @return string|null Base64 de l'image ou null.
      */
-    public static function generateImage(string $prompt, string $style = 'réaliste'): ?string
+    public static function generateImage(string $prompt, string $style = 'réaliste', bool $withText = false): ?string
     {
         $apiKey = env('GEMINI_API_KEY');
         if (empty($apiKey)) {
@@ -149,7 +149,11 @@ class GeminiService
             default => 'photographie très réaliste, haute résolution, éclairage studio professionnel, 4k.',
         };
 
-        $finalPrompt = $prompt . " - Style attendu : " . $styleAddon . " - (Ne pas inclure de texte écrit dans l'image sauf demande explicite).";
+        $textInstruction = $withText 
+            ? " - IMPORTANT : Vous êtes autorisé à intégrer du texte de manière lisible et esthétique."
+            : " - RÈGLE ABSOLUE ET STRICTE : L'image NE DOIT CONTENIR ABSOLUMENT AUCUN TEXTE. Ni mot, ni lettre, ni chiffre, ni signature, ni filigrane. Le rendu doit être 100% visuel.";
+
+        $finalPrompt = $prompt . " - Style attendu : " . $styleAddon . $textInstruction;
 
         // URL potentielle pour la v1beta, attention Imagen peut nécessiter un endpoint ou modèle spécifique ("imagen-3.0-generate-001" etc.)
         // Si l'API Key standard de Gemini Studio Supporte Imagen sur /models/ :

@@ -20,6 +20,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Set;
 use Filament\Forms\Get;
@@ -154,6 +155,12 @@ class AiPostResource extends Resource
                             ->default('réaliste')
                             ->dehydrated(false), // Ne pas sauver en bdd
                             
+                        Toggle::make('image_with_text')
+                            ->label('Autoriser le texte sur l\'image')
+                            ->helperText('Si désactivé, l\'IA a pour consigne stricte de ne mettre aucun texte.')
+                            ->default(false)
+                            ->dehydrated(false),
+                            
                         FileUpload::make('cover_image')
                             ->label('Illustration de couverture')
                             ->directory('blog-covers')
@@ -176,10 +183,11 @@ class AiPostResource extends Resource
                                         }
                                         
                                         $style = $get('image_style') ?? 'réaliste';
+                                        $withText = $get('image_with_text') ?? false;
                                         
                                         Notification::make()->info()->title('Création de l\'image en cours (Imagen)...')->send();
                                         
-                                        $base64 = GeminiService::generateImage($prompt, $style);
+                                        $base64 = GeminiService::generateImage($prompt, $style, $withText);
                                         // $base64 peut contenir "ERROR: ..."
                                         if ($base64 && !str_starts_with($base64, 'ERROR:')) {
                                             $imageService = app(ImageService::class);
@@ -187,8 +195,23 @@ class AiPostResource extends Resource
                                             $slug = Str::slug($get('title') ?? 'ai-post');
                                             $path = $imageService->saveBase64Image($prefix . $base64, 'blog-covers', $slug . '-cover-' . time());
                                             
-                                            $set('cover_image', $path); 
-                                            Notification::make()->success()->title('Image ajoutée avec succès !')->send();
+                                            $set('cover_image', [$path => $path]); // FileUpload attend un tableau en interne
+                                            
+                                            // // Intégration de l'image dans le rendu HTML
+                                            $html = $get('html_content') ?? '';
+                                            $imageUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+                                            
+                                            if (preg_match('/<img[^>]+src="([^">]+)"/i', $html)) {
+                                                // Remplacer la première image existante
+                                                $html = preg_replace('/(<img[^>]+src=")[^">]+(")/i', '${1}' . $imageUrl . '${2}', $html, 1);
+                                            } else {
+                                                // Prepend si aucune image n'existe
+                                                $imgHtml = '<div class="mb-10 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10"><img src="' . $imageUrl . '" alt="Illustration de l\'article" class="w-full h-auto object-cover aspect-video hover:scale-105 transition-transform duration-700"></div>';
+                                                $html = $imgHtml . "\n" . $html;
+                                            }
+                                            $set('html_content', $html);
+                                            
+                                            Notification::make()->success()->title('Image ajoutée et insérée dans l\'article !')->send();
                                         } else {
                                             $errorMsg = str_replace('ERROR: ', '', $base64 ?? 'Erreur inconnue');
                                             Notification::make()->danger()
