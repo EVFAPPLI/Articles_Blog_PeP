@@ -66,11 +66,23 @@ class AiPostResource extends Resource
                 Section::make('Laboratoire de Contenu (IA)')
                     ->schema([
                         Textarea::make('source_content')
-                            ->label('Texte Source Brute (Votre brouillon)')
-                            ->rows(8)
-                            ->hintAction(
+                            ->label('Texte Source Brute ou Code HTML')
+                            ->rows(12)
+                            ->hintActions([
+                                Action::make('keep_html')
+                                    ->label('✅ Conserver mon HTML tel quel')
+                                    ->color('gray')
+                                    ->action(function (Get $get, Set $set) {
+                                        $source = $get('source_content');
+                                        if (empty($source)) {
+                                            Notification::make()->warning()->title('Veuillez saisir un contenu')->send();
+                                            return;
+                                        }
+                                        $set('html_content', $source);
+                                        Notification::make()->success()->title('HTML validé tel quel !')->send();
+                                    }),
                                 Action::make('generate_html')
-                                    ->label('Générer HTML Premium')
+                                    ->label('✨ Sublimer le texte brut avec l\'IA')
                                     ->icon('heroicon-m-sparkles')
                                     ->color('success')
                                     ->action(function (Get $get, Set $set) {
@@ -79,19 +91,22 @@ class AiPostResource extends Resource
                                             Notification::make()->warning()->title('Veuillez saisir un texte source')->send();
                                             return;
                                         }
+                                        Notification::make()->info()->title('Magie IA en cours...')->send();
                                         $html = GeminiService::formatToHtml($source);
                                         if ($html) {
                                             $set('html_content', $html);
-                                            Notification::make()->success()->title('HTML finalisé ! Vérifiez le résultat ci-dessous.')->send();
+                                            Notification::make()->success()->title('Design ultra-moderne appliqué !')->send();
                                         } else {
                                             Notification::make()->danger()->title('Échec de la génération')->send();
                                         }
-                                    })
-                            ),
+                                    }),
+                            ]),
                             
-                        RichEditor::make('html_content')
-                            ->label('Résultat HTML (Modifiable)')
-                            ->fileAttachmentsDirectory('blog-content')
+                        \Filament\Forms\Components\Hidden::make('html_content'),
+                        
+                        \Filament\Forms\Components\Placeholder::make('html_preview')
+                            ->label('Aperçu du Rendu Final (Magie IA)')
+                            ->content(fn (Get $get) => new \Illuminate\Support\HtmlString('<div class="p-8 bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden" style="min-height: 200px;">' . ($get('html_content') ?? '<p class="text-gray-400 italic text-center mt-10">Aucun rendu pour le moment.</p>') . '</div>'))
                             ->columnSpanFull(),
                     ]),
                     
@@ -137,7 +152,6 @@ class AiPostResource extends Resource
                                 'aquarelle' => 'Peinture aquarelle',
                             ])
                             ->default('réaliste')
-                            ->ignored() // Ce champ sert juste au bouton, pas besoin de le sauver en BDD s'il n'existe pas, mais on peut le garder pour l'UX
                             ->dehydrated(false), // Ne pas sauver en bdd
                             
                         FileUpload::make('cover_image')

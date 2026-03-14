@@ -194,16 +194,24 @@ class GeminiService
      */
     public static function formatToHtml(string $textContent): ?string
     {
-        $prompt = "Tu es un copywriter et intégrateur web expert.
-        Prends ce texte brut et transforme-le en un magnifique article HTML avec une super mise en page professionnelle et moderne.
+        $prompt = "Tu es un designer et intégrateur web de classe mondiale spécialisé dans le design ultra-moderne, premium et 'branché'.
+        Prends ce texte brut et transforme-le en un magnifique article HTML. Ne modifie PAS le sens ni le contenu du texte, ton rôle est purement ESTHÉTIQUE.
         
-        RÈGLES D'OR : 
-        1. Tu DOIS utiliser du CSS inline (attribut style=\"...\") pour TOUTES tes mises en page (tailles de police, couleurs associées, marges, padding). N'utilise AUCUNE classe utilitaire externe.
-        2. Les titres (h2, h3) doivent être mis en valeur (plus gros, avec une couleur élégante comme un beau bleu foncé ou gris sombre).
-        3. Fais des listes à puces esthétiques.
-        4. INTERDICTION ABSOLUE DE COUPER LES MOTS (CÉSURE) : Mettre sur les paragraphes `style=\"word-break: normal; word-wrap: break-word; overflow-wrap: break-word;\"`.
+        RÈGLES D'OR DE DESIGN (OBLIGATOIRES) : 
+        1. Utilise EXCLUSIVEMENT du CSS inline (attribut style=\"...\"). Ne génère pas de balises <style> ni de classes externes.
+        2. DESIGN ULTRA-MODERNE : Utilise des espacements généreux (margins/paddings massifs), des ombres douces (box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05)), des bordures arrondies (border-radius: 1.5rem).
+        3. TYPOGRAPHIE : 
+           - Les paragraphes (<p>) doivent être aérés (line-height: 1.9), avec une belle couleur sombre (color: #334155;) et une taille lisible (font-size: 1.15rem).
+           - Les titres (<h2>, <h3>) doivent être spectaculaires : utilise des dégradés de textes si approprié (background: linear-gradient(...); -webkit-background-clip: text; -webkit-text-fill-color: transparent;) ou de belles couleurs vibrantes (ex: Bleu électrique #2563eb, Émeraude #059669). Ajoute de fortes marges au-dessus (margin-top: 3rem).
+        4. ÉLÉMENTS RICHES : 
+           - Si tu détectes une citation, fais-en un design 'Glassmorphism' ou avec une grosse bordure gauche colorée et un fond pastel très léger.
+           - Les listes à puces (<ul>) doivent être espacées (gap), avec des puces design.
+           - Si des mots clés sont importants, mets-les en gras avec une légère coloration.
+           - Si tu vois des liens potentiels ou si ça s'y prête, donne-leur un style moderne (soulignement fin coloré).
+        5. INTERDICTION ABSOLUE DE COUPER LES MOTS : Mettre sur les conteneurs `style=\"word-break: normal; word-wrap: break-word; overflow-wrap: break-word; hyphens: none;\"`.
         
-        Retourne UNIQUEMENT le code HTML final pur, sans blocs markdown (pas de ```html).";
+        Rappel : Je te donne LE texte Final. Tu ne le résumes pas, tu ne l'inventes pas. Tu lui appliques juste une surcouche de magie visuelle HTML/CSS inline.
+        Retourne UNIQUEMENT le code HTML, sans balises ```html.";
 
         $response = self::generateContent($prompt, $textContent);
 
