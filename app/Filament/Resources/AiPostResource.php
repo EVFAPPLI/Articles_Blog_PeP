@@ -180,17 +180,21 @@ class AiPostResource extends Resource
                                         Notification::make()->info()->title('Création de l\'image en cours (Imagen)...')->send();
                                         
                                         $base64 = GeminiService::generateImage($prompt, $style);
-                                        if ($base64) {
+                                        // $base64 peut contenir "ERROR: ..."
+                                        if ($base64 && !str_starts_with($base64, 'ERROR:')) {
                                             $imageService = app(ImageService::class);
                                             $prefix = "data:image/jpeg;base64,";
                                             $slug = Str::slug($get('title') ?? 'ai-post');
                                             $path = $imageService->saveBase64Image($prefix . $base64, 'blog-covers', $slug . '-cover-' . time());
                                             
-                                            // Filament veut un type FileUpload compatible, généralement un string de fichier dans un tableau ou directement le string selon la config
                                             $set('cover_image', $path); 
                                             Notification::make()->success()->title('Image ajoutée avec succès !')->send();
                                         } else {
-                                            Notification::make()->danger()->title('Échec de la génération')->send();
+                                            $errorMsg = str_replace('ERROR: ', '', $base64 ?? 'Erreur inconnue');
+                                            Notification::make()->danger()
+                                                ->title('Échec de la génération d\'image')
+                                                ->body($errorMsg)
+                                                ->send();
                                         }
                                     })
                             ),

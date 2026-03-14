@@ -179,11 +179,18 @@ class GeminiService
                     return $data['predictions'][0]['bytesBase64Encoded'];
                 }
                 Log::warning('Format d\'image inattendu reçu de l\'API Imagen.', ['response' => $data]);
+                return 'ERROR: Format inattendu.';
             } else {
                 Log::error('Échec de la requête Imagen API', ['status' => $response->status(), 'body' => $response->body()]);
+                $body = $response->json();
+                if (isset($body['error']['message'])) {
+                    return 'ERROR: ' . $body['error']['message'];
+                }
+                return 'ERROR: L\'API Imagen a retourné une erreur ' . $response->status();
             }
         } catch (\Exception $e) {
             Log::error('Exception lors de l\'appel à Imagen API : ' . $e->getMessage());
+            return 'ERROR: Exception - ' . $e->getMessage();
         }
 
         return null;
@@ -199,19 +206,14 @@ class GeminiService
         
         RÈGLES D'OR DE DESIGN (OBLIGATOIRES) : 
         1. Utilise EXCLUSIVEMENT du CSS inline (attribut style=\"...\"). Ne génère pas de balises <style> ni de classes externes.
-        2. DESIGN ULTRA-MODERNE : Utilise des espacements généreux (margins/paddings massifs), des ombres douces (box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05)), des bordures arrondies (border-radius: 1.5rem).
-        3. TYPOGRAPHIE : 
-           - Les paragraphes (<p>) doivent être aérés (line-height: 1.9), avec une belle couleur sombre (color: #334155;) et une taille lisible (font-size: 1.15rem).
-           - Les titres (<h2>, <h3>) doivent être spectaculaires : utilise des dégradés de textes si approprié (background: linear-gradient(...); -webkit-background-clip: text; -webkit-text-fill-color: transparent;) ou de belles couleurs vibrantes (ex: Bleu électrique #2563eb, Émeraude #059669). Ajoute de fortes marges au-dessus (margin-top: 3rem).
-        4. ÉLÉMENTS RICHES : 
-           - Si tu détectes une citation, fais-en un design 'Glassmorphism' ou avec une grosse bordure gauche colorée et un fond pastel très léger.
-           - Les listes à puces (<ul>) doivent être espacées (gap), avec des puces design.
-           - Si des mots clés sont importants, mets-les en gras avec une légère coloration.
-           - Si tu vois des liens potentiels ou si ça s'y prête, donne-leur un style moderne (soulignement fin coloré).
-        5. INTERDICTION ABSOLUE DE COUPER LES MOTS : Mettre sur les conteneurs `style=\"word-break: normal; word-wrap: break-word; overflow-wrap: break-word; hyphens: none;\"`.
+        2. DESIGN ULTRA-MODERNE : Utilise des espacements généreux (margins/paddings massifs), des ombres douces (box-shadow...), des bordures arrondies (border-radius: 1.5rem).
+        3. TYPOGRAPHIE : Paragraphes aérés (line-height: 1.9, color: #334155, font-size: 1.15rem). Titres spectaculaires avec de magnifiques couleurs.
+        4. ÉLÉMENTS RICHES : Sublimer les citations, listes à puces, et liens.
+        5. INTERDICTION ABSOLUE DE COUPER LES MOTS (hyphens: none).
+        6. NE GÉNÈRE AUCUN PIED DE PAGE (footer), NI EN-TÊTE (header), NI MENTIONS DE DROITS D'AUTEUR.
+        7. RETOURNE DIRECTEMENT LE CONTENU DE L'ARTICLE (pas de balises <html>, <head> ou <body>).
         
-        Rappel : Je te donne LE texte Final. Tu ne le résumes pas, tu ne l'inventes pas. Tu lui appliques juste une surcouche de magie visuelle HTML/CSS inline.
-        Retourne UNIQUEMENT le code HTML, sans balises ```html.";
+        Retourne UNIQUEMENT le code HTML final.";
 
         $response = self::generateContent($prompt, $textContent);
 
