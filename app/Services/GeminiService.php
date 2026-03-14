@@ -129,4 +129,102 @@ class GeminiService
         }
         return null;
     }
+
+    /**
+     * Génère une image via le modèle Imagen 3 (Accessible via Gemini / Vertex AI).
+     * @return string|null Base64 de l'image ou null.
+     */
+    public static function generateImage(string $prompt, string $style = 'réaliste'): ?string
+    {
+        $apiKey = env('GEMINI_API_KEY');
+        if (empty($apiKey)) {
+            Log::error('Erreur API Gemini : Clé API non configurée (.env)');
+            return null;
+        }
+
+        // Configuration du style
+        $styleAddon = match (strtolower($style)) {
+            'graphique' => 'illustration graphique vectorielle, haute qualité, couleurs vibrantes.',
+            'aquarelle' => 'peinture à l\'aquarelle, douce et artistique.',
+            default => 'photographie très réaliste, haute résolution, éclairage studio professionnel, 4k.',
+        };
+
+        $finalPrompt = $prompt . " - Style attendu : " . $styleAddon . " - (Ne pas inclure de texte écrit dans l'image sauf demande explicite).";
+
+        // URL potentielle pour la v1beta, attention Imagen peut nécessiter un endpoint ou modèle spécifique ("imagen-3.0-generate-001" etc.)
+        // Si l'API Key standard de Gemini Studio Supporte Imagen sur /models/ :
+        // (Vérifier la doc officielle si c'est model=imagen-3.0-generate-001)
+        // Pour Google AI Studio API:
+        $model = 'imagen-3.0-generate-001';
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:predict?key={$apiKey}";
+
+        $payload = [
+            'instances' => [
+                ['prompt' => $finalPrompt]
+            ],
+            'parameters' => [
+                'sampleCount' => 1,
+                'aspectRatio' => '16:9',
+            ]
+        ];
+
+        try {
+            $response = Http::timeout(60)->post($url, $payload);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                
+                // Extraire l'image Base64
+                if (isset($data['predictions'][0]['bytesBase64Encoded'])) {
+                    return $data['predictions'][0]['bytesBase64Encoded'];
+                }
+                Log::warning('Format d\'image inattendu reçu de l\'API Imagen.', ['response' => $data]);
+            } else {
+                Log::error('Échec de la requête Imagen API', ['status' => $response->status(), 'body' => $response->body()]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception lors de l\'appel à Imagen API : ' . $e->getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Formate un texte brut en HTML premium.
+     */
+    public static function formatToHtml(string $textContent): ?string
+    {
+        $prompt = "Tu es un copywriter et intégrateur web expert.
+        Prends ce texte brut et transforme-le en un magnifique article HTML avec une super mise en page professionnelle et moderne.
+        
+        RÈGLES D'OR : 
+        1. Tu DOIS utiliser du CSS inline (attribut style=\"...\") pour TOUTES tes mises en page (tailles de police, couleurs associées, marges, padding). N'utilise AUCUNE classe utilitaire externe.
+        2. Les titres (h2, h3) doivent être mis en valeur (plus gros, avec une couleur élégante comme un beau bleu foncé ou gris sombre).
+        3. Fais des listes à puces esthétiques.
+        4. INTERDICTION ABSOLUE DE COUPER LES MOTS (CÉSURE) : Mettre sur les paragraphes `style=\"word-break: normal; word-wrap: break-word; overflow-wrap: break-word;\"`.
+        
+        Retourne UNIQUEMENT le code HTML final pur, sans blocs markdown (pas de ```html).";
+
+        $response = self::generateContent($prompt, $textContent);
+
+        if ($response) {
+            return preg_replace('/```(?:html)?|```/i', '', $response);
+        }
+        return null;
+    }
+
+    /**
+     * Génère une vignette avec 'Lire la suite' depuis un contenu HTML complet.
+     */
+    public static function generateVignette(string $htmlContent): ?string
+    {
+        $prompt = "Rédige un court extrait très attractif et percutant (2 à 3 phrases max) résumant parfaitement cet article de blog. Ne retourne que l'extrait sous format HTML (ex: dans un <p>), et termine OBLIGATOIREMENT le texte par \"... <a href=\"#\" class=\"read-more\" style=\"font-weight: bold; color: #3b82f6;\">Lire la suite</a>\"";
+        
+        $response = self::generateContent($prompt, strip_tags($htmlContent));
+
+        if ($response) {
+            return preg_replace('/```(?:html)?|```/i', '', $response);
+        }
+        return null;
+    }
 }
