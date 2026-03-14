@@ -238,6 +238,19 @@ class AiPostResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\Action::make('preview')
+                    ->label('Aperçu')
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->modalHeading(fn ($record) => 'Aperçu : ' . $record->title)
+                    ->modalWidth('7xl')
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Fermer')
+                    ->form([
+                        \Filament\Forms\Components\Placeholder::make('html_preview')
+                            ->hiddenLabel()
+                            ->content(fn ($record) => new \Illuminate\Support\HtmlString('<div class="p-8 bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden" style="min-height: 200px; max-width: 100%;">' . ($record->html_content ?? '<p class="text-gray-400 italic text-center mt-10">Aucun rendu pour le moment.</p>') . '</div>')),
+                    ]),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
