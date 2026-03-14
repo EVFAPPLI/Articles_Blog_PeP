@@ -131,7 +131,37 @@ class GeminiService
     }
 
     /**
-     * Génère une image via le modèle Imagen 3 (Accessible via Gemini / Vertex AI).
+     * Utilise Gemini (texte) pour reformuler le prompt utilisateur afin de maximiser la qualité Imagen
+     * et, le cas échéant, d'interdire subtilement le texte.
+     */
+    private static function enhanceImagePrompt(string $userPrompt, string $style, bool $withText): string
+    {
+        $systemInstruction = "Tu es un expert en prompt engineering pour le modèle de génération d'images Imagen 4.0. Ton but est de prendre le concept de l'utilisateur et d'en faire un prompt descriptif ultra-détaillé et visuel en ANGLAIS (Imagen comprend mieux les prompts ultra-précis en anglais).";
+        
+        $rules = "";
+        if (!$withText) {
+            $rules = "RÈGLE CRUCIALE: L'utilisateur a demandé AUCUN TEXTE. Tu ne dois inclure AUCUN mot comme 'text', 'letters', 'typography' dans ton prompt final car cela embrouille le générateur d'image. Décris plutôt une scène 'purely visual, clean composition, entirely free of written elements, wordless, blank surfaces'. Décris ce qu'il y a (paysages, objets purs) plutôt que ce qu'il n'y a pas.";
+        } else {
+            $rules = "L'utilisateur autorise l'intégration de texte. Demande au générateur de l'incorporer de manière lisible et élégante dans la composition visuelle.";
+        }
+
+        $prompt = "Voici le concept de l'utilisateur: \"{$userPrompt}\".\nStyle demandé: {$style}.\n{$rules}\n\nRenvoie UNIQUEMENT le prompt parfait en anglais, sans aucune autre explication ni guillemets.";
+
+        try {
+            $enhanced = self::generateContent($systemInstruction, $prompt);
+            if ($enhanced && !str_starts_with($enhanced, 'ERROR')) {
+                return trim($enhanced);
+            }
+        } catch (\Exception $e) {
+            Log::warning('Erreur lors de l\'amélioration du prompt image: ' . $e->getMessage());
+        }
+
+        // Fallback
+        return $userPrompt . " (Style: $style)";
+    }
+
+    /**
+     * Génère une image via le modèle Imagen 4 (Accessible via Gemini).
      * @return string|null Base64 de l'image ou null.
      */
     public static function generateImage(string $prompt, string $style = 'réaliste', bool $withText = false): ?string
@@ -142,23 +172,9 @@ class GeminiService
             return null;
         }
 
-        // Configuration du style
-        $styleAddon = match (strtolower($style)) {
-            'graphique' => 'illustration graphique vectorielle, haute qualité, couleurs vibrantes.',
-            'aquarelle' => 'peinture à l\'aquarelle, douce et artistique.',
-            default => 'photographie très réaliste, haute résolution, éclairage studio professionnel, 4k.',
-        };
+        // Reformulation intelligente du prompt ("Mode raisonnement")
+        $finalPrompt = self::enhanceImagePrompt($prompt, $style, $withText);
 
-        $textInstruction = $withText 
-            ? " - IMPORTANT : Vous êtes autorisé à intégrer du texte de manière lisible et esthétique."
-            : " - RÈGLE ABSOLUE ET STRICTE : L'image NE DOIT CONTENIR ABSOLUMENT AUCUN TEXTE. Ni mot, ni lettre, ni chiffre, ni signature, ni filigrane. Le rendu doit être 100% visuel.";
-
-        $finalPrompt = $prompt . " - Style attendu : " . $styleAddon . $textInstruction;
-
-        // URL potentielle pour la v1beta, attention Imagen peut nécessiter un endpoint ou modèle spécifique ("imagen-3.0-generate-001" etc.)
-        // Si l'API Key standard de Gemini Studio Supporte Imagen sur /models/ :
-        // (Vérifier la doc officielle si c'est model=imagen-3.0-generate-001)
-        // Pour Google AI Studio API:
         $model = 'imagen-4.0-generate-001';
         $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:predict?key={$apiKey}";
 
