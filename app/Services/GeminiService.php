@@ -155,7 +155,7 @@ class GeminiService
         // Si l'API Key standard de Gemini Studio Supporte Imagen sur /models/ :
         // (Vérifier la doc officielle si c'est model=imagen-3.0-generate-001)
         // Pour Google AI Studio API:
-        $model = 'imagen-3.0-generate-001';
+        $model = 'imagen-4.0-generate-001';
         $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:predict?key={$apiKey}";
 
         $payload = [
