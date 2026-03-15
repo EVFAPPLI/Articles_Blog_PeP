@@ -20,6 +20,18 @@ class ChangelogWidget extends Widget
         return [
             'releases' => [
                 [
+                    'version' => '1.4.0',
+                    'date' => Carbon::now()->translatedFormat('d F Y'),
+                    'title' => 'Nouveau Laboratoire Brouillons IA & Multimédia 🚀',
+                    'changes' => [
+                        ['type' => 'NOUVEAU', 'color' => 'success', 'text' => 'Espace Brouillons IA : Un environnement de travail 100% indépendant (avec sa propre table) pour générer, tester et ajuster vos articles IA avant publication.'],
+                        ['type' => 'NOUVEAU', 'color' => 'success', 'text' => 'Lien YouTube : Intégrez directement un lien vidéo pour que l\'IA l\'embarque élégamment en format natif interactif.'],
+                        ['type' => 'AMÉLIORATION', 'color' => 'info', 'text' => 'Mode Raisonnement IA : Le prompt de création d\'image Imagen 4.0 a été renforcé par Gemini (mode réflexion) pour garantir "zéro texte baveux" lors de la génération.'],
+                        ['type' => 'UX', 'color' => 'primary', 'text' => 'Publication intelligente : Synchronisation automatique d\'un "Brouillon IA" vers "l\'Article Public" final lors de la sauvegarde.'],
+                        ['type' => 'NOUVEAU', 'color' => 'success', 'text' => 'Style Futuristic : Nouveau preset de style "Moderne / Futuriste" ajouté au générateur d\'image Imagen.'],
+                    ],
+                ],
+                [
                     'version' => '1.3.0',
                     'date' => Carbon::now()->translatedFormat('d F Y'),
                     'title' => 'Amélioration de l\'Intelligence Artificielle 🎨',

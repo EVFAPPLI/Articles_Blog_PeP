@@ -66,6 +66,26 @@ php artisan storage:link
 
 ---
 
+## 🤖 Intelligence Artificielle (Gemini & Imagen)
+
+### 1. Laboratoire Brouillons IA (`AiPostResource`)
+
+Un environnement bac à sable indépendant de la table `posts` a été créé (`ai_posts`).
+- **Isolation** : Ne pollue pas le blog public avec des tests.
+- **Publication Auto-synchronisée** : Le cycle complet est géré via `$post_id`. La sauvegarde modifie instantanément l'article côté public s'il est déjà "Transféré".
+
+### 2. Le "Mode Raisonnement"
+
+La génération d'images avec Imagen 4.0 ne supportant pas les prompt négatifs d'API, un "Mode Raisonnement" est en place via `GeminiService::enhanceImagePrompt()`.
+- L'utilisateur tape un prompt basique en français.
+- S'il coche "Sans texte", **Gemini s'interpose** et génère un prompt anglais ultra-descriptif (sans utiliser les mots interdits) pour tromper Imagen 4.0 et obtenir une image pure.
+
+### 3. Intégration YouTube Seamless
+
+Lors du formatage de l'article (Bouton "Sublimer le HTML"), si une URL YouTube (watch?v=...) est présente, Gemini a la consigne stricte de créer une balise `<iframe src=".../embed/...">` encapsulée dans un Design System Premium 100% Responsive et de l'insérer de manière esthétique dans le dom.
+
+---
+
 ## 🎨 Stratégies de Design (V4 & Premium)
 
 Face aux limitations de compilation CSS en direct ou aux contenus HTML importés via Filament (sans support Tailwind natif complet pour les enfants), deux stratégies robustes sont utilisées :

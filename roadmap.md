@@ -56,8 +56,15 @@ Ce document récapitule l'état d'avancement du projet et définit les prochaine
 - **[x] Correction Texte Tronqué** : Retrait de `overflow-hidden` qui coupait les phrases à droite.
 - **[x] Règles CSS Optimisées** : Application de `word-break: normal`, `word-wrap: break-word`, `overflow-wrap: break-word` sur `.prose` et `.ai-content`.
 - **[x] Prompt IA Amélioré** : Instructions explicites pour interdire `word-break: break-all` et garantir des retours à la ligne naturels.
-- **[x] Aperçus Filament** : Suppression de `overflow-hidden` dans les prévisualisations HTML de l'éditeur et de l'assistant IA.
+- [x] Aperçus Filament : Suppression de `overflow-hidden` dans les prévisualisations HTML de l'éditeur et de l'assistant IA.
+
+## ✅ Phase 10 : Laboratoire IA & Intégrations Multimédias (Nouveau)
+
+- **[x] Brouillons IA Indépendants** : Séparation physique (table `ai_posts` et menu dédié) pour expérimenter les générations Gemini et Imagen sans polluer le blog.
+- **[x] Mode Raisonnement Image** : Protocole d'auto-réflexion Gemini pour traduire et formater parfaitement le prompt avant de l'envoyer à Imagen 4.0, garantissant l'absence de texte indésirable.
+- **[x] Integration Vidéo Seamless** : Support optionnel de lien YouTube. L'IA injecte et style automatiquement un `<iframe>` 100% responsive au coeur du HTML.
+- **[x] Publication Intelligente** : Bouton de transfert vers la table officielle `posts` avec synchronisation automatique (sauvegarde) pour éviter les doublons.
 
 ---
 
-_Dernière mise à jour : 11 mars 2026_
+_Dernière mise à jour : 15 mars 2026_
