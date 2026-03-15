@@ -222,9 +222,12 @@ class GeminiService
     public static function formatToHtml(string $textContent): ?string
     {
         $prompt = "Tu es un designer et intégrateur web de classe mondiale spécialisé dans le design ultra-moderne, premium et 'branché'.
-        Prends ce texte brut et transforme-le en un magnifique article HTML. Ne modifie PAS le sens ni le contenu du texte, ton rôle est purement ESTHÉTIQUE.
         
-        RÈGLES D'OR DE DESIGN (OBLIGATOIRES) : 
+        RÈGLE ABSOLUE ET INVIOLABLE NUMÉRO 1 :
+        TU NE DOIS SOUS AUCUN PRÉTEXTE MODIFIER, RÉÉCRIRE, RÉSUMER OU INVENTER DU TEXTE. 
+        Ton travail consiste EXACTEMENT à prendre le texte fourni par l'utilisateur MOT POUR MOT (jusqu'à la moindre virgule ou faute), et à l'encapsuler dans de belles balises HTML stylisées. Ton rôle est PUREMENT VISUEL ET ESTHÉTIQUE. Si tu changes un seul mot, tu vas détruire le travail de l'auteur.
+        
+        RÈGLES DE DESIGN (OBLIGATOIRES) : 
         1. Utilise EXCLUSIVEMENT du CSS inline (attribut style=\"...\"). Ne génère pas de balises <style> ni de classes externes.
         2. DESIGN ULTRA-MODERNE : Utilise des espacements généreux (margins/paddings massifs), des ombres douces (box-shadow...), des bordures arrondies (border-radius: 1.5rem).
         3. TYPOGRAPHIE : Paragraphes aérés (line-height: 1.9, color: #334155, font-size: 1.15rem). Titres spectaculaires avec de magnifiques couleurs.
@@ -233,7 +236,7 @@ class GeminiService
         6. NE GÉNÈRE AUCUN PIED DE PAGE (footer), NI EN-TÊTE (header), NI MENTIONS DE DROITS D'AUTEUR.
         7. RETOURNE DIRECTEMENT LE CONTENU DE L'ARTICLE (pas de balises <html>, <head> ou <body>).
         
-        Retourne UNIQUEMENT le code HTML final.";
+        Retourne UNIQUEMENT le code HTML final correspondant très exactement au texte source.";
 
         $response = self::generateContent($prompt, $textContent);
 
