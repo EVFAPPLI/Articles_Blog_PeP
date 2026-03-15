@@ -18,27 +18,43 @@ class EditAiPost extends EditRecord
         return [
             Actions\DeleteAction::make(),
             Actions\Action::make('transfer_to_blog')
-                ->label('Transférer sur le Blog Public')
+                ->label(fn () => $this->record->status === 'transferred' ? 'Mettre à jour l\'article public' : 'Publier sur le Blog Public')
                 ->icon('heroicon-o-rocket-launch')
-                ->color('success')
+                ->color(fn () => $this->record->status === 'transferred' ? 'warning' : 'success')
                 ->requiresConfirmation()
-                ->modalHeading('Publier l\'article')
-                ->modalDescription('Êtes-vous sûr de vouloir transférer ce brouillon vers le blog public ? Un nouvel article officiel sera créé.')
-                ->modalSubmitActionLabel('Oui, publier')
-                ->visible(fn () => $this->record->status !== 'transferred')
+                ->modalHeading(fn () => $this->record->status === 'transferred' ? 'Mettre à jour l\'article' : 'Publier l\'article')
+                ->modalDescription(fn () => $this->record->status === 'transferred' 
+                    ? 'L\'article public existant sera mis à jour avec le contenu actuel de ce brouillon.' 
+                    : 'Êtes-vous sûr de vouloir publier ce brouillon ? Un nouvel article officiel sera créé.')
+                ->modalSubmitActionLabel(fn () => $this->record->status === 'transferred' ? 'Oui, mettre à jour' : 'Oui, publier')
                 ->action(function () {
                     $record = $this->record;
 
                     // Vérifications de base
                     if (empty($record->title) || empty($record->html_content)) {
-                        Notification::make()->warning()->title('Impossible de transférer : Titre ou HTML manquant.')->send();
+                        Notification::make()->warning()->title('Impossible de publier : Titre ou HTML manquant.')->send();
                         return;
+                    }
+
+                    if ($record->post_id) {
+                        $post = Post::find($record->post_id);
+                        if ($post) {
+                            $post->update([
+                                'title' => $record->title,
+                                'category' => $record->category ?? 'Non classé',
+                                'html_content' => $record->html_content,
+                                'vignette_content' => $record->vignette_content ?? '<p></p>',
+                                'cover_image' => $record->cover_image,
+                            ]);
+                            Notification::make()->success()->title('Article public mis à jour avec succès !')->send();
+                            return;
+                        }
                     }
 
                     // Création dans la vraie table posts
                     $post = Post::create([
                         'title' => $record->title,
-                        'slug' => Str::slug($record->title) . '-' . time(), // ajout time() pour éviter conflit de slug 
+                        'slug' => Str::slug($record->title) . '-' . time(),
                         'category' => $record->category ?? 'Non classé',
                         'html_content' => $record->html_content,
                         'vignette_content' => $record->vignette_content ?? '<p></p>',
@@ -48,10 +64,10 @@ class EditAiPost extends EditRecord
                         'published_at' => now(),
                     ]);
 
-                    // Mise a jour du statut du brouillon
-                    $record->update(['status' => 'transferred']);
+                    // Mise a jour du statut du brouillon et sauvegarde de l'ID post
+                    $record->update(['status' => 'transferred', 'post_id' => $post->id]);
 
-                    Notification::make()->success()->title('Brouillon transféré avec succès sur le blog public !')->send();
+                    Notification::make()->success()->title('Brouillon publié avec succès sur le blog public !')->send();
                 }),
         ];
     }

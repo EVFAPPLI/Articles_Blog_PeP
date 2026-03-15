@@ -16,5 +16,6 @@ class AiPost extends Model
         'category',
         'status',
         'youtube_url',
+        'post_id',
     ];
 }
