@@ -71,4 +71,24 @@ class EditAiPost extends EditRecord
                 }),
         ];
     }
+
+    protected function afterSave(): void
+    {
+        $record = $this->record;
+
+        // Si l'article est déjà lié à un article public, on le met à jour automatiquement à chaque sauvegarde du brouillon
+        if ($record->status === 'transferred' && $record->post_id) {
+            $post = Post::find($record->post_id);
+            if ($post) {
+                $post->update([
+                    'title' => $record->title,
+                    'category' => $record->category ?? 'Non classé',
+                    'html_content' => $record->html_content,
+                    'vignette_content' => $record->vignette_content ?? '<p></p>',
+                    'cover_image' => $record->cover_image,
+                ]);
+                Notification::make()->success()->title('Article public synchronisé automatiquement !')->send();
+            }
+        }
+    }
 }
