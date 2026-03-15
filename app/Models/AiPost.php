@@ -15,5 +15,6 @@ class AiPost extends Model
         'image_prompt',
         'category',
         'status',
+        'youtube_url',
     ];
 }

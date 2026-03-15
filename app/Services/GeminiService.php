@@ -219,7 +219,7 @@ class GeminiService
     /**
      * Formate un texte brut en HTML premium.
      */
-    public static function formatToHtml(string $textContent): ?string
+    public static function formatToHtml(string $textContent, ?string $youtubeUrl = null): ?string
     {
         $prompt = "Tu es un designer et intégrateur web de classe mondiale spécialisé dans le design ultra-moderne, premium et 'branché'.
         
@@ -234,9 +234,17 @@ class GeminiService
         4. ÉLÉMENTS RICHES : Sublimer les citations, listes à puces, et liens.
         5. INTERDICTION ABSOLUE DE COUPER LES MOTS (hyphens: none).
         6. NE GÉNÈRE AUCUN PIED DE PAGE (footer), NI EN-TÊTE (header), NI MENTIONS DE DROITS D'AUTEUR.
-        7. RETOURNE DIRECTEMENT LE CONTENU DE L'ARTICLE (pas de balises <html>, <head> ou <body>).
+        7. RETOURNE DIRECTEMENT LE CONTENU DE L'ARTICLE (pas de balises <html>, <head> ou <body>).";
         
-        Retourne UNIQUEMENT le code HTML final correspondant très exactement au texte source.";
+        if (!empty($youtubeUrl)) {
+            $prompt .= "\n\nINTEGRATION YOUTUBE (TRÈS IMPORTANT) :
+        L'utilisateur a fourni ce lien YouTube : {$youtubeUrl}.
+        Tu DOIS intégrer cette vidéo dans l'article en créant un lecteur vidéo (iframe). 
+        Place ce lecteur vidéo dans l'article, de manière intelligente et esthétique (par exemple, juste après le premier paragraphe ou un titre principal, ou au centre).
+        Le lecteur vidéo doit être 100% responsive, avec un style premium (bords arrondis, ombre douce). Utilise un wrapper du type <div style=\"position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); margin: 2rem 0;\"><iframe src=\"(Ici l'url convertie en version embed, ex: https://www.youtube.com/embed/XXXX)\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div>. Assure-toi de bien convertir le lien standard watch?v= en lien d'intégration /embed/ !";
+        }
+        
+        $prompt .= "\n\nRetourne UNIQUEMENT le code HTML final correspondant très exactement au texte source.";
 
         $response = self::generateContent($prompt, $textContent);
 

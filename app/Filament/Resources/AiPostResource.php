@@ -66,6 +66,12 @@ class AiPostResource extends Resource
 
                 Section::make('Laboratoire de Contenu (IA)')
                     ->schema([
+                        TextInput::make('youtube_url')
+                            ->label('Lien Vidéo YouTube (Optionnel)')
+                            ->placeholder('Ex: https://www.youtube.com/watch?v=...')
+                            ->url()
+                            ->columnSpanFull(),
+                            
                         Textarea::make('source_content')
                             ->label('Texte Source Brute ou Code HTML')
                             ->rows(12)
@@ -93,7 +99,10 @@ class AiPostResource extends Resource
                                             return;
                                         }
                                         Notification::make()->info()->title('Magie IA en cours...')->send();
-                                        $html = GeminiService::formatToHtml($source);
+                                        
+                                        $youtubeUrl = $get('youtube_url');
+                                        $html = GeminiService::formatToHtml($source, $youtubeUrl);
+                                        
                                         if ($html) {
                                             $set('html_content', $html);
                                             Notification::make()->success()->title('Design ultra-moderne appliqué !')->send();
