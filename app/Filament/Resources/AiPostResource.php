@@ -151,6 +151,7 @@ class AiPostResource extends Resource
                                 'réaliste' => 'Photographie réaliste',
                                 'graphique' => 'Illustration graphique (Vecteur)',
                                 'aquarelle' => 'Peinture aquarelle',
+                                'futuriste' => 'Moderne / Futuriste',
                             ])
                             ->default('réaliste')
                             ->dehydrated(false), // Ne pas sauver en bdd
@@ -197,21 +198,7 @@ class AiPostResource extends Resource
                                             
                                             $set('cover_image', [$path => $path]); // FileUpload attend un tableau en interne
                                             
-                                            // // Intégration de l'image dans le rendu HTML
-                                            $html = $get('html_content') ?? '';
-                                            $imageUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($path);
-                                            
-                                            if (preg_match('/<img[^>]+src="([^">]+)"/i', $html)) {
-                                                // Remplacer la première image existante
-                                                $html = preg_replace('/(<img[^>]+src=")[^">]+(")/i', '${1}' . $imageUrl . '${2}', $html, 1);
-                                            } else {
-                                                // Prepend si aucune image n'existe
-                                                $imgHtml = '<div class="mb-10 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10"><img src="' . $imageUrl . '" alt="Illustration de l\'article" class="w-full h-auto object-cover aspect-video hover:scale-105 transition-transform duration-700"></div>';
-                                                $html = $imgHtml . "\n" . $html;
-                                            }
-                                            $set('html_content', $html);
-                                            
-                                            Notification::make()->success()->title('Image ajoutée et insérée dans l\'article !')->send();
+                                            Notification::make()->success()->title('Image générée avec succès !')->send();
                                         } else {
                                             $errorMsg = str_replace('ERROR: ', '', $base64 ?? 'Erreur inconnue');
                                             Notification::make()->danger()
