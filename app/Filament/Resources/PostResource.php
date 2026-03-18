@@ -311,7 +311,7 @@ class PostResource extends Resource
                                     ->form([
                                         Forms\Components\TagsInput::make('suggested_keywords')
                                             ->label('Mots-clés proposés')
-                                            ->separator(',')
+                                            ->splitKeys(['Tab', ','])
                                             ->required(),
                                     ])
                                     ->mountUsing(function (Forms\ComponentContainer $form, Forms\Get $get) {
@@ -339,7 +339,7 @@ class PostResource extends Resource
                                         }
                                     })
                             )
-                            ->separator(','),
+                            ->splitKeys(['Tab', ',']),
                     ]),
             ]);
     }
