@@ -184,12 +184,9 @@ class AiPostResource extends Resource
                                     ->action(function (Get $get, Set $set) {
                                         $prompt = $get('image_prompt');
                                         if (empty($prompt)) {
-                                            $source = $get('source_content');
-                                            if (empty($source)) {
-                                                Notification::make()->warning()->title('Veuillez fournir un prompt ou un texte source.')->send();
-                                                return;
-                                            }
-                                            $prompt = strip_tags(Str::limit($source, 500));
+                                            $title = $get('title') ?? 'Article de blog';
+                                            $category = $get('category') ?? 'Thème général';
+                                            $prompt = "Un visuel conceptuel et créatif illustrant l'article de blog suivant : '$title', de la catégorie '$category'.";
                                         }
                                         
                                         $style = $get('image_style') ?? 'réaliste';
