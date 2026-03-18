@@ -62,6 +62,12 @@ class AiPostResource extends Resource
                                 'Flow' => 'Flow',
                             ])
                             ->required(),
+                            
+                        FileUpload::make('cover_image')
+                            ->label('Illustration de couverture')
+                            ->directory('blog-covers')
+                            ->image()
+                            ->columnSpanFull(),
                     ]),
 
                 Section::make('Laboratoire de Contenu (IA)')
@@ -116,7 +122,19 @@ class AiPostResource extends Resource
                         
                         \Filament\Forms\Components\Placeholder::make('html_preview')
                             ->label('Aperçu du Rendu Final (Magie IA)')
-                            ->content(fn (Get $get) => new \Illuminate\Support\HtmlString('<div class="p-8 bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden" style="min-height: 200px;">' . ($get('html_content') ?? '<p class="text-gray-400 italic text-center mt-10">Aucun rendu pour le moment.</p>') . '</div>'))
+                            ->content(function (Get $get) {
+                                $coverHtml = '';
+                                if ($get('cover_image')) {
+                                    $coverStr = is_array($get('cover_image')) ? array_values($get('cover_image'))[0] : $get('cover_image');
+                                    // Handle Livewire temporary upload object vs string
+                                    if (is_string($coverStr)) {
+                                        $url = \Illuminate\Support\Facades\Storage::url($coverStr);
+                                        $coverHtml = '<img src="' . $url . '" class="w-full rounded-3xl shadow-xl mb-12" style="max-width: 100%; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); margin-bottom: 3rem;">';
+                                    }
+                                }
+                                $content = $get('html_content') ?? '<p class="text-gray-400 italic text-center mt-10">Aucun rendu pour le moment.</p>';
+                                return new \Illuminate\Support\HtmlString('<div class="p-8 bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden" style="min-height: 200px;">' . $coverHtml . $content . '</div>');
+                            })
                             ->columnSpanFull(),
                     ]),
                     
@@ -144,77 +162,7 @@ class AiPostResource extends Resource
                             )
                             ->columnSpanFull(),
                     ]),
-                    
-                Section::make('Laboratoire d\'Image (Imagen)')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('image_prompt')
-                            ->label('Prompt de l\'Image')
-                            ->placeholder('Ex: Un bureau moderne avec un café chaud...')
-                            ->hint('Laissez vide pour générer à partir du texte source.')
-                            ->columnSpanFull(),
-                            
-                        Select::make('image_style')
-                            ->label('Style de l\'image')
-                            ->options([
-                                'réaliste' => 'Photographie réaliste',
-                                'graphique' => 'Illustration graphique (Vecteur)',
-                                'aquarelle' => 'Peinture aquarelle',
-                                'futuriste' => 'Moderne / Futuriste',
-                            ])
-                            ->default('réaliste')
-                            ->dehydrated(false), // Ne pas sauver en bdd
-                            
-                        Toggle::make('image_with_text')
-                            ->label('Autoriser le texte sur l\'image')
-                            ->helperText('Si désactivé, l\'IA a pour consigne stricte de ne mettre aucun texte.')
-                            ->default(false)
-                            ->dehydrated(false),
-                            
-                        FileUpload::make('cover_image')
-                            ->label('Illustration de couverture')
-                            ->directory('blog-covers')
-                            ->image()
-                            ->columnSpanFull()
-                            ->hintAction(
-                                Action::make('generate_image')
-                                    ->label('Créer avec Imagen')
-                                    ->icon('heroicon-m-sparkles')
-                                    ->color('success')
-                                    ->action(function (Get $get, Set $set) {
-                                        $prompt = $get('image_prompt');
-                                        if (empty($prompt)) {
-                                            $title = $get('title') ?? 'Article de blog';
-                                            $category = $get('category') ?? 'Thème général';
-                                            $prompt = "Un visuel conceptuel et créatif illustrant l'article de blog suivant : '$title', de la catégorie '$category'.";
-                                        }
-                                        
-                                        $style = $get('image_style') ?? 'réaliste';
-                                        $withText = $get('image_with_text') ?? false;
-                                        
-                                        Notification::make()->info()->title('Création de l\'image en cours (Imagen)...')->send();
-                                        
-                                        $base64 = GeminiService::generateImage($prompt, $style, $withText);
-                                        // $base64 peut contenir "ERROR: ..."
-                                        if ($base64 && !str_starts_with($base64, 'ERROR:')) {
-                                            $imageService = app(ImageService::class);
-                                            $prefix = "data:image/jpeg;base64,";
-                                            $slug = Str::slug($get('title') ?? 'ai-post');
-                                            $path = $imageService->saveBase64Image($prefix . $base64, 'blog-covers', $slug . '-cover-' . time());
-                                            
-                                            $set('cover_image', [$path => $path]); // FileUpload attend un tableau en interne
-                                            
-                                            Notification::make()->success()->title('Image générée avec succès !')->send();
-                                        } else {
-                                            $errorMsg = str_replace('ERROR: ', '', $base64 ?? 'Erreur inconnue');
-                                            Notification::make()->danger()
-                                                ->title('Échec de la génération d\'image')
-                                                ->body($errorMsg)
-                                                ->send();
-                                        }
-                                    })
-                            ),
-                    ]),
+
             ]);
     }
 
@@ -265,7 +213,16 @@ class AiPostResource extends Resource
                     ->form([
                         \Filament\Forms\Components\Placeholder::make('html_preview')
                             ->hiddenLabel()
-                            ->content(fn ($record) => new \Illuminate\Support\HtmlString('<div class="p-8 bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden" style="min-height: 200px; max-width: 100%;">' . ($record->html_content ?? '<p class="text-gray-400 italic text-center mt-10">Aucun rendu pour le moment.</p>') . '</div>')),
+                            ->content(function ($record) {
+                                $coverHtml = '';
+                                if ($record->cover_image) {
+                                    $coverStr = is_array($record->cover_image) ? array_values($record->cover_image)[0] : $record->cover_image;
+                                    $url = \Illuminate\Support\Facades\Storage::url($coverStr);
+                                    $coverHtml = '<img src="' . $url . '" class="w-full rounded-3xl shadow-xl mb-12" style="max-width: 100%; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); margin-bottom: 3rem;">';
+                                }
+                                $content = $record->html_content ?? '<p class="text-gray-400 italic text-center mt-10">Aucun rendu pour le moment.</p>';
+                                return new \Illuminate\Support\HtmlString('<div class="p-8 bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden" style="min-height: 200px; max-width: 100%;">' . $coverHtml . $content . '</div>');
+                            }),
                     ]),
                 Tables\Actions\Action::make('transfer_to_blog')
                     ->label(fn ($record) => $record->status === 'transferred' ? 'Mettre à jour' : 'Publier')
@@ -283,14 +240,32 @@ class AiPostResource extends Resource
                             return;
                         }
 
+                        $coverHtml = '';
+                        $url = '';
+                        if ($record->cover_image) {
+                            $coverStr = is_array($record->cover_image) ? array_values($record->cover_image)[0] : $record->cover_image;
+                            $url = \Illuminate\Support\Facades\Storage::url($coverStr);
+                            $coverHtml = '<img src="' . $url . '" class="w-full rounded-3xl shadow-xl mb-12" style="max-width: 100%; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); margin-bottom: 3rem;">';
+                        }
+                        
+                        $finalHtml = $record->html_content;
+                        if ($coverHtml && !str_contains($finalHtml, '<img src="' . $url . '"')) {
+                            $finalHtml = $coverHtml . $finalHtml;
+                        }
+                        
+                        $finalVignette = $record->vignette_content ?? '<p></p>';
+                        if ($coverHtml && !str_contains($finalVignette, '<img src="' . $url . '"')) {
+                            $finalVignette = $coverHtml . $finalVignette;
+                        }
+
                         if ($record->post_id) {
                             $post = \App\Models\Post::find($record->post_id);
                             if ($post) {
                                 $post->update([
                                     'title' => $record->title,
                                     'category' => $record->category ?? 'Non classé',
-                                    'html_content' => $record->html_content,
-                                    'vignette_content' => $record->vignette_content ?? '<p></p>',
+                                    'html_content' => $finalHtml,
+                                    'vignette_content' => $finalVignette,
                                     'cover_image' => $record->cover_image,
                                 ]);
                                 Notification::make()->success()->title('Article public mis à jour avec succès !')->send();
@@ -303,8 +278,8 @@ class AiPostResource extends Resource
                             'title' => $record->title,
                             'slug' => \Illuminate\Support\Str::slug($record->title) . '-' . time(),
                             'category' => $record->category ?? 'Non classé',
-                            'html_content' => $record->html_content,
-                            'vignette_content' => $record->vignette_content ?? '<p></p>',
+                            'html_content' => $finalHtml,
+                            'vignette_content' => $finalVignette,
                             'cover_image' => $record->cover_image,
                             'author' => 'Bruno Savoyat, PEP worldwide',
                             'is_published' => true,
